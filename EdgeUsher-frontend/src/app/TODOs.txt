@@ -1,0 +1,19 @@
+TODO: 
+
+//Controls
+- controllo errori nei dialog, specialmente dove è coinvolta la probabilità
+- controlli su spazi e lettere maiuscole, entrambi non devono esserci se non in affinity e antiaffinity per le variabili
+- controllo errori nel caso in cui si carichi un file problog specificante un'infrastruttura con probabilità singola
+- controllare comportamento dei parser in caso di caratteri speciali come '::'
+
+//Functionalities
+- colorare anche il marker di fine link di blu quando questo è usato nel placement
+- capire errore da parte del server nell'eseguire più query in fila
+x- salvare ogni volta il file dell'infrastruttura, come fatto per la catena
+- trovare il modo di effettuare multiple richieste POST per valutare i risultati ricevuti dalla versione euristica,
+  senza che il programma ritorni subito in maniera asincrona e senza errori lato flask
+- scrivere i tutorial vari
+- dockerizzare il tutto per renderlo più facile da eseguire
+- creazione stringa antiaffinity anche per quando viene chiesta l'esecuzione a partire dalla pagina placement
+- implementare download del placement come file 
+- implementare upload del placement come file, usando lo stesso metodo in cui viene parsato

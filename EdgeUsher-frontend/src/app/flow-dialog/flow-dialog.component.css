@@ -1,0 +1,69 @@
+/*button#delete {
+    position: relative;
+    border: 3px solid rgb(33, 117, 173);
+}
+
+button#save {
+    position: relative;
+    margin-left: 200px;
+    border: 3px solid rgb(33, 117, 173);
+}*/
+
+#flow-dialog-content {
+    font-size: 80%;
+}
+
+#err {
+    display: block;
+    font-size: 70%;
+    color: red;
+}
+
+button {
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 150%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 70%;
+    min-width: 0px;
+    border: solid;
+    border-radius: 8px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+#save {
+    grid-column-start: 2;
+}
+
+#delete {
+    grid-column-start: 1;
+}
+/*
+div#actions {
+    width: 100%;
+}
+*/
+div#actions {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    display: flex;
+    flex-wrap: inherit;
+    align-items: center;
+    padding: 0%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+input {
+    width: 10%;
+    height: 80%;
+    font-size: 80%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}

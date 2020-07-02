@@ -1,0 +1,206 @@
+/*--- GENERAL DIALOG STYLE ---*/
+
+#header {
+    margin-top: 2px;
+    display: grid;
+    width: 100%;
+    grid-template-columns: 5% 35% 60%;
+}
+
+#header-chain-actions {
+    grid-column-start: 3;
+    grid-row-start: 1;
+}
+
+/*Don't highlight the image button*/
+input {
+    outline: none;
+}
+
+
+/*--- TITLE STYLE ---*/
+
+#logo-div {
+    text-align: center;
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+
+#logo {
+    grid-column-start: 1;
+    grid-row-start: 1;
+    cursor: pointer;
+}
+
+#chain-name {
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    line-height: 150%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding-left: 1%;
+    padding-right: 1%;
+    font-size: 70%;
+    min-width: 0px;
+    background-color: skyblue;
+    border: solid;
+    border-radius: 8px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+
+#chain-name {
+    text-align: left;
+    grid-column: 2;
+    cursor: text;
+    border: none;
+    border-radius: 0px;
+    background-image: linear-gradient(to right, rgb(33, 117, 173), rgb(33, 117, 173));
+    background-position: 1px calc(100% - 5px);
+    background-size: calc(100% - 10px) 2px;
+    background-repeat: no-repeat;
+    font-size: 120%;
+    box-shadow: none;
+}
+
+
+/*--- BUTTONS STYLE ---*/
+
+#settings-chain-button {
+    height: 20px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+#subchain-button {
+    height: 20px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+#tutorial-button-chain {
+    height: 20px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+#infrastructure-button {
+    height: 30px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 1px;
+}
+
+#img-exe-from-chain {
+    height: 20px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+#exe-from-chain {
+    position: relative;
+    /*border: 3px solid rgb(33, 117, 173);
+    border-radius: 2%;*/
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    line-height: 150%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding-left: 1%;
+    padding-right: 1%;
+    font-size: 70%;
+    min-width: 0px;
+    background-color: lightblue;
+    border-radius: 8px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    float: right;
+    margin-top: 3px;
+}
+
+button:hover {
+    background-color: rgba(0, 0, 0, .08);
+}
+
+#buttons {
+    grid-column-start: 3;
+    position: relative;
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 33% 33% 33%;
+    align-items: center;
+    text-align: center;
+    margin-left: 0%;
+    margin-right: 0%;
+}
+/*
+#new-infrastructure {
+    grid-column: 1;
+    grid-row-start: 1;
+}
+
+#code-button {
+    grid-column: 2;
+    grid-row-start: 1;
+}
+
+#reset {
+    grid-column: 3;
+    grid-row-start: 1;
+}
+
+#save {
+    grid-column: 1;
+    grid-row-start: 2;
+}
+
+#upload {
+    grid-column: 2;
+    grid-row-start: 2;
+}
+
+#subchain-button {
+    grid-column: 3;
+    grid-row: 2;
+}*/
+
+/*--- SETTINGS MENU ---*/
+
+#settings-menu-content input {
+    width: 100%;
+}
+
+/*--- file input style ---*/
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}

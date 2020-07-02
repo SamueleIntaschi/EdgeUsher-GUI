@@ -1,0 +1,39 @@
+<div id="header">
+    <div id="logo-div">
+        <img 
+        id="logo" 
+        src="https://raw.githubusercontent.com/di-unipi-socc/EdgeUsher/master/img/edgeusherlogo.png" 
+        alt="EdgeUsher" 
+        width="30" 
+        routerLink=""
+        (click)="onLogoClick()"
+        />
+    </div>
+
+    <input id="chain-name" 
+    autocomplete="off" 
+    value="Untitled chain" 
+    type="text" 
+    [(ngModel)]="this.title" 
+    (ngModelChange)="onChangeTitle($event)"
+    />
+    <div id="header-chain-actions">
+        <!--input id="infrastructure-button" title="Create an infrastructure" routerLink="/infrastructure" type="image" src="../../icons/right_arrow.png" (click)="onInfrClick()"/--> 
+        <input id="settings-chain-button" title="Actions" type="image" src="../../icons/settings.png" [matMenuTriggerFor]="settingsmenu"/> 
+        <mat-menu #settingsmenu="matMenu">
+            <div id='settings-menu-content'>
+                <button mat-menu-item id="reset-chain" (click)="new()">Reset chain</button>
+                <button mat-menu-item id="save-chain" (click)="save()">Download chain file</button>
+                <button mat-menu-item id="download-json-chain" (click)="saveJson()">Download chain project</button>
+                <!--input id="upload" type="file" ng2FileSelect (change)="upload($event)" value="Upload chain" onclick="this.value=null"/-->
+                <div id="upload" class="upload-btn-wrapper">
+                    <button mat-menu-item>Upload chain</button>
+                    <input type="file" ng2FileSelect (change)="upload($event)" name="myfile" />
+                </div>
+            </div>
+        </mat-menu>
+        <input id="img-exe-from-chain" title="Run EdgeUsher" type="image" src="../../icons/play.png" (click)="exe()"/>
+        <input id="subchain-button" title="Create a max latency constraint" (click)="subchain()" type="image" src="../../icons/subchain.png"/>
+        <input id="tutorial-button-chain" title="Tutorial" (click)=tutorial() type="image" src="../../icons/tutorial.png"/>
+    </div>
+</div>

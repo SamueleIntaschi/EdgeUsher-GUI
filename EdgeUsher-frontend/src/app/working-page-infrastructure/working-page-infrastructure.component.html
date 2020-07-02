@@ -1,0 +1,32 @@
+<div id="working-page">
+    <app-svg-infrastructure id="svg"
+    (onChangeTitleFromUpload)="changeTitleFromUpload($event)"
+    ></app-svg-infrastructure>
+    <app-header-infrastructure id ="header"
+    (reset)="new()"
+    (saveInfrastructure)="save()"
+    (uploadInfrastructureFile)="uploadInfrastructure($event)"
+    (changeTitle)="onChangeTitle($event)"
+    (codeClick)="onCodeClick($event)"
+    (probClick)="setProbabilisticMode($event)"
+    (onChainClick)="onChainClick()"
+    (logoClick)="onLogoClick()"
+    (exeEU)="openExecutionDialog()"
+    (saveJSON)="saveJson()"
+    [title]="this.title"
+    ></app-header-infrastructure>
+    <app-chain-code id="code"
+    ></app-chain-code>
+    <!--div id="infrastructure-navigation">
+        <button id='infrastructure-src-code' (click)="onCodeClick(1)">Source code</button>
+        <button id='infrastructure-editor' (click)="onCodeClick(2)">Graphic editor</button>
+    </div-->
+    <div id='radio-button-infrastructure'>
+        <div id="subdiv-radio-button-infrastructure">
+            <input id="left-radio-button-infr" (click)="onCodeClick(1)" type="radio" name="radios"value="false">
+            <label for="left-radio-button-infr">Source code</label>
+            <input id="right-radio-button-infr" (click)="onCodeClick(2)" type="radio" name="radios" value="all" checked>
+            <label for="right-radio-button-infr">Graphic editor</label>
+        </div>
+    </div>
+</div>

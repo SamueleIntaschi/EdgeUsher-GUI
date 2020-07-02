@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Chain</h1>
+<p id="err" [textContent]="err"></p>
+<div mat-dialog-content id="save-dialog-content">
+    <p>
+        Max latency in the chain: <input autocomplete="off" id="max-latency" [(ngModel)]="data.maxLatency"> <br><br>
+    </p>
+</div>
+<div id="actions" mat-dialog-actions>
+  <button id="delete" mat-button mat-dialog-close (click)="onCancelClick()">Delete</button>
+  <button id="save" mat-button (click)="onSaveClick(data)">Save</button>
+  <button id="modify" mat-button mat-dialog-close (click)="onModifyClick(data)">Modify</button>
+</div>

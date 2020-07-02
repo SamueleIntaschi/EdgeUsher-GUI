@@ -1,0 +1,89 @@
+<div id="execution-dialog">
+
+    <div id="execution-dialog-title">
+        <p id="exe-dialog-title">Query creation</p>
+        <input id="close" type="image" src="../../icons/close-button1.png" (click)="cancel()"/>
+    </div>
+    
+
+    <div id="query-error">
+        <p id="query-err" [textContent]="err"></p>
+        <p id="query-result">{{queryPreview()}}</p>
+    </div>
+
+    
+    <div id="constraints-div">
+
+    <div id='placements-div' *ngIf="this.data.type == 0">
+        <button class="add" (click)="addPlace()">Add a service placement</button>
+        <ul *ngFor="let elem of placesRequested">
+            <div class='placement-div'>
+                <select [(ngModel)]="elem.service">
+                    <option *ngFor="let service of this.services; index as i" [value]="this.services[i]">{{this.services[i]}}</option>
+                </select>
+                <p id="on-p">on</p>
+                <select [(ngModel)]="elem.node">
+                    <option *ngFor="let node of this.nodes; index as i" [value]="this.nodes[i]">{{this.nodes[i]}}</option>
+                </select>
+                <button class="delete" (click)="deletePlace(elem)">Delete placement</button>
+            </div>
+        </ul>
+    </div>
+
+    <div id='affinities-div'>
+        <button class="add" (click)="addAffinity()">Add an affinity</button>
+        <ul *ngFor="let elem of affinities">
+            <div class='affinity-div'>
+                <p class='fields-description'>Services on the same node:</p>
+                <select [(ngModel)]="elem.service1">
+                    <option *ngFor="let service of this.services; index as i" [value]="this.services[i]">{{this.services[i]}}</option>
+                </select>
+                ,
+                <select [(ngModel)]="elem.service2">
+                    <option *ngFor="let service of this.services; index as i" [value]="this.services[i]">{{this.services[i]}}</option>
+                </select>
+                <br>
+                <button class="delete" (click)="deleteAffinity(elem)">Delete affinity</button>
+            </div>
+        </ul>
+    </div>
+
+    <div id="anti-affinities-div">
+        <button class="add" (click)="addAntiaffinity()">Add an anty-affinity</button>
+        <ul *ngFor="let elem of antiAffinities">
+            <div class='anti-affinity-div'>
+                <p class="fields-description">Services that must not be on the same node:</p>
+                <select [(ngModel)]="elem.service1">
+                    <option *ngFor="let service of this.services; index as i" [value]="this.services[i]">{{this.services[i]}}</option>
+                </select>
+                ,
+                <select [(ngModel)]="elem.service2">
+                    <option *ngFor="let service of this.services; index as i" [value]="this.services[i]">{{this.services[i]}}</option>
+                </select>
+                <br>
+                <button class="delete" (click)="deleteAntiaffinity(elem)">Delete anti-affinity</button>
+            </div>
+        </ul>
+    </div>
+
+    </div>
+
+    <mat-slide-toggle id='heuristic-slide-toggle' [(ngModel)]="this.heuristicMode" labelPosition="before">Heuristic</mat-slide-toggle>
+
+    <div id="heuristic-param-div" *ngIf="this.heuristicMode">
+        <label for="thrhw-input">Hardware threshold: </label>
+        <input autocomplete="off" id="thrhw-input" [(ngModel)]="this.thrhw"> <br><br>
+        <label for="thrqos-input">QoS threshold: </label>
+        <input autocomplete="off" id="thrqos-input" [(ngModel)]="this.thrqos"> <br><br>
+    </div>
+
+    <p [textContent]="this.result"></p>
+
+    <div id="exe-actions">
+        <button class="exe-buttons" id="cancel-button" (click)="cancel()">Cancel</button>
+        <button class="exe-buttons" id="exe-button" (click)="submitQuery()">Submit</button>
+    </div>
+
+    
+    
+</div>

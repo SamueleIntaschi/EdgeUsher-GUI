@@ -1,0 +1,32 @@
+<div id="dot-navigation-content">
+    <div id="subdiv-dot-navigation-content">
+    <div class="dotstyle dotstyle-fillup">
+        <ul>
+            <!-- maybe useful to change chain/infrastructure/placement -->
+            <li
+            title="Chain creation"
+            [ngClass]="{
+                'current': chain,
+                'not-current': !chain
+            }" 
+            (click)="onClick('chain')"
+            ><button>Graphic editor</button></li>
+            <li
+            title="Infrastructure creation"
+            [ngClass]="{
+                'current': infrastructure,
+                'not-current': !infrastructure
+            }" 
+            (click)="onClick('infrastructure')"
+            ><button>Source code</button></li>
+            <li
+            title="Placement creation"
+            [ngClass]="{
+                'current': placement,
+                'not-current': !placement
+            }" 
+            (click)="onClick('placement')"
+            ><button>Graphic editor</button></li>
+        </ul>
+    </div>
+    </div>

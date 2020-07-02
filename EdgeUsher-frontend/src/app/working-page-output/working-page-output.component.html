@@ -1,0 +1,33 @@
+<div id="working-page-placement">
+    <app-svg-output id="svgplacement"
+    (changePlacements)="onChangePlacements($event)"
+    (firstSelectedPlacement)="setFirstSelPlacement($event)"
+    (clearPlacements)="clearPlacements()"
+    ></app-svg-output>
+    <app-header-output id ="header-placement"
+    (savePlacement)="save()"
+    (uploadChain)="upload($event)"
+    (codeClick)="onCodeClick($event)"
+    (logoClick)="onLogoClick()"
+    (changeSelectedPlacement)="changeSelectedPlacement($event)"
+    (addNewPlacement)="newPlacement()"
+    (exeEU)="openExecutionDialog()"
+    [placements]="this.placements"
+    [selectedPlacement]="this.selectedPlacement"
+    [indexSelectedPlacement]="this.indexSelectedPlacement"
+    ></app-header-output>
+    <app-chain-code id="code"
+    ></app-chain-code>
+    <div id='radio-button-placement'>
+        <div id="subdiv-radio-button-placement">
+            <input id="left-radio-button-pl" (click)="onCodeClick(1)" type="radio" name="radios"value="false">
+            <label for="left-radio-button-pl">Source code</label>
+            <input id="right-radio-button-pl" (click)="onCodeClick(2)" type="radio" name="radios" value="all" checked>
+            <label for="right-radio-button-pl">Graphic editor</label>
+        </div>
+    </div>
+    <!--div id="placement-navigation">
+        <button id='placement-src-code' (click)="onCodeClick(1)">Source code</button>
+        <button id='placement-editor' (click)="onCodeClick(2)">Graphic editor</button>
+    </div-->
+</div>

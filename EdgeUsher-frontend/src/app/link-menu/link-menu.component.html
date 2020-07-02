@@ -1,0 +1,65 @@
+<div id="link-menu">
+<div id="flow-title">
+    <p id="p-title">Link from {{this.data.from}} to {{this.data.to}}</p>
+    <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
+</div>
+<p id="err" [textContent]="err"></p>
+<div mat-dialog-content id="flow-dialog-content">
+
+  <mat-slide-toggle id='prob-link-slide-toggle-menu' [(ngModel)]="data.probabilisticMode" labelPosition="before">Probability</mat-slide-toggle>
+
+  <!-- CASE NOT PROBABILITIES -->
+  <div id="no-prob-link" *ngIf="!data.probabilisticMode">
+    <label for="bandwidth">Link bandwidth (Mbps):</label> 
+    <input autocomplete="off" id="bandwidth" [(ngModel)]="data.bandwidth"> <br><br>
+    <label for="latency">Link latency (ms):</label>
+    <input autocomplete="off" id="latency" [(ngModel)]="data.latency"> <br><br>
+  </div>
+
+  <!-- CASE PROBABILITIES -->
+  <div id="prob-link" *ngIf="data.probabilisticMode">
+    <button class='add' id='add-prob' (click)="addProbability()">Add probability</button>
+    
+    <ul *ngFor="let prob of this.probs; index as i; last as last">
+      
+      <li class="nested-link-line-prob" [ngClass]="{'last-child': last}">
+      
+        <div class="nested-link-prob-div">
+
+          <div class='link-prob'>
+            <label [for]="'band-prob'+i">Probability: </label>
+            <input [id]="'band-prob'+i" autocomplete="off" [(ngModel)]="prob.prob"> 
+          </div>
+          <div class='link-band-value'>
+            <label [for]="'band-value'+i">Bandwidth (Mbps): </label>
+            <input [id]="'band-value'+i" autocomplete="off" [(ngModel)]="prob.bandvalue"> 
+          </div>
+          <div class='link-lat-value'>
+            <label [for]="'lat-value'+i">Latency (ms): </label>
+            <input [id]="'lat-value'+i" autocomplete="off" [(ngModel)]="prob.latvalue"> 
+          </div>
+          <button class='delete-prob' (click)="deleteProbability(prob)">Delete probability</button>
+      
+        </div>
+
+      </li>
+
+    </ul>
+    
+  </div>
+
+  <div id="link-menu-select-link-type">
+    <mat-form-field>
+      <mat-label>Link type</mat-label>
+      <mat-select [(value)]="data.type">
+        <mat-option value="wireless">Wireless</mat-option>
+        <mat-option value="wired">Wired</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<div id="actions" mat-dialog-actions>
+  <button id="delete" mat-button mat-dialog-close (click)="onDeleteClick($event)">Delete</button>
+  <button id="save" mat-button (click)="onCreateClick(data)">Save</button>
+</div>
+</div>

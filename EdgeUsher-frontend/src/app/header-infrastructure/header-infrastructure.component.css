@@ -1,0 +1,174 @@
+/*--- GENERAL DIALOG STYLE ---*/
+
+#header-infrastructure {
+    display: grid;
+    margin-top: 2px;
+    width: 100%;
+    grid-template-columns: 5% 35% 60%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; 
+}
+
+#header-infrastructure::selection {
+    background: none;
+}
+
+#header-infrastructure-actions {
+    grid-column-start: 3;
+    grid-row-start: 1;
+}
+
+input {
+    outline: none;
+}
+
+
+/*---TITLE STYLE ---*/
+
+#logo-infrastructure-div {
+    text-align: center;
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+
+#logo {
+    grid-column-start: 1;
+    grid-row-start: 1;
+    cursor: pointer;
+}
+
+#infrastructure-name {
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    background-color: skyblue;
+    text-align: left;
+    align-content: center;
+    align-items: center;
+    grid-column: 2;
+    cursor: text;
+    border: none;
+    border-radius: 0px;
+    background-image: linear-gradient(to right, rgb(33, 117, 173), rgb(33, 117, 173));
+    background-position: 1px calc(100% - 5px);
+    background-size: calc(100% - 10px) 2px;
+    background-repeat: no-repeat;
+    font-size: 120%;
+    box-shadow: none;padding-left: 1%;
+    padding-right: 1%;
+}
+
+
+/*--- BUTTONS STYLE ---*/
+
+#settings-infrastructure-button {
+    height: 20px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+#tutorial-button-infrastructure {
+    height: 20px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+#placement-button {
+    height: 30px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 1px;
+}
+
+#img-exe-from-infrastructure {
+    height: 20px;
+    float: right;
+    border: none;
+    box-shadow: none;
+    margin-top: 4px;
+    margin-right: 10px;
+}
+
+#exe-from-infrastructure {
+    position: relative;
+    /*border: 3px solid rgb(33, 117, 173);
+    border-radius: 2%;*/
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    line-height: 150%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding-left: 1%;
+    padding-right: 1%;
+    font-size: 70%;
+    min-width: 0px;
+    background-color: lightblue;
+    border-radius: 8px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    float: right;
+    margin-top: 3px;
+}
+
+#buttons {
+    grid-column-start: 3;
+    position: relative;
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 33% 33% 33%;
+    align-items: center;
+    text-align: center;
+    margin-left: 0%;
+    margin-right: 0%;
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+  
+.btn {
+    border: 1px solid gray;
+    color: black;
+    background-color: lightcyan;
+    padding: 2px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+}
+  
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+button:hover {
+    background-color: rgba(0, 0, 0, .08);
+}
+
+.upload-btn-wrapper.button:hover {
+    background-color: rgba(0, 0, 0, .08);
+}
+
+/*--- SETTINGS MENU ---*/
+
+#settings-menu-content input {
+    width: 100%;
+}
+

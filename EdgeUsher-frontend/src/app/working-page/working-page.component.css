@@ -1,0 +1,89 @@
+#working-page {
+    display: grid;
+    overflow: auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#svg-div {
+    grid-row-start: 2;
+}
+
+#code {
+    display: none;
+}
+
+#header {
+    grid-row-start: 1;
+}
+
+/*--- CHAIN NAVIGATION ---*/
+
+#chain-navigation {
+    text-align: center;
+    grid-row: 3;
+}
+
+/*---Radio button style ---*/
+/*
+  Hide radio button (the round disc)
+  we will use just the label to create pushbutton effect
+*/
+input[type=radio] {
+  display:none; 
+  margin:10px;
+}
+
+
+/*
+Change the look'n'feel of labels (which are adjacent to radiobuttons).
+Add some margin, padding to label
+*/
+input[type=radio] + label {
+  display:inline-block;
+  margin:-2px;
+  padding: 4px 12px;
+  /*background-color: #e7e7e7;
+  border-color: #ddd;*/
+  background-color: skyblue;
+  line-height: 30%;
+  cursor: pointer;
+  font-size: 80%;
+}
+
+#right-radio-button + label {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border: 2px solid rgb(33, 117, 173);
+  border-left-color: skyblue;
+}
+
+#left-radio-button + label {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border: 2px solid rgb(33, 117, 173);
+  border-right-color: skyblue;
+}
+/*
+Change background color for label next to checked radio button
+to make it look like highlighted button
+*/
+input[type=radio]:checked + label { 
+  background-image: none;
+  /*background-color:#d0d0d0;*/
+  background-color: rgb(33, 117, 173);
+}
+
+#radio-button-chain {
+  /*top: 90%;
+  left: 50%;
+  position: fixed;*/
+  text-align: center;
+}
+
+/*#subdiv-radio-button-chain {
+  position: relative;
+  left: -50%;
+}*/

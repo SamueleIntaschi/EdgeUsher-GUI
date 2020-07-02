@@ -1,0 +1,255 @@
+/*--- GENERAL DIALOG STYLE ---*/
+
+#flow-dialog-content {
+    font-size: 80%;
+    display: grid;
+    grid-template-rows: 3;
+}
+
+#link-menu {
+    display: grid;
+    grid-template-rows: 40px 20px 130px 20px;
+}
+
+#err {
+    grid-row: 2;
+    font-size: 50%;
+    color: red;
+    margin: 0 0;
+}
+
+input {
+    width: 10%;
+    font-size: 80%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+button {
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 150%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 60%;
+    min-width: 0px;
+    border: solid;
+    border-radius: 8px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+/*--- TITLE STYLE ---*/
+
+#p-title {
+    grid-row: 1;
+    grid-column-start: 1;
+    margin: 0 0;
+}
+
+#flow-title {
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: auto;
+    padding: 0%;
+    font-weight: 500;
+}
+
+/*--- BANDWIDTH FIELD ---*/
+#link-menu-bandwidth {
+    grid-row: 1;
+}
+
+/*--- LATENCY FIELD ---*/
+#link-menu-latency {
+    grid-row: 2;
+}
+
+/*--- LINK TYPE ---*/
+#link-menu-select-link-type {
+    grid-row: 3;
+}
+
+/*--- BUTTONS STYLE ---*/
+
+#close {
+    grid-row: 1;
+    grid-column-start: 2;
+    height: 16px;
+    line-height: none !important;
+    width: 15px;
+    height: 15px;
+    justify-self: right;
+    line-height: 100%;
+    cursor: pointer;
+    background-color: lightskyblue;
+    box-shadow: none;
+}
+
+#save {
+    grid-column-start: 2;
+}
+
+#delete {
+    grid-column-start: 1;
+}
+
+div#actions {
+    grid-row: 4;
+    width: 100%;
+    padding-top: 3px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 100%;
+}
+
+/*---Add button---*/
+.add {
+    margin: 2px;
+    height: 15px;
+    background-color: rgb(63, 226, 63);
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 100%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 1px;
+    font-size: 80%;
+    min-width: 0px;
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+/*---Delete button---*/
+.delete {
+    margin: 2px;
+    height: 15px;
+    background-color: rgb(224, 72, 72);
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 100%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 1px;
+    font-size: 80%;
+    min-width: 0px;
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+/*---Probability Style---*/
+
+/*General div for probability input*/
+#prob-link {
+    width: 90%;
+}
+
+#prob-link button {
+    line-height: 100%;
+}
+
+#prob-link input {
+    width: 30%;
+    height: 80%;
+    font-size: 90%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+#add-prob {
+    background-color: rgb(63, 226, 63);
+}
+
+.delete-prob {
+    align-self: center;
+    grid-column: 1;
+    grid-row: 2;
+    margin: 2px;
+    height: 15px;
+    background-color: rgb(224, 72, 72);
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 100%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 1px;
+    font-size: 80%;
+    min-width: 0px;
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+/*---Probability Style---*/
+
+ul {
+    list-style-type: none;
+    margin: 0px;
+    padding-left: 16px;
+}
+
+.nested-link-line-prob {
+    position: relative;
+}
+
+ul li::before, ul li::after {
+    position: absolute;
+    left: -12px;
+    content: '';
+}
+
+li.nested-link-line-prob.last-child:after {
+    height: 50%;
+}
+
+/*--- Horizontal lines ---*/
+
+ul li::before {
+    border-top: 2px solid black;
+    top: 50%;
+    width: 1em;
+    height: 0;
+}
+
+/*--- Vertical lines ---*/
+
+ul li::after {
+    border-left: 2px solid black;
+    height: 110%;
+    width: 0px;
+    top: 2px;
+}
+
+.nested-link-prob-div {
+    border: 2px solid grey;
+    padding: 3px;
+    margin: 5px;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.link-band-value {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.link-lat-value {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.link-prob {
+    grid-column: 1;
+    grid-row: 1;
+}

@@ -1,0 +1,17 @@
+<div id="subchain-menu">
+  <div id="subchain-title">
+    <p id="p-title">Maximum latency constraint</p>
+    <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
+  </div>
+  <p id="err" [textContent]="err"></p>
+  <div mat-dialog-content id="subchain-dialog-content">
+    <p>
+      Max latency in the chain: <input autocomplete="off" id="max-latency" [(ngModel)]="data.maxLatency">
+    </p>
+  </div>
+  <div id="actions" mat-dialog-actions>
+    <button id="delete" mat-button mat-dialog-close (click)="onCancelClick()">Delete</button>
+    <button id="save" mat-button (click)="onSaveClick(data)">Save</button>
+    <button id="modify" mat-button mat-dialog-close (click)="onModifyClick(data)">Modify</button>
+  </div>
+</div>

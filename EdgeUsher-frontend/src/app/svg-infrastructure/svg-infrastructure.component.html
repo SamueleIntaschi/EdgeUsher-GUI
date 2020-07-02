@@ -1,0 +1,166 @@
+<div id="svg-div">
+    
+    <svg #svgelem id="svgelem"
+    oncontextmenu="return false;"
+    (mousedown)="onMouseDown($event)" 
+    (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp($event)"
+    (mouseleave)="onMouseLeave()"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        <defs>
+            <marker id="startcircle" markerWidth="8" markerHeight="8" refX="5" refY="5">
+                <circle cx="5" cy="5" r="1.5" style="stroke: none; fill:red;"/>
+            </marker>  
+            <marker id="arrowhead3" refX="4" refY="3" markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
+                <path d="M 0 0 L 4 3 L 0 6 Z"></path>
+            </marker>
+        </defs>
+        <g *ngFor="let link of this.links">
+            <title>
+                {{link.title}}
+            </title>
+            <path
+            [attr.d]="link.path"
+            class='click-path'
+            stroke="skyblue"
+            fill="none"
+            (mouseup)="link.onMouseUp($event)"
+            title="link"
+            stroke-width="3"
+            />
+            <path *ngIf="link.type == 'wired'"
+            [attr.d]="link.path" 
+            stroke="red" 
+            fill="none"
+            marker-end="url(#arrowhead3)"
+            (mouseup)="link.onMouseUp($event)"
+            [attr.id]="'link' + link.id"
+            class="link"
+            />
+            <path *ngIf="link.type == 'wireless'"
+            [attr.d]="link.path" 
+            stroke="red" 
+            fill="none"
+            marker-end="url(#arrowhead3)"
+            (mouseup)="link.onMouseUp($event)"
+            [attr.id]="'link' + link.id"
+            class="link"
+            stroke-dasharray="5,5"
+            />
+            <!--path
+            [attr.d]="link.textpath" 
+            stroke="none" 
+            fill="none"
+            (mouseup)="link.onMouseUp($event)"
+            [attr.id]="'link-text' + link.id"
+            stroke-dasharray="5,5"
+            /-->
+            
+            <!--rect *ngIf="this.probabilisticMode == 'static' && link.middlePoint"
+            [attr.x]="link.middlePoint.x - (link.bandwidth + ' mbps').length * 8 / 2"
+            [attr.y]="link.middlePoint.y - 15"
+            [attr.width]="(link.bandwidth + ' mbps').length * 8"
+            [attr.height]="20"
+            class="link-rect"
+            (mouseup)="link.onMouseUp($event)"
+            stroke="#000000" 
+            stroke-width="1px"
+            />
+            <text *ngIf="this.probabilisticMode == 'static' && link.middlePoint"
+            [attr.x]="link.middlePoint.x"
+            [attr.y]="link.middlePoint.y"
+            text-anchor="middle"
+            (mouseup)="link.onMouseUp($event)"
+            font-size=".8em"
+            >
+            {{link.bandwidth}} Mbps
+            {{link.latency}} ms
+            </text-->
+
+            <!--text class="text-link" [attr.id]="'text-link' + link.id" (mouseup)="link.onMouseUp($event)">
+                <textPath [attr.xlink:href]="'#'+ 'link-text' + link.id" startOffset="50%" text-anchor="middle">
+                  L: {{link.latency}} ms,  BW: {{link.bandwidth}} Mbps
+                </textPath>
+            </text-->
+            <!--line *ngIf="link.type == 'wired'"
+            [attr.x1]="link.x1" 
+            [attr.y1]="link.y1" 
+            [attr.x2]="link.x2" 
+            [attr.y2]="link.y2" 
+            [attr.id]="'link' + link.id"
+            class="link"
+            (mouseup)="link.onMouseUp($event)"
+            marker-end="url(#arrowhead3)" />
+            <line *ngIf="link.type == 'wireless'"
+            [attr.x1]="link.x1" 
+            [attr.y1]="link.y1" 
+            [attr.x2]="link.x2" 
+            [attr.y2]="link.y2" 
+            [attr.id]="'link' + link.id"
+            class="link"
+            (mouseup)="link.onMouseUp($event)"
+            stroke-dasharray="5,5" 
+            marker-end="url(#arrowhead3)" /-->
+            <!--rect
+            [attr.x]="link.coordBox.x" 
+            [attr.y]="link.coordBox.y"
+            [attr.width]="link.coordBox.w"
+            [attr.height]="link.coordBox.h"
+            style="stroke:rgb(255,0,0); stroke-width: 1"
+            ></rect>
+            <text 
+            [attr.x]="link.coordBox.x"
+            [attr.y]="link.coordBox.y"
+            class="text"
+            dominant-baseline="middle" 
+            text-anchor="middle"
+            font-size="0.8em">
+                {{link.bandwidth}} ms
+                {{link.latency}} ms
+            </text-->
+        </g>
+        
+        <g *ngFor="let node of this.nodes">
+            <image 
+            [attr.x]="node.x - node.width/2" 
+            [attr.y]="node.y - node.height/2"
+            [attr.id]="'node' + node.id"
+            [attr.class]="node"
+            [attr.height]="node.height"
+            [attr.width]="node.width"
+            class="node"
+            (mouseup)="node.onMouseUp($event)"
+            (mousemove)="node.onMouseMove($event)"
+            (mousedown)="node.onMouseDown($event)"
+            [attr.href]="node.imageUrl"/>
+            <text 
+            [attr.x]="node.x"
+            [attr.y]="node.y + ((2*node.height)/3)"
+            [attr.id]="'text' + node.id"
+            (mouseup)="node.onMouseUp($event)"
+            (mousemove)="node.onMouseMove($event)"
+            (mousedown)="node.onMouseDown($event)"
+            class="text"
+            dominant-baseline="middle" 
+            text-anchor="middle"
+            font-size="0.8em">
+                {{node.name}}
+            </text>
+        </g>
+        
+
+        <line *ngIf="this.isDrawingLine"
+        [attr.x1]="this.tmpLink.x1" 
+        [attr.y1]="this.tmpLink.y1" 
+        [attr.x2]="this.tmpLink.x2" 
+        [attr.y2]="this.tmpLink.y2" 
+        id="tmp-link"
+        class="link"
+        (mouseup)="this.tmpLink.onMouseUp($event)" 
+        marker-end="url(#arrowhead3)"/>
+    </svg>
+    <input id="zoomp" width="20" type="image" src="../../icons/zoomin3.png" (click)="onZoom(1)"/>
+    <input id="zoom0" width="20" type="image" src="../../icons/zoom3.png" (click)="onZoom(2)"/>
+    <input id="zoom-" width="20" type="image" src="../../icons/zoomout3.png" (click)="onZoom(0)"/>
+    <!--img id="logo" src="https://raw.githubusercontent.com/di-unipi-socc/EdgeUsher/master/img/edgeusherlogo.png" alt="EdgeUsher" width="70" routerLink=""-->
+</div>

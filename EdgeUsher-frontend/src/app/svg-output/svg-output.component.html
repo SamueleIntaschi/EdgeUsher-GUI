@@ -1,0 +1,205 @@
+<div id="svg-placement-div">
+    
+    <svg #svgoutputelem id="svgplacementelem"
+    (mousedown)="onMouseDown($event)" 
+    (mousemove)="onMouseMove($event)"
+    (mouseup)="onMouseUp($event)"
+    (mouseleave)="onMouseLeave($event)"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        <defs>
+            <marker id="arrowhead3" refX="4" refY="3" markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
+                <path d="M 0 0 L 4 3 L 0 6 Z"></path>
+            </marker>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="0" y2="100%">
+                <stop offset="0%" style="stop-color:lightcyan;" />
+                <stop offset="100%" style="stop-color:#3366FF;" />
+            </linearGradient>
+        </defs>
+        <g *ngFor="let link of this.links">
+            <path *ngIf="link.type == 'wired' && !link.usedBw"
+            [attr.d]="link.path" 
+            stroke="red" 
+            fill="none"
+            marker-end="url(#arrowhead3)"
+            (mouseup)="link.onMouseUp($event)"
+            [attr.id]="'link' + link.id"
+            class="link"
+            />
+            <path *ngIf="link.type == 'wired' && link.usedBw"
+            [attr.d]="link.path" 
+            stroke="blue" 
+            fill="none"
+            marker-end="url(#arrowhead3)"
+            (mouseup)="link.onMouseUp($event)"
+            [attr.id]="'link' + link.id"
+            class="link"
+            />
+            <path *ngIf="link.type == 'wireless' && !link.usedBw"
+            [attr.d]="link.path" 
+            stroke="red" 
+            fill="none"
+            marker-end="url(#arrowhead3)"
+            (mouseup)="link.onMouseUp($event)"
+            [attr.id]="'link' + link.id"
+            class="link"
+            stroke-dasharray="5,5"
+            />
+            <path *ngIf="link.type == 'wireless' && link.usedBw"
+            [attr.d]="link.path" 
+            stroke="blue" 
+            fill="none"
+            marker-end="url(#arrowhead3)"
+            (mouseup)="link.onMouseUp($event)"
+            [attr.id]="'link' + link.id"
+            class="link"
+            stroke-dasharray="5,5"
+            />
+            <path *ngIf="link.usedBw"
+            [attr.d]="link.textpath" 
+            stroke="none" 
+            fill="none"
+            (mouseup)="link.onMouseUp($event)"
+            [attr.id]="'link-text' + link.id"
+            stroke-dasharray="5,5"
+            />
+            <text class="text-link" [attr.id]="'text-link' + link.id">
+                <textPath [attr.xlink:href]="'#'+ 'link-text' + link.id" startOffset="50%" text-anchor="middle">
+                  {{link.usedBw}} Mbps
+                </textPath>
+            </text>
+        </g>
+
+        
+        
+        <g *ngFor="let node of this.nodes">
+            <image 
+            [attr.x]="node.x - node.width/2" 
+            [attr.y]="node.y - node.height/2"
+            [attr.id]="'node' + node.id"
+            [attr.class]="node"
+            [attr.height]="node.height"
+            [attr.width]="node.width"
+            class="node"
+            (mouseup)="node.onMouseUp($event)"
+            (mousemove)="node.onMouseMove($event)"
+            (mousedown)="node.onMouseDown($event)"
+            [attr.href]="node.imageUrl"/>
+            <text 
+            [attr.x]="node.x"
+            [attr.y]="node.y + ((2*node.height)/3)"
+            [attr.id]="'text' + node.id"
+            (mouseup)="node.onMouseUp($event)"
+            (mousemove)="node.onMouseMove($event)"
+            (mousedown)="node.onMouseDown($event)"
+            class="text"
+            dominant-baseline="middle" 
+            text-anchor="middle"
+            font-size="0.8em">
+                {{node.name}}
+            </text>
+        </g>
+        <g *ngFor="let service of this.services">
+            <circle 
+            *ngIf="this.indexOfUnplacedService(service) == -1"
+            [attr.cx]="service.x"
+            [attr.cy]="service.y"
+            [attr.r]="service.r"
+            [attr.id]="'service' + service.id"
+            class="service"
+            (mouseup)="service.onMouseUp($event)"
+            fill="url(#gradient)"
+            stroke-width="1px"
+            stroke="#000000"
+            (mousedown)="service.onMouseDown($event)"/>
+            <text 
+            *ngIf="this.indexOfUnplacedService(service) == -1"
+            [attr.x]="service.x"
+            [attr.y]="service.y + ((4*service.r)/3)"
+            [attr.id]="'text' + service.id"
+            text-anchor="middle" 
+            stroke="#000000" 
+            stroke-width="1px"
+            (mousedown)="service.onMouseDown($event)" 
+            (mouseup)="service.onMouseUp($event)"
+            font-size="0.8em"
+            >
+                {{service.name}}
+            </text>
+        </g>
+        
+    </svg>
+
+    <svg #unplacedsvg id='unplacedsvg'
+    (mouseup)="onMouseUpUnplaced($event)"
+    (mousedown)="onMouseDownUnplaced($event)"
+    (mousemove)="onMouseMoveUnplaced($event)"
+    (mouseleave)="onMouseLeaveUnplaced()"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        <!--g>
+            <circle
+            cx="50%"
+            cy="50%"
+            r="100"
+            position="absolute"
+            fill="skyblue"
+            stroke-width="1px"
+            stroke="#000000"
+            />
+        </g-->
+        <g>
+            <rect 
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            fill="skyblue"
+            />
+            <text 
+            id="unplaced-text"
+            x="50%" 
+            y="45%" 
+            dominant-baseline="middle" 
+            text-anchor="middle">
+            Unplaced
+            </text> 
+            <text 
+            id="unplaced-text"
+            x="50%" 
+            y="55%" 
+            dominant-baseline="middle" 
+            text-anchor="middle">
+            Services
+            </text> 
+        </g>
+        <g *ngFor="let service of this.unplacedServices">
+            <circle
+            [attr.cx]="service.x"
+            [attr.cy]="service.y"
+            [attr.r]="service.r"
+            [attr.id]="'service' + service.id"
+            class="service"
+            (mouseup)="service.onMouseUp($event)"
+            fill="url(#gradient)"
+            stroke-width="1px"
+            stroke="#000000"
+            (mousedown)="service.onMouseDown($event)"/>
+            <text 
+            [attr.x]="service.x"
+            [attr.y]="service.y + ((4*service.r)/3)"
+            [attr.id]="'text' + service.id"
+            text-anchor="middle" 
+            stroke="#000000" 
+            stroke-width="1px"
+            (mousedown)="service.onMouseDown($event)" 
+            (mouseup)="service.onMouseUp($event)"
+            font-size="0.8em"
+            >
+                {{service.name}}
+            </text>
+        </g>
+    </svg>
+    <input id="zoomp" width="20" type="image" src="../../icons/zoomin3.png" (click)="onZoom(1)"/>
+    <input id="zoom0" width="20" type="image" src="../../icons/zoom3.png" (click)="onZoom(2)"/>
+    <input id="zoom-" width="20" type="image" src="../../icons/zoomout3.png" (click)="onZoom(0)"/>
+    <!--img id="logo" src="https://raw.githubusercontent.com/di-unipi-socc/EdgeUsher/master/img/edgeusherlogo.png" alt="EdgeUsher" width="70" routerLink=""-->
+</div>

@@ -1,0 +1,141 @@
+<div id='svg-div'>
+    <svg #svgchainelem id="svgchainelem" 
+    oncontextmenu="return false;"
+    (mousedown)='onMouseDown($event)'
+    (mousemove)='onMouseMove($event)'
+    (mouseup)='onMouseUp($event)'
+    (mouseleave)='onMouseLeave()'
+    xlmns:xhtml="http://www.w3.org/1999/xhtml">
+    <defs>
+        <marker id="startcircle" markerWidth="8" markerHeight="8" refX="5" refY="5">
+            <circle cx="5" cy="5" r="2" style="stroke: none; fill:red;"/>
+        </marker>    
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" />
+        </marker>
+        <marker id="arrowhead2" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="10" refY="0" viewBox="0 -5 10 10" orient="auto">
+            <path d="M0 -5L10 0L0 5 Z"></path>
+        </marker>
+        <marker id="arrowhead3" refX="4" refY="3" markerWidth="6" markerHeight="6" orient="auto" stroke="black">
+            <path d="M 0 0 L 4 3 L 0 6 Z"></path>
+        </marker>
+        <marker id="arrowhead4" refX="4" refY="3" markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
+            <path d="M 0 0 L 4 3 L 0 6 Z"></path>
+        </marker>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="0" y2="100%">
+            <stop offset="0%" style="stop-color:lightcyan;" />
+            <stop offset="100%" style="stop-color:#3366FF;" />
+        </linearGradient>
+    </defs>
+        <g *ngFor="let sub of this.subchains">
+            <path 
+            [attr.d]="sub.path" 
+            [attr.id]="'subchain' + sub.id"
+            stroke="red" 
+            fill="none"
+            class="subchain"
+            (mouseup)="sub.onMouseUp($event)" 
+            stroke-dasharray="5,5"
+            marker-start="url(#startcircle)"
+            marker-end="url(#arrowhead4)"
+            />
+            <path 
+            [attr.d]="sub.textpath" 
+            [attr.id]="'subchain-text' + sub.id"
+            stroke="none" 
+            fill="none"
+            (mouseup)="sub.onMouseUp($event)" 
+            />
+            
+            <text class="text-subchain" [attr.id]="'text-subchain' + sub.id" (mouseup)="sub.onMouseUp($event)" >
+                <textPath [attr.xlink:href]="'#'+ 'subchain-text' + sub.id" startOffset="50%" text-anchor="middle">
+                  {{sub.maxLatency + ' Mbps'}}
+                </textPath>
+            </text>
+            
+        </g>
+        <g *ngFor="let flow of this.flows">
+
+            <line
+            [attr.x1]='flow.coord1.x'
+            [attr.y1]='flow.coord1.y'
+            [attr.x2]='flow.coord2.x'
+            [attr.y2]='flow.coord2.y'
+            [attr.id]="'flow' + flow.id"
+            class="flow"
+            (mouseup)="flow.onMouseUp($event)"
+            marker-end="url(#arrowhead3)"
+            /> 
+            <rect
+            [attr.x]="((flow.coord1.x + flow.coord2.x) / 2) - (flow.bandwidth + ' mbps').length * 8 / 2"
+            [attr.y]="((flow.coord1.y + flow.coord2.y) / 2) - 15"
+            [attr.width]="(flow.bandwidth + ' mbps').length * 8"
+            [attr.height]="20"
+            class="flow-rect"
+            (mouseup)="flow.onMouseUp($event)"
+            stroke="#000000" 
+            stroke-width="1px"
+            (mouseup)="flow.onMouseUp($event)"/>
+            <text
+            [attr.x]="(flow.coord1.x + flow.coord2.x) / 2"
+            [attr.y]="(flow.coord1.y + flow.coord2.y) / 2"
+            text-anchor="middle"
+            (mouseup)="flow.onMouseUp($event)"
+            font-size=".8em"
+            >
+            {{flow.bandwidth}} Mbps
+            </text>
+        </g>
+        <g *ngFor="let service of this.services">
+            <circle
+            [attr.cx]="service.x"
+            [attr.cy]="service.y"
+            [attr.r]="service.r"
+            [attr.id]="'service' + service.id"
+            class="service"
+            (mouseup)="service.onMouseUp($event)"
+            fill="url(#gradient)"
+            (mousedown)="service.onMouseDown($event)"/>
+            <image *ngFor="let device of service.iotReqs"
+            [attr.x]="device.x - 10" 
+            [attr.y]="device.y - 10"
+            class="icon"
+            [attr.height]="20"
+            [attr.width]="20"
+            (mouseup)="service.onMouseUp($event)"
+            (mousedown)="service.onMouseDown($event)"
+            [attr.href]="device.imgUrl"
+            cursor="pointer"
+            />
+            <text 
+            [attr.x]="service.x"
+            [attr.y]="service.y + ((4*service.r)/3)"
+            [attr.id]="'text' + service.id"
+            text-anchor="middle" 
+            stroke="#000000" 
+            stroke-width="1px"
+            (mousedown)="service.onMouseDown($event)" 
+            (mouseup)="service.onMouseUp($event)"
+            font-size="0.8em"
+            >
+                {{service.name}}
+            </text>
+        </g>
+
+
+        <line
+        [attr.x1]="tmpFlow.coord1.x"
+        [attr.x2]="tmpFlow.coord2.x"
+        [attr.y1]="tmpFlow.coord1.y"
+        [attr.y2]="tmpFlow.coord2.y"
+        id="tmp-flow"
+        class="flow"
+        (mouseup)="tmpFlow.onMouseUp($event)"
+        marker-end="url(#arrowhead3)"
+        style="stroke:black;stroke-width:2;"/>
+
+    </svg>
+    <input id="zoomp" width="20" type="image" src="../../icons/zoomin3.png" (click)="onZoom(1)"/>
+    <input id="zoom0" width="20" type="image" src="../../icons/zoom3.png" (click)="onZoom(2)"/>
+    <input id="zoom-" width="20" type="image" src="../../icons/zoomout3.png" (click)="onZoom(0)"/>
+</div>

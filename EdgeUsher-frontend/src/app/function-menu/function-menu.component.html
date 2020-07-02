@@ -1,0 +1,198 @@
+<div id="function-menu">
+<div id="title">
+    <!--button checked="false" id="close" (click)="onClose()">x</button-->
+    <input id="function-name-menu" autocomplete="off" [(ngModel)]="data.name">
+    <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
+</div>
+<p id="err" class="err" [textContent]="err"></p>
+<div mat-dialog-content id="service-dialog-content" >
+  <!--label for="service-name-input">Function name:</label> 
+  <input autocomplete="off" id="service-name-input" [(ngModel)]="data.squareName"> <br-->
+  <label for="service-time-input">Average processing time:</label> 
+  <input autocomplete="off" id="service-time-input" [(ngModel)]="data.serviceTime"> <br>
+  <label for="hardware-requirements-input">Hardware capacity required:</label>
+  <input autocomplete="off" id="hardware-requirements-input" [(ngModel)]="data.hwReqs"> <br>
+
+  <!-- IOT DEVICES CONNECTED -->
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          IoT devices connected
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+        <button class='add' id="add-device" (click)="addDevice()">Add connected device</button>
+          <div id='iot-reqs-div' *ngFor="let iot of this.iotReqs; let i = index; trackBy: trackByFn">
+            <label [for]="'service-' + this.data.id + '-device-'+i">Device: </label>
+            <input [id]="'service-' + this.data.id + '-device-'+i" autocomplete="off" class="iot-caps-input" [(ngModel)]="this.iotReqs[i].device">
+            <button class='delete' (click)='deleteDevice(iot)'>Delete device</button>
+          
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Choose icon
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div id="select-icon">
+                  <img 
+                  *ngFor="let icon of icons; index as j"
+                  class='icon'
+                  [attr.id]="'icon-' + j + '-device' + i + '-service' + data.id" 
+                  [attr.src]="icon"
+                  height="30"
+                  width="30"
+                  (click)="onIconClick($event, iot)"/>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          
+          </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!--label for="iot-requirements-input">IoT devices connected (separate by ,):</label>
+  <input autocomplete="off" id="iot-requirements-input" [(ngModel)]="data.iotReqs"> <br-->
+  <mat-accordion>
+    <mat-expansion-panel id="sec-reqs">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            Security policies
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <app-query-builder
+      [initCond]="this.data.cond"
+      [initRules]="this.data.securityRequirements"
+      (rulesChange)="updateSecRules($event)"
+      (condChange)="updateCond($event)"
+      ></app-query-builder>
+
+      <!--div id="security">
+
+        <p [textContent]="this.saveReq()"></p>
+        <div class="nested">
+          <button id="and-req" class="cond" *ngIf="this.cond != 'list'" (click)='andReq0()'>AND</button>
+          <button id="or-req" class="cond" *ngIf="this.cond != 'list'" (click)='orReq0()'>OR</button>
+          <button id="add-rule" class="add" (click)='this.addRule0()'>Add rule</button>
+          <button id="add-rule" class="add" *ngIf="this.cond != 'list'" (click)='addRuleset0()'>Add ruleset</button>
+          <button id="list-req" class="add" (click)='listReq()'>List</button>
+          <button id="ruleset-req" class="add" (click)='ruleReq()'>Ruleset</button>
+    
+          
+            
+          <ng-template #recursiveList let-rules>
+          <ul class='nested-ul' *ngFor="let rule of rules; index as i">
+            <li class="nested-line">
+              <div class="nested">
+                <select *ngIf="rule.cond == 'single'" [(ngModel)]="rule.singleReq">
+                  <option *ngFor="let rec of this.secRequisites" [value]="rec.id">{{rec.name}}</option>
+                </select>
+                <div *ngIf="rule.cond == 'and' || rule.cond == 'or'">
+                    <button id="and-req" class="cond" *ngIf="rule.cond != 'single'" (click)='andReq(rule)'>AND</button>
+                    <button id="or-req" class="cond" *ngIf="rule.cond != 'single'" (click)='orReq(rule)'>OR</button>
+                    <button id="add-rule" class="add" (click)='addRule(rule)'>Add rule</button>
+                    <button id="add-rule" class="add" *ngIf="rule.cond != 'single'" (click)='addRuleset(rule)'>Add ruleset</button>
+                    <p class="help" *ngIf="rule.nestedRules.length == 0">A ruleset must not be empty</p>
+                    <ul class="nested-ul" *ngIf="rule.nestedRules.length > 0">
+                        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: rule.nestedRules }"></ng-container>
+                    </ul>
+    
+                </div>
+                <button class="delete" (click)="deleteRule(i, rules)">Delete this rule</button>
+              </div>
+            </li>
+          </ul>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: rules}"></ng-container>
+    
+        </div>
+      </div-->
+
+      <!--div id="security">
+          <button id="and-req" *ngIf="this.firstRule.cond != 'list'" class="cond" (click)='andReq(this.firstRule)'>ALL</button>
+          <button id="or-req" *ngIf="this.firstRule.cond != 'list'" class="cond" (click)='orReq(this.firstRule)'>ANY</button>
+          <button id="add-rule" class="add" (click)='addRule(this.firstRule)'>Add requirement</button>
+          <button id="add-single-req" *ngIf="this.firstRule.cond != 'list'" class="add" (click)='listReq(this.firstRule)'>List</button>
+          <button id="rule-button" *ngIf="this.firstRule.cond == 'list'" class="add" (click)="ruleReq(this.firstRule)">Rule</button>
+          <p class='help' *ngIf="this.firstRule.cond == 'and' || this.firstRule.cond == 'list'">All of these requisites must be satisfied</p>
+          <p class='help' *ngIf="this.firstRule.cond == 'or'">At least one of these requisites must be satisfied</p>
+          <select *ngIf="this.firstRule.cond == 'single'" [(ngModel)]="this.firstRule.singleReq">
+            <option *ngFor="let rec of this.secRequisites" [value]="rec.id">{{rec.name}}</option>
+          </select>
+          <ul id="first-nest" *ngFor="let rule of this.firstRule.nestedRules; index as i">
+            <button id="and-req" class="cond" *ngIf="rule.cond != 'single'" (click)='andReq(rule)'>AND</button>
+            <button id="or-req" class="cond" *ngIf="rule.cond != 'single'" (click)='orReq(rule)'>OR</button>
+            <button *ngIf="this.firstRule.cond != 'list'" id="add-rule" class="add" (click)='addRule(rule)'>Add rule</button>
+            <button id="add-single-req" class="add" *ngIf="rule.cond != 'single'" (click)='addSingleReq(rule)'>Single requisite</button>
+            <button class="delete" (click)="deleteRule(rule)">Delete this rule</button>
+            <p class='help' *ngIf="rule.cond == 'and'">All of these requisites must be satisfied</p>
+            <p class='help' *ngIf="rule.cond == 'or'">At least one of these requisites must be satisfied</p>
+            <select *ngIf="rule.cond == 'single'" [(ngModel)]="rule.singleReq">
+              <option *ngFor="let rec of this.secRequisites" [value]="rec.id">{{rec.name}}</option>
+            </select>
+
+              <ul id="second-nest" *ngFor="let rule of rule.nestedRules; index as i">
+                <button id="and-req" class="cond" *ngIf="rule.cond != 'single'" (click)='andReq(rule)'>AND</button>
+                <button id="or-req" class="cond" *ngIf="rule.cond != 'single'" (click)='orReq(rule)'>OR</button>
+                <button id="add-rule" class="add" (click)='addRule(rule)'>Add rule</button>
+                <button id="add-single-req" class="add" *ngIf="rule.cond != 'single'" (click)='addSingleReq(rule)'>Single requisite</button>
+                <button class="delete" (click)="deleteRule(rule)">Delete this rule</button>
+                <p class='help' *ngIf="rule.cond == 'and'">All of these requisites must be satisfied</p>
+                <p class='help' *ngIf="rule.cond == 'or'">At least one of these requisites must be satisfied</p>
+                <select *ngIf="rule.cond == 'single'" [(ngModel)]="rule.singleReq">
+                  <option *ngFor="let rec of this.secRequisites" [value]="rec.id">{{rec.name}}</option>
+                </select>
+
+                <ul id="third-nest" *ngFor="let rule of rule.nestedRules; index as i">
+                  <select [(ngModel)]="rule.singleReq">
+                    <option *ngFor="let rec of this.secRequisites" [value]="rec.id">{{rec.name}}</option>
+                  </select>
+                  <button class="delete" (click)="deleteRule(rule)">Delete this rule</button>
+                </ul>
+              </ul>
+          </ul>
+      </div-->
+
+      <!--
+      Virtualisation: <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.virtualisation.accessLogs">Access logs</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.virtualisation.auth">Authentication</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.virtualisation.hIds">Host IDS</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.virtualisation.procIsol">Process isolation</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.virtualisation.permMdl">Permission model</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.virtualisation.resMon">Resource usage monitoring</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.virtualisation.restPnts">Restore points</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.virtualisation.userIsol">User data isolation</mat-checkbox> <br>
+      <br>
+      Communications: <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.communications.certificates">Certificates</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.communications.firewall">Firewall</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.communications.dataEncr">IoT data encryption</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.communications.nodeIsol">Node isolation mechanisms</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.communications.netIDS">Network IDS</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.communications.keyCrypt">Public key cryptography</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.communications.wirelessSec">Wireless security</mat-checkbox> <br>
+      <br>
+      Data: <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.data.backup">Backup</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.data.encrStorage">Encrypted storage</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.data.obfsStorage">Obfuscated storage</mat-checkbox> <br>
+      <br>
+      Physical: <br> 
+      <mat-checkbox [(ngModel)]="data.secReqs.physical.accessCtrl">Access control</mat-checkbox> <br>
+      <mat-checkbox [(ngModel)]="data.secReqs.physical.antiTamp">Anti-tampering capabilities</mat-checkbox> <br>
+      <br>
+      Other: <br> 
+      <mat-checkbox [(ngModel)]="data.secReqs.other.audit">Audit</mat-checkbox> <br>
+      <br-->
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<div id="actions" class="action-buttons" mat-dialog-actions>
+  <button id="delete" mat-button mat-dialog-close (click)="onDeleteClick($event)">Delete</button>
+  <button id="move" mat-button mat-dialog-close (click)="onMoveClick($event)">Move</button>
+  <button id="save" mat-button (click)="onCreateClick(data)">Save</button>
+</div>
+</div>

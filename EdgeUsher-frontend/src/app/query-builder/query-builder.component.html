@@ -1,0 +1,65 @@
+<div id="security">
+
+    <div id="query-result-div">
+      <p id="query-result" [textContent]="this.saveReq()"></p>
+    </div>
+    <div id="query-builder-content">
+    <div class="nested">
+      <div class="actions-sec-div">
+        <div class='condition-div'>
+          <button class="cond" *ngIf="this.cond != 'list' && this.cond != 'and'" (click)='andReq0()'>AND</button>
+          <button class="selected-cond" *ngIf="this.cond == 'and'">AND</button>
+          <button class="cond" *ngIf="this.cond != 'list' && this.cond != 'or'" (click)='orReq0()'>OR</button>
+          <button class="selected-cond" *ngIf="this.cond == 'or'">OR</button>
+        </div>
+        <div class="add-type-div">
+          <button id="add-rule" class="add" (click)='this.addRule0()'>Add rule</button>
+          <button id="add-rule" class="add" *ngIf="this.cond != 'list'" (click)='addRuleset0()'>Add ruleset</button>
+          <button id="list-req" class="add" (click)='listReq()'>List</button>
+          <button id="ruleset-req" class="add" (click)='ruleReq()'>Ruleset</button>
+        </div>
+      </div>
+      
+      <ng-template #recursiveList let-rules>
+      <ul class='nested-ul' *ngFor="let rule of rules; index as i; last as last">
+        <li class="nested-line" [ngClass]="{'last-child': last}">
+          <div class="nested">
+            <select class="select-req" *ngIf="rule.cond == 'single'" [(ngModel)]="rule.singleReq" (ngModelChange)="onChange()">
+              <option *ngFor="let rec of this.secRequisites" [value]="rec.id">{{rec.name}}</option>
+            </select>
+            <div *ngIf="rule.cond == 'and' || rule.cond == 'or'">
+
+              <div class="actions-sec-div">
+                <div class='condition-div'>
+                  <button class="cond" *ngIf="rule.cond != 'list' && rule.cond != 'and'" (click)='andReq(rule)'>AND</button>
+                  <button class="selected-cond" *ngIf="rule.cond == 'and'">AND</button>
+                  <button class="cond" *ngIf="rule.cond != 'list' && rule.cond != 'or'" (click)='orReq(rule)'>OR</button>
+                  <button class="selected-cond" *ngIf="rule.cond == 'or'">OR</button>
+                </div>
+                <div class="add-type-div">
+                  <button id="add-rule" class="add" (click)='addRule(rule)'>Add rule</button>
+                  <button id="add-rule" class="add" *ngIf="this.cond != 'list'" (click)='addRuleset(rule)'>Add ruleset</button>
+                </div>
+              </div>
+
+                <!--button id="and-req" class="cond" *ngIf="rule.cond != 'single'" (click)='andReq(rule)'>AND</button>
+                <button id="or-req" class="cond" *ngIf="rule.cond != 'single'" (click)='orReq(rule)'>OR</button>
+                <button id="add-rule" class="add" (click)='addRule(rule)'>Add rule</button>
+                <button id="add-rule" class="add" *ngIf="rule.cond != 'single'" (click)='addRuleset(rule)'>Add ruleset</button-->
+                <p class="help" *ngIf="rule.nestedRules.length == 0">A ruleset must not be empty</p>
+                <ul class="nested-ul" *ngIf="rule.nestedRules.length > 0">
+                  <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: rule.nestedRules }"></ng-container>
+                </ul>
+
+            </div>
+            <button class="delete" (click)="deleteRule(i, rules)">Delete this rule</button>
+          </div>
+        </li>
+      </ul>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: rules}"></ng-container>
+
+
+    </div>
+    </div>
+  </div>

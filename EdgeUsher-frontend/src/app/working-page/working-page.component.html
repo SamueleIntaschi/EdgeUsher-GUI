@@ -1,0 +1,63 @@
+<div id="working-page">
+    <!--app-canvas id="app-canvas" ></app-canvas-->
+    <app-svg-chain id="svg"
+    (onChangeTitleFromUpload)="changeTitleFromUpload($event)"
+    ></app-svg-chain>
+    <app-header-chain id ="header"
+    (reset)="new()"
+    (saveChain)="save()"
+    (saveJSON)="saveJson()"
+    (uploadChain)="upload($event)"
+    (changeTitle)="onChangeTitle($event)"
+    (codeClick)="onCodeClick($event)"
+    (onInfClick)="onInfClick()"
+    (onSubchainClick)="subchain()"
+    (logoClick)="onLogoClick()"
+    (exeEU)="openExecutionDialog()"
+    (tutorialClick)="openTutorialDialog()"
+    [title]="this.title"
+    ></app-header-chain>
+
+    <app-chain-code id="code"
+    ></app-chain-code>
+
+    <div id='radio-button-chain'>
+        <div id="subdiv-radio-button-chain">
+            <input id="left-radio-button" (click)="onCodeClick(1)" type="radio" name="radios"value="false">
+            <label for="left-radio-button">Source code</label>
+            <input id="right-radio-button" (click)="onCodeClick(2)" type="radio" name="radios" value="all" checked>
+            <label for="right-radio-button">Graphic editor</label>
+        </div>
+    </div>
+
+
+    <!--div id="chain-navigation">
+        <div class="dotstyle dotstyle-fillup">
+            <ul>
+                <li id='chain-editor' 
+                [ngClass]="{
+                    'current': isCodeView,
+                    'not-current': !isCodeView
+                }" 
+                (click)="onCodeClick(2)"><button>Graphic editor</button></li>
+                <li id='chain-src-code' 
+                [ngClass]="{
+                    'current': !isCodeView,
+                    'not-current': isCodeView
+                }" 
+                (click)="onCodeClick(1)"><button>Source code</button></li>
+                <li id='chain-editor' 
+                [ngClass]="{
+                    'current': isCodeView,
+                    'not-current': !isCodeView
+                }" 
+                (click)="onCodeClick(2)"><button>Graphic editor</button></li>
+            </ul>
+        </div>
+
+    </div-->
+
+    <!--app-dot-navigation id="chain-navigation"
+    [current]="'chain'">
+    </app-dot-navigation-->
+</div>

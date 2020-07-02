@@ -1,0 +1,319 @@
+/*--- GENERIC DIALOG STYLE ---*/
+
+input {
+    outline: none;
+}
+
+mat-checkbox {
+    font-size: 80%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+mat-expansion-panel {
+    /*background-color: lightgray;*/
+    background-color: lightblue;
+    align-items: left;
+    text-align: left;
+    margin-left: 0%;
+    margin-top: 2px;
+}
+
+mat-checkbox {
+    font-size: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+} 
+
+#node-menu {
+    display: grid;
+    grid-template-rows: 20px 20px 220px 20px;
+}
+
+#node-menu-content {
+    grid-row: 3;
+    font-size: 90%;
+    height: 100%;
+}
+
+input {
+    font-size: 80%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+.err {
+    grid-row: 2;
+    font-size: 50%;
+    color: red;
+    margin: 0 0;
+}
+
+button {
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 150%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 70%;
+    min-width: 0px;
+    border: solid;
+    border-radius: 8px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.node-menu-prob-input {
+    width: 20%;
+    height: 10%;
+    font-size: 80%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+/*--- CONNECTORS AND PROBABILITY DIV STYLE ---*/
+
+ul {
+    list-style-type: none;
+    margin: 0px;
+    padding-left: 16px;
+}
+
+.nested-node-menu-line-prob {
+    position: relative;
+}
+
+.nested-node-menu-prob-div {
+    border: 2px solid grey;
+    padding: 3px;
+    margin: 5px;
+    border-radius: 4px;
+}
+
+ul li::before, ul li::after {
+    position: absolute;
+    left: -12px;
+    content: '';
+}
+
+li.nested-node-menu-line-prob.last-child:after {
+    height: 50%;
+}
+
+/*--- Horizontal lines ---*/
+
+ul li::before {
+    border-top: 2px solid black;
+    top: 50%;
+    width: 1em;
+    height: 0;
+}
+
+/*--- Vertical lines ---*/
+
+ul li::after {
+    border-left: 2px solid black;
+    height: 110%;
+    width: 0px;
+    top: 2px;
+}
+
+/*---Add button---*/
+.add {
+    margin: 2px;
+    height: 15px;
+    background-color: rgb(63, 226, 63);
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 100%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 1px;
+    font-size: 100%;
+    min-width: 0px;
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+/*---Delete button---*/
+.delete {
+    margin: 2px;
+    height: 15px;
+    background-color: rgb(224, 72, 72);
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 100%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 1px;
+    font-size: 100%;
+    min-width: 0px;
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+
+
+/*--- SERVICE TIME STYLE ---*/
+
+#service-time-input {
+    width: 10%;
+    height: 80%;
+    font-size: 80%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+
+/*--- IOT CAPABILITIES STYLE ---*/
+
+#iot-caps-div-no-probs input {
+    height: 80%;
+    font-size: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+#iot-caps-div-probs input {
+    height: 80%;
+    font-size: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+#iot-requirements-input {
+    width: 70%;
+    height: 100%;
+    font-size: 80%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+
+/*--- ICONS STYLE ---*/
+
+#select-icon {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-rows: 33% 33% 33%;
+    height: 100px;
+}
+
+.icon {
+    height: 100%;
+    width: 100%;
+}
+
+/*--- SERVICE NAME STYLE ---*/
+
+#node-name-menu {
+    width: 80%;
+    text-align: left;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    cursor: text;
+    border: none;
+    border-radius: 0px;
+    background-color: lightskyblue;
+    background-image: linear-gradient(to right, rgb(33, 117, 173), rgb(33, 117, 173));
+    background-position: 1px calc(100% - 1px);
+    background-size: calc(100% - 10px) 2px;
+    background-repeat: no-repeat;
+    font-size: 100%;
+}
+
+#title {
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: auto;
+    padding: 0%;
+    font-weight: 500;
+}
+
+#p-title {
+    grid-row: 1;
+    grid-column-start: 1;
+    margin: 0 0;
+}
+
+#service-name-input {
+    width: 50%;
+    height: 10%;
+    font-size: 80%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+
+/*--- HARDWARE CAPABILITY STYLE ---*/
+
+.delete-prob {
+    grid-column: 3;
+    margin: 2px;
+    height: 15px;
+    background-color: rgb(224, 72, 72);
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    line-height: 100%;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    padding: 1px;
+    font-size: 80%;
+    min-width: 0px;
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: rgb(33, 117, 173);
+    box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.menu-hardware-requirements-input {
+    width: 10%;
+    height: 80%;
+    font-size: 100%;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: lightcyan;
+}
+
+
+/*--- BUTTONS STYLE ---*/
+
+#save {
+    grid-column-start: 3;
+}
+
+#delete {
+    grid-column-start: 1;
+}
+
+#move {
+    grid-column-start: 2;
+}
+
+div#actions {
+    grid-row: 4;
+    width: 100%;
+    padding-top: 3px;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    height: 100%;
+}
+
+#close {
+    grid-row: 1;
+    grid-column-start: 2;
+    height: 16px;
+    line-height: none !important;
+    width: 15px;
+    height: 15px;
+    justify-self: right;
+    line-height: 100%;
+    cursor: pointer;
+    background-color: lightskyblue;
+    box-shadow: none;
+}

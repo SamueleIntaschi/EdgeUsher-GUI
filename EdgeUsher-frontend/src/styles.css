@@ -1,0 +1,109 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { 
+    height: 100%;
+    background-color: skyblue;
+    /*background-image: linear-gradient(rgb(224, 72, 72), rgb(101, 101, 238));*/
+    /*background-image: linear-gradient(lightblue, rgb(101, 101, 238));*/
+    /*background-image: linear-gradient(lightblue, lightskyblue, #0066ff);*/
+}
+body { 
+    margin: 0; 
+    /*font-family: Roboto, "Helvetica Neue", sans-serif*/;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/*--- CHECKBOX ---*/
+
+.mat-checkbox-inner-container {
+    height: 10px !important;
+    width: 10px !important;
+}
+
+/*--- EXPANSION PANEL ---*/
+
+.mat-expansion-panel-content {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 70%;
+}
+
+.mat-expansion-panel-header {
+    height: 10% !important;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 0 8px !important;
+    font-size: 90%;
+}
+
+.mat-expansion-panel-header-title {
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+.mat-expansion-panel-body {
+    padding: 0 1% 1% !important;
+}
+
+.cdk-overlay-dark-backdrop {
+    /*opacity: 0 !important;*/
+    /*pointer-events: none;*/
+}
+
+/*--- MAT-MENU ---*/
+
+.mat-menu-content {
+    background-color: lightblue;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/*--- DIALOG CONTAINER ---*/
+
+.mat-dialog-container {
+    background-color: lightskyblue;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+.mat-dialog-container text::selection {
+    background: none;
+}
+
+/*--- SCROLLBAR ---*/
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    border-radius: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    background: rgb(33, 117, 173); 
+    border-radius: 10px;
+}
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(214, 52, 52);  
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
+::-webkit-scrollbar-corner {
+    background: rgb(33, 117, 173); 
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: red; 
+    border-radius: 10px;
+}
+
+

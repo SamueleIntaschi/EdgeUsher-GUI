@@ -1,0 +1,6 @@
+<h1 mat-dialog-title>Confirmation Request</h1>
+<p id="text" [textContent]="data.text"></p>
+<div id="actions" mat-dialog-actions>
+  <button id="no" mat-button (click)="onNegativeClick()">No</button>
+  <button id="yes" mat-button mat-dialog-close (click)="onPositiveClick()">Yes</button>
+</div>

@@ -1,0 +1,15 @@
+<div id="flow-menu">
+  <div id="flow-title">
+    <p id="p-title">Flow</p>
+    <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
+  </div>
+  <p id="err" [textContent]="err"></p>
+  <div mat-dialog-content id="flow-dialog-content">
+    <label for="bandwidth">Flow bandwidth (mbps):</label>
+    <input autocomplete="off" id="bandwidth" [(ngModel)]="data.bandwidth"> <br><br>
+  </div>
+  <div id="actions" mat-dialog-actions>
+    <button id="delete" mat-button (click)="onDeleteClick($event)">Delete</button>
+    <button id="save" mat-button mat-dialog-close (click)="onCreateClick(data)">Save</button>
+  </div>
+</div>

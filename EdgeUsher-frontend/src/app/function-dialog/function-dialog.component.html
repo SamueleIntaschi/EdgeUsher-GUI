@@ -1,0 +1,73 @@
+<input id="function-name" autocomplete="off" [(ngModel)]="data.name">
+<p class="err" [textContent]="err"></p>
+<div mat-dialog-content id="service-dialog-content" >
+  <!--Service name: <input autocomplete="off" id="service-name-input" [(ngModel)]="data.squareName"> <br><br-->
+  Average processing time: <input autocomplete="off" id="service-time-input" [(ngModel)]="data.serviceTime"> <br><br>
+  Hardware capacity required: <input autocomplete="off" id="hardware-requirements-input" [(ngModel)]="data.hwReqs"> <br><br>
+  
+  <!-- IOT DEVICES CONNECTED -->
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          IoT devices connected
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+        <button class='add' id="add-device" (click)="addDevice()">Add connected device</button>
+          <div id='iot-caps-div' *ngFor="let iot of this.data.iotReqs; let i = index; trackBy: trackByFn">
+            <label [for]="'device'+i">Device: </label>
+            <input [id]="'device'+i" autocomplete="off" class="iot-caps-input" [(ngModel)]="this.data.iotReqs[i].device">
+            <button class='delete' (click)='deleteDevice(iot)'>Delete device</button>
+
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Choose icon
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div id="select-icon">
+                  <img 
+                  *ngFor="let icon of icons; index as j"
+                  class='icon'
+                  [attr.id]="'icon-' + j + '-device' + i + '-service' + data.id" 
+                  [attr.src]="icon"
+                  height="30"
+                  width="30"
+                  (click)="onIconClick($event, iot)"/>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+
+          </div>
+
+          
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <br>
+  <!-- SECURITY REQUIREMENTS -->
+
+  <mat-accordion>
+    <mat-expansion-panel id="sec-reqs">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            Security policies
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+        <app-query-builder
+        (rulesChange)="updateSecRules($event)"
+        (condChange)="updateCond($event)"
+        ></app-query-builder>
+        
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<div id="actions" class="action-buttons" mat-dialog-actions>
+  <button id="delete" mat-button mat-dialog-close (click)="onDeleteClick($event)">Cancel</button>
+  <!--button id="move" mat-button mat-dialog-close (click)="onMoveClick($event)">Move</button-->
+  <button id="save" mat-button (click)="onCreateClick(data)">Save</button>
+</div>

@@ -1,0 +1,96 @@
+/*--- SVG GENERIC STYLE ---*/
+
+#svg-placement-div {
+    height: 510px;
+    width: 97%;
+    border: solid;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 2px;
+}
+
+#svgplacementelem {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#unplacedsvg {
+    position: absolute;
+    top: 7%;
+    right: 3%;
+    height: 220px;
+    width: 220px;
+    border: 2px solid grey;
+    border-radius: 8px;
+}
+
+
+/*--- SVG ELEMENTS STYLE ---*/
+
+image {
+    cursor: default;
+}
+
+.service {
+    cursor: pointer;
+}
+
+.link {
+    /*stroke: rgb(255,0,0);*/
+    stroke-width: 2;
+    cursor: default;
+}
+
+
+.text-link { 
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 100; 
+    font-size: 12px;
+    fill:blue;
+}
+
+#unplaced-text {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 500;
+}
+
+.link-rect {
+    cursor: pointer;
+    /*fill: rgb(224, 72, 72);*/
+    fill: lightblue;
+}
+
+svg text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+svg text::selection {
+    background: none;
+}
+
+/*--- ZOOM BUTTONS ---*/
+
+#zoomp {
+    position: absolute;
+    top: 90%;
+    left: 88%;
+    cursor: pointer;
+}
+
+#zoom- {
+    position: absolute;
+    top: 90%;
+    left: 94%;
+    cursor: pointer;
+}
+
+#zoom0 {
+    position: absolute;
+    top: 90%;
+    left: 91%;
+    cursor: pointer;
+}

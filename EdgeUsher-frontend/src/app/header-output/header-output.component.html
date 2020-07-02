@@ -1,0 +1,38 @@
+<div id="header-placement">
+    <div id="logo-div">
+        <img 
+        id="logo" 
+        src="https://raw.githubusercontent.com/di-unipi-socc/EdgeUsher/master/img/edgeusherlogo.png" 
+        alt="EdgeUsher" 
+        width="30" 
+        routerLink=""
+        (click)="onLogoClick()"
+        />
+    </div>
+
+    <p *ngIf="this.placements.length == 0" id="placement-header-title">
+        Placement creation
+    </p>
+
+    <select *ngIf="this.placements.length > 0" id="select-placement" [(ngModel)]="indexSelectedPlacement" (ngModelChange)="onChange()">
+        <option *ngFor="let p of this.placements; index as i" [attr.selected]="i == indexSelectedPlacement ? true : null" [attr.value]="i">placement {{p.id}}, prob: {{p.prob}}</option>
+    </select>
+
+    <div id="header-placement-actions">
+        <input id="settings-placement-button" title="Actions" type="image" src="../../icons/settings.png" [matMenuTriggerFor]="settingsmenu"/> 
+        <mat-menu #settingsmenu="matMenu">
+            <div id='settings-menu-placement-content'>
+                <button mat-menu-item id="save-placement" (click)="save()">Download placement file</button>
+                <button mat-menu-item id="new-placement" (click)="newPlacement()">New placement</button>
+                <div id="upload" class="upload-btn-wrapper">
+                    <button mat-menu-item>Upload placement</button>
+                    <input type="file" ng2FileSelect (change)="upload($event)" name="myfile" />
+                </div>
+            </div>
+        </mat-menu>
+        <!--button id="exe-from-chain" (click)="exe()">EdgeUsher!</button-->
+        <input id="img-exe-from-placement" title="Run EdgeUsher" type="image" src="../../icons/play.png" (click)="exe()"/>
+        <input id="tutorial-button-placement" title="Tutorial" (click)=tutorial() type="image" src="../../icons/tutorial.png"/>
+    </div>
+</div>
+

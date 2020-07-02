@@ -1,0 +1,227 @@
+<div id="node-menu">
+  <div id="title">
+    <!--button checked="false" id="close" (click)="onClose()">x</button-->
+    <input id="node-name-menu" autocomplete="off" [(ngModel)]="data.name"> 
+    <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
+  </div>
+  <p class="err" [textContent]="err"></p>
+  <div mat-dialog-content id="node-menu-content">
+
+    <!-- SELECT ICON-->
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Choose icon
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div id="select-icon">
+          <img 
+          *ngFor="let icon of icons; index as i"
+          class='icon'
+          [attr.id]="'icon-' + i + '-node' + data.id" 
+          [attr.src]="icon"
+          height="30"
+          width="30"
+          (click)="onIconClick($event)"/>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-slide-toggle id='prob-slide-toggle-menu' [(ngModel)]="this.data.probabilisticMode" (ngModelChange)="onChangeProb($event)" labelPosition="before">Probability</mat-slide-toggle>
+
+    <!--Normal mode-->
+
+    <div *ngIf="!this.data.probabilisticMode" id="classic-div">
+
+      <!--- Hardware Capabilities -->
+  
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Hardware capabilities
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="hw-cap-div">
+            <label for="menu-hardware-requirements-input">Hardware capacity: </label>
+            <input autocomplete="off" class="menu-hardware-requirements-input" [(ngModel)]="singleValue.hwCaps"> <br><br>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+  
+      <!--- IoT capabilities --->
+  
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              IoT devices connected
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <button class='add' id="add-device" (click)="addDevice(null)">Add connected device</button>
+          <div id='iot-caps-div-no-probs' *ngFor="let iot of this.singleValue.iotCaps; let i = index; trackBy: trackByFn">
+            <label [for]="'node-' + this.data.id +  '-device-no-probs-' + i">Device: </label>
+            <input [id]="'node-' + this.data.id +  '-device-no-probs-' + i" autocomplete="off" class="iot-caps-input" [(ngModel)]="this.singleValue.iotCaps[i]">
+            <button class='delete' (click)='deleteDevice(iot, null)'>Delete device</button>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+  
+      <!--- Security capabilities --->
+  
+      <div class="security-div">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Security policies provided
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          Virtualisation: <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.virtualisation.accessLogs">Access logs</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.virtualisation.auth">Authentication</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.virtualisation.hIds">Host IDS</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.virtualisation.procIsol">Process isolation</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.virtualisation.permMdl">Permission model</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.virtualisation.resMon">Resource usage monitoring</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.virtualisation.restPnts">Restore points</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.virtualisation.userIsol">User data isolation</mat-checkbox> <br>
+        
+          Communications: <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.communications.certificates">Certificates</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.communications.firewall">Firewall</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.communications.dataEncr">IoT data encryption</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.communications.nodeIsol">Node isolation mechanisms</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.communications.netIDS">Network IDS</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.communications.keyCrypt">Public key cryptography</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.communications.wirelessSec">Wireless security</mat-checkbox> <br>
+        
+          Data: <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.data.backup">Backup</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.data.encrStorage">Encrypted storage</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.data.obfsStorage">Obfuscated storage</mat-checkbox> <br>
+        
+          Physical: <br> 
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.physical.accessCtrl">Access control</mat-checkbox> <br>
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.physical.antiTamp">Anti-tampering capabilities</mat-checkbox> <br>
+        
+          Other: <br> 
+          <mat-checkbox [(ngModel)]="singleValue.secCaps.other.audit">Audit</mat-checkbox> <br>
+        
+        </mat-expansion-panel>
+      </mat-accordion>
+      </div>
+      
+    </div>
+
+    <!---Probabilistic mode --->
+
+    <div id="node-menu-probabilistic-div" *ngIf="this.data.probabilisticMode">
+
+      <button class='add' id='add-prob' (click)="addProbability()">Add probability</button>
+      <ul *ngFor="let prob of this.probs; index as i; last as last">
+
+        <li class="nested-node-menu-line-prob" [ngClass]="{'last-child': last}">
+        <div class="nested-node-menu-prob-div">
+  
+        <label [for]="'prob'+i">Probability: </label>
+        <input [id]="'prob'+i" class="node-menu-prob-input" autocomplete="off" [(ngModel)]="prob.prob">
+        <div id="node-menu-prob-content">
+  
+          <!--- Hardware Capabilities -->
+  
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Hardware capabilities
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="hw-cap-div">
+                <label [for]="'menu-hardware-requirements-input-' + i">Hardware capacity: </label>
+                <input class="menu-hardware-requirements-input" autocomplete="off" [id]="'menu-hardware-requirements-input-' + i" [(ngModel)]="prob.value.hwCaps"> <br><br>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+    
+          <!--- IoT capabilities --->
+    
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  IoT devices connected
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <button class='add' id="add-device" (click)="addDevice(prob)">Add connected device</button>
+              <div id='iot-caps-div-probs' *ngFor="let iot of prob.value.iotCaps; let j = index; trackBy: trackByFn">
+                <label [for]="'node-' + this.data.id + '-device-' + j + '-prob-'+ i">Device: </label>
+                <input [id]="'node-' + this.data.id + '-device-' + j + '-prob-'+ i" autocomplete="off" class="iot-caps-input" [(ngModel)]="prob.value.iotCaps[j]">
+                <button class='delete' (click)='deleteDevice(iot, null)'>Delete device</button>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+    
+          <!--- Security capabilities --->
+    
+    
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Security policies provided
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              Virtualisation: <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.virtualisation.accessLogs">Access logs</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.virtualisation.auth">Authentication</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.virtualisation.hIds">Host IDS</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.virtualisation.procIsol">Process isolation</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.virtualisation.permMdl">Permission model</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.virtualisation.resMon">Resource usage monitoring</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.virtualisation.restPnts">Restore points</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.virtualisation.userIsol">User data isolation</mat-checkbox> <br>
+          
+              Communications: <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.communications.certificates">Certificates</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.communications.firewall">Firewall</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.communications.dataEncr">IoT data encryption</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.communications.nodeIsol">Node isolation mechanisms</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.communications.netIDS">Network IDS</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.communications.keyCrypt">Public key cryptography</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.communications.wirelessSec">Wireless security</mat-checkbox> <br>
+          
+              Data: <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.data.backup">Backup</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.data.encrStorage">Encrypted storage</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.data.obfsStorage">Obfuscated storage</mat-checkbox> <br>
+          
+              Physical: <br> 
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.physical.accessCtrl">Access control</mat-checkbox> <br>
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.physical.antiTamp">Anti-tampering capabilities</mat-checkbox> <br>
+          
+              Other: <br> 
+              <mat-checkbox [(ngModel)]="prob.value.secCaps.other.audit">Audit</mat-checkbox> <br>
+          
+            </mat-expansion-panel>
+          </mat-accordion>
+  
+        </div>
+  
+        <button class='delete-prob' (click)="deleteProbability(prob)">Delete probability</button>
+
+        </div>
+        </li>
+        
+      </ul>
+    </div>
+  
+  </div>
+  <!-- BUTTONS -->
+  <div id="actions" mat-dialog-actions>
+    <button id="delete" mat-button mat-dialog-close (click)="onDeleteClick($event)">Delete</button>
+    <button id="move" mat-button mat-dialog-close (click)="onMoveClick($event)">Move</button>
+    <button id="save" mat-button (click)="onCreateClick(data)">Save</button>
+  </div>
+</div>

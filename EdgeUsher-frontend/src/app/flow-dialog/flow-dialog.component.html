@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Flow from {{data.from}} to {{data.to}}</h1>
+<p id="err" [textContent]="err"></p>
+<div mat-dialog-content id="flow-dialog-content">
+    <p>
+      <label for="bandwidth">Flow bandwidth (Mbps):</label>
+      <input autocomplete="off" id="bandwidth" [(ngModel)]="data.bandwidth"> <br><br>
+    </p>
+</div>
+<div id="actions" mat-dialog-actions>
+  <button id="delete" mat-button (click)="onDeleteClick($event)">Cancel</button>
+  <button id="save" mat-button (click)="onCreateClick(data)">Save</button>
+</div>
