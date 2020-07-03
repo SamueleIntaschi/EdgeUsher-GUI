@@ -188,6 +188,7 @@ export class NodeMenuComponent implements OnInit {
       if (errType == -1) this.err = 'Node name not specified';
       else if (errType == -2) this.err = 'There are spaces in the name';
       else if (errType == -3) this.err = 'A node with this name already exists';
+      else if (errType == -4) this.err = 'There is characters in the name that are not allowed';
       errs++;
     }
     else if ((errType = this.checkHardwareCaps()) != 1) {
@@ -214,6 +215,9 @@ export class NodeMenuComponent implements OnInit {
       return -1;
     }
     else {
+      var cnter = this.data.name.indexOf('::') + this.data.name.indexOf('[') +
+      this.data.name.indexOf(']') + this.data.name.indexOf('(') + this.data.name.indexOf(')');
+      if (cnter >= 0) return -4;
       if (this.data.name.indexOf(' ') >= 0) {
         //Delete the spaces in the name
         var splitted = this.data.name.split(" ");

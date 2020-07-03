@@ -24,13 +24,8 @@
             <div id='settings-menu-placement-content'>
                 <button mat-menu-item id="save-placement" (click)="save()">Download placement file</button>
                 <button mat-menu-item id="new-placement" (click)="newPlacement()">New placement</button>
-                <div id="upload" class="upload-btn-wrapper">
-                    <button mat-menu-item>Upload placement</button>
-                    <input type="file" ng2FileSelect (change)="upload($event)" name="myfile" />
-                </div>
             </div>
         </mat-menu>
-        <!--button id="exe-from-chain" (click)="exe()">EdgeUsher!</button-->
         <input id="img-exe-from-placement" title="Run EdgeUsher" type="image" src="../../icons/play.png" (click)="exe()"/>
         <input id="tutorial-button-placement" title="Tutorial" (click)=tutorial() type="image" src="../../icons/tutorial.png"/>
     </div>

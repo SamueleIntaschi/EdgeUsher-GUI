@@ -36,14 +36,8 @@ export class WorkingPageOutputComponent implements OnInit {
     this.svg.saveSelectedPlacementAsFile();
   }
 
-  upload(event) {
-    this.svg.uploadPlacement(event);
-  }
-
   onLogoClick() {
     this.svg.dialog.closeAll();
-    this.svg.openLinkDialogs = [];
-    this.svg.openNodeDialogs = [];
     document.getElementById('dot-navigation-component').style.display = 'none';
   }
 

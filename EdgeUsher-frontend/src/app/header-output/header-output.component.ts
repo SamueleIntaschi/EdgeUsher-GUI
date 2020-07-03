@@ -11,7 +11,6 @@ import { Placement, Place } from '../execution-dialog/execution-dialog.component
 export class HeaderOutputComponent implements OnInit {
   
   @Output() savePlacement = new EventEmitter<number>();
-  @Output() uploadChain = new EventEmitter<any>();
   @Output() codeClick = new EventEmitter<number>();
   //@Output() onChClick = new EventEmitter<number>();
   @Output() openSettings = new EventEmitter<number>();
@@ -60,10 +59,6 @@ export class HeaderOutputComponent implements OnInit {
 
   save() {
     this.savePlacement.emit(1);
-  }
-
-  upload(event) {
-    this.uploadChain.emit(event);
   }
 
   onCodeClick(type) {

@@ -17,12 +17,31 @@
     </div>
     <div id="tutorial">
         <svg id="svg-start-elem" xlmns:xhtml="http://www.w3.org/1999/xhtml">
-            <circle 
-            cx="80" cy="300" r="70"
-            stroke="blue"
-            stroke-widht="5"
-            fill="skyblue"
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="0" y2="100%">
+                    <stop offset="0%" style="stop-color:lightcyan;" />
+                    <stop offset="100%" style="stop-color:#3366FF;" />
+                </linearGradient>
+            </defs>
+            <path
+            d="M70 370 L 300 120"
+            stroke-dasharray="5,5"
+            stroke="red" 
+            fill="none"
+            stroke-width="2"
             />
+            <circle 
+            cx="300" cy="120" r="80"
+            stroke="#1520A6"
+            stroke-width="3"
+            fill="url(#gradient)"
+            />
+            <image 
+            x="0"
+            y="300"
+            height="140"
+            width="140"
+            href="../../icons/network/building.svg"/>
         </svg>
     </div>
 </div>

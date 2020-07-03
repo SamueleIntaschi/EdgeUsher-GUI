@@ -32,7 +32,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
 
   @ViewChild('svgelemoutput', { static: true }) svg: ElementRef<SVGSVGElement>;
   @ViewChild('unplacedsvg', { static: true}) unplacedSvg: ElementRef<SVGSVGElement>;
-  @Output() onChangeTitleFromUpload = new EventEmitter<string>();
   @Output() changePlacements: EventEmitter<any> = new EventEmitter<any>();
   @Output() firstSelectedPlacement: EventEmitter<any> = new EventEmitter<any>();
   @Output() clearPlacements: EventEmitter<number> = new EventEmitter<number>();
@@ -43,13 +42,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   nodeId = 0;
   serviceId = 0;
   linkId = 0;
-  movedNode = -1;
   movedService = -1;
-  node1: Node;
-  isDrawingLine = false;
-  clickToCreate = false;
-  infrasFile = Array<string>();
-  title = "Untitled placement";
   svgPanZoom: SvgPanZoom.Instance;
   movementX = 0;
   movementY = 0;
@@ -57,9 +50,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   lastY = -1;
   dragging = false;
   leaved = -1;
-  probabilisticMode = 'static';
-  openNodeDialogs = Array<number>();
-  openLinkDialogs = Array<number>();
   selectedPlacement: Placement;
   unplacedServices = Array<ServiceP>();
   userPlacement: PlacementObject = new PlacementObject();
@@ -125,6 +115,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   //------------------------------------------------------------------------------------------------------------------------------------
   /*--- DATA METHODS ---*/
 
+  //Reset all the variables, except infrastructure and chain
   newPlacement() {
     //Clear the placements
     this.new();
@@ -152,28 +143,26 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     this.placeUnplacedServices();
   }
 
+  //Reset all the variables
   new() {
     this.userPlacement = new PlacementObject();
     this.localStorageService.storePlacements([]);
     this.placements = [];
-    this.movedNode = -1;
     this.movedService = -1;
-    this.isDrawingLine = false;
-    this.clickToCreate = false;
-    this.title = "Untitled placement";
     this.movementX = 0;
     this.movementY = 0;
     this.lastX = -1;
     this.lastY = -1;
     this.dragging = false;
     this.leaved = -1;
+    this.onUnplacedSVG = false;
     this.selectedPlacement = null;
     this.clearPlacements.emit(1);
-    this.onUnplacedSVG = false;
     this.unplacedServices = [];
     this.placementId = 0;
   }
 
+  //Retrieve placements saved in local storage
   retrievePlacements() {
     var ps = this.localStorageService.getPlacements();
     if (ps.length > 0) {
@@ -187,66 +176,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     }
   }
 
-  retrieveInformationFromFile(file: File) {
-    this.new();
-    let fileReader = new FileReader();
-    fileReader.onloadend = (e) => {
-      var placements = (fileReader.result as string).split('\n');
-      for (var i=0; i<placements.length; i++) {
-        console.log(placements[i]);
-        var tmp: string = placements[i].trim().split('(')[0];
-        if (tmp && tmp != 'placement') {
-          //Do nothing
-        }
-        else {
-          var prob: string = <string>placements[i].split(':')[1];
-          console.log(prob);
-          if (prob) {
-            prob = prob.trim();
-          }
-          var placement0 =  placements[i].split(',[')[1];
-          if (placement0) {
-            placement0 = placement0.split(']')[0];
-          }
-          var routesTmp =<string>placements[i].split(',[')[2];
-          var routes: string;
-          if (routesTmp) {
-            routes = routesTmp.split(':')[0];
-          }
-          var chainIdtmp = <string>placements[i].split('(')[1];
-          var chainId: string;
-          if (chainIdtmp) {
-            chainId = chainIdtmp.split(',')[0].trim();
-          }
-          var p: Array<Place> = this.createPlacementFromString(placement0);
-          var r: Array<Route> = this.createRoutesFromString(routes);
-          if (p != null && r != null) {
-            if (Number(prob) > 0) {
-              var placement = {
-                chainId: chainId,
-                placement: p,
-                routes: r,
-                prob: Number(prob),
-                id: this.placementId
-              }
-              this.placements.push(placement);
-              this.placementId++;
-            }
-            else {
-              //Do nothing if prob <= 0
-            }
-          }
-        }
-        if (this.placements.length > 0) {
-          this.localStorageService.storePlacements(this.placements);
-          this.retrievePlacements();
-        }
-      }
-    }
-    fileReader.readAsText(file);
-
-  }
-
+  //Select one of the available placements to view it
   setSelectedPlacement() {
     this.resetPlacement();
     for (var j in this.selectedPlacement.placement) {
@@ -270,9 +200,14 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   }
 
   resetPlacement() {
-    //TODO: controllare se procedura di reset per cambiare placement visualizzato è corretta, cioè se viene resettato tutto
     this.movedService = -1;
-    this.movedNode = -1;
+    this.movementX = 0;
+    this.movementY = 0;
+    this.lastX = -1;
+    this.lastY = -1;
+    this.dragging = false;
+    this.leaved = -1;
+    this.onUnplacedSVG = false;
     for (var i in this.nodes) {
       var node = this.nodes[i];
       node.services = [];
@@ -282,6 +217,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Get the infrastructure from the storage
   retrieveInfrastructureInformation() {
     var ss = this.localStorageService.getNodes() as Array<Node>;
     for (var i in ss) {
@@ -318,6 +254,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Get the chain from the storage
   retrieveChainInformation() {
     var ss = this.localStorageService.getServices() as Array<Service>;
     for (var i in ss) {
@@ -331,6 +268,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Place the services in the area
   placeServices() {
     for (var i in this.nodes) {
       var node = this.nodes[i];
@@ -338,6 +276,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //Create placements in order, order that was provided by chain file
   createPlacementBase() {
     var p = Array<string>();
     var f: Array<string> = this.localStorageService.getChainFile();
@@ -427,7 +366,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   //Create full placement string: (chainId, [on(f1,n1), on(f2,n2), ..., on(fn,nn)], Routes)
   createFullPlacement(): string {
     var str = 'placement(' + this.selectedPlacement.chainId + ', ' + this.createPlacement() + ', ' + this.createRoutes() + '): ' + this.selectedPlacement.prob;
-    //console.log(str);
     return str;
   }
 
@@ -444,151 +382,12 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     FileSaver.saveAs(blob, fname);
   }
 
-  uploadPlacement(event) {
-    if (event.target.files && event.target.files.length) {
-      //Hide the code if it is visible
-      this.hideCode();
-      var file = event.target.files[0];
-      var tmpfile = file.name.split('.');
-      this.retrieveInformationFromFile(file);
-    }
-  }
-
-  createPlacementFromString(str: string) {
-    var ps = Array<Place>();
-    var tmp: Array<string>;
-    var tmp2: Array<string>;
-    var service: string;
-    var node: string;
-    var pselem: Place;
-    if (str) {
-      tmp = str.split('),');
-    }
-    else return null;
-    //console.log(str);
-    //console.log(tmp);
-    for (var i in tmp) {
-      if (tmp[i]) {
-        tmp2 = tmp[i].split('(');
-        if (tmp2[1]) {
-          service = tmp2[1].split(',')[0];
-          node = tmp2[1].split(',')[1];
-          if (node.indexOf(')')>=0) {
-            node = node.split(')')[0];
-          }
-          if (node && service) {
-            pselem = {
-              service: service.trim(),
-              node: node.trim()
-            };
-            ps.push(pselem);
-          }
-          else return null;
-        }
-        else return null;
-      }
-      else return null;
-    }
-    //console.log(ps);
-    return ps;
-  }
-
-  createRoutesFromString(str: string) {
-    var rts = Array<Route>();
-    var tmp = Array<string>();
-    var tmp2 = Array<string>();
-    var tmp3 = Array<string>();
-    var node1 = '';
-    var node2 = '';
-    var usedBw = '';
-    var from = '';
-    var to = '';
-    var elem: Route;
-    var bw: number;
-    var from2 = '';
-    var to2 = '';
-    var node2 = '';
-    var flowstr = Array<string>();
-    var flows: Array<{
-      from: string,
-      to: string,
-    }>;
-    if (str) {
-      tmp = str.split(']),');
-    }
-    else return null;
-    for (var i in tmp) {
-      //console.log(tmp[i]);
-      if (tmp[i].indexOf(',') <= 0) {
-        //Case empty routes
-        return [];
-        /*rts.push({
-          fromNode: '',
-          toNode: '',
-          usedBw: 0,
-          flows: [],
-        });
-        return rts;*/
-      }
-      if (tmp[i]) {
-        tmp2 = tmp[i].split(',');
-        node1 = tmp2[0];
-        node2 = tmp2[1];
-        usedBw = tmp2[2];
-        flows = [];
-        
-        if (tmp[i].split('[')[1]) {
-          flowstr = tmp[i].split('[')[1].split('(');
-        }
-
-        if (usedBw) {
-          bw = Number(usedBw.trim());
-        }
-        if (node2 && node1) {
-          node1 = node1.split('(')[1];
-          node2 = node2;
-        }
-
-        for (var i in flowstr) {
-          var s1 = flowstr[i].split(',')[0];
-          var s2 = flowstr[i].split(',')[1];
-          if (s2) s2 = s2.split(')')[0];
-          if (s1 && s2) {
-            s1 = s1.trim();
-            s2 = s2.trim();
-            if (s1 && s2 && s1.indexOf(' ') < 0 && s2.indexOf(' ') < 0) {
-              flows.push({
-                from: s1,
-                to: s2
-              })
-              //console.log(flows);
-            }
-          }
-        }
-
-        if (node1 && node2 && bw && flows && isNaN(bw) == false) {
-          elem = {
-            fromNode: node1.trim(),
-            toNode: node2.trim(),
-            usedBw: bw,
-            flows: flows,
-          };
-          rts.push(elem);
-        }
-        else return null;
-      }
-      else return null;
-    }
-    return rts;
-  }
-
-
 
 //---------------------------------------------------------------------------------------------------------------------------------------
   /*--- MOUSE EVENTS HANDLING ---*/
 
   onMouseDownUnplaced(event) {
-
+    //Do nothing
   }
 
   onMouseMoveUnplaced(event) {
@@ -605,7 +404,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   }
 
   onMouseUpUnplaced($event) {
-
+    //Do nothing
   }
 
   onMouseLeaveUnplaced() {
@@ -625,7 +424,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
         this.lastX = (x - this.svgPanZoom.getPan().x) / this.svgPanZoom.getZoom();
         this.lastY = (y - this.svgPanZoom.getPan().y) / this.svgPanZoom.getZoom();
         this.dragging = true;
-        this.clickToCreate = true;
       }
     }
   }
@@ -646,6 +444,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
       this.movementX += deltaX;
       this.movementY += deltaY;
     }
+    /*
     else if (this.movedNode >= 0) {
       document.getElementById('node'+this.nodes[this.movedNode].id).style.cursor = 'move';
       var index = this.indexOfSquareById(this.movedNode);
@@ -664,7 +463,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
           //this.localStorageService.modifyLink(this.links[i]);
         }
       }
-    }
+    }*/
     else if (this.movedService >= 0) {
       var index = this.indexOfServiceById(this.movedService);
       if (index != -1) {
@@ -700,6 +499,8 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
         }
       }
       else {
+        //Do nothing
+        /*
         if (this.movedNode >= 0) {
           document.getElementById('node'+this.nodes[this.movedNode].id).style.cursor = 'move';
           var index = this.indexOfSquareById(this.movedNode);
@@ -718,18 +519,13 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
             }
           }
         }
+        */
       }
     }
     this.dragging = false;
   }
 
   onMouseLeave(event) {
-    //if (this.movedSquare >= 0) this.movedSquare = -1;
-    if (this.isDrawingLine == true) {
-      this.isDrawingLine = false;
-      this.svgPanZoom.enablePan();
-      this.leaved = 1;
-    }
     if (this.dragging == true) {
       this.dragging = false;
       this.lastX = -1;
@@ -738,7 +534,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
       this.movementX = 0;
       this.leaved = 1;
     }
-    this.clickToCreate = false;
     //Check if the mouse is on other service
     if (this.movedService != -1) {
       var index = this.indexOfServiceById(this.movedService);
@@ -757,6 +552,8 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
 
 //---------------------------------------------------------------------------------------------------------------------------------------
   /*--- DATA STRUCTURES HANDLING ---*/
+
+  //Place the services that are unplaced in the specific svg
   placeUnplacedServices() {
     var s = this.unplacedServices;
     var radius = 80;
@@ -773,41 +570,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     }
   }
 
-  isOpenNode(id: number) {
-    for (var i in this.openNodeDialogs) {
-      //if (this.nodes[i].id) == id) return true;
-      if (this.openNodeDialogs[i] == id) return true;
-    }
-    return false;
-  }
-
-  isOpenLink(id: number) {
-    for (var i in this.openLinkDialogs) {
-      if (this.openLinkDialogs[i] == id) return true;
-    }
-    return false;
-  }
-
-  removeNodeDialog(id: number) {
-    for (var i=0; i<this.openNodeDialogs.length; i++) {
-      if (this.openNodeDialogs[i] == id) {
-        this.openNodeDialogs.splice(i, 1);
-        i--;
-        break;
-      }
-    }
-  }
-
-  removeLinkDialog(id: number) {
-    for (var i=0; i<this.openLinkDialogs.length; i++) {
-      if (this.openLinkDialogs[i] == id) {
-        this.openLinkDialogs.splice(i, 1);
-        i--;
-        break;
-      }
-    }
-  }
-
+  //Get the index of this placement
   indexOfPlacement(pl: Placement) {
     for (var i=0; i<this.placements.length; i++) {
       if (this.placements[i].id == pl.id) return i;
@@ -815,6 +578,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return -1;
   }
 
+  //Get the index of the unplaced service
   indexOfUnplacedService(s: ServiceP) {
     for (var i=0; i<this.unplacedServices.length; i++) {
       if (s.id == this.unplacedServices[i].id) return i;
@@ -822,6 +586,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return -1;
   }
 
+  //Get the index of link in know the nodes
   indexOfLinkByNodes(node1: string, node2: string) {
     for (var i=0; i<this.links.length; i++) {
       var l = this.links[i];
@@ -832,6 +597,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return -1;
   }
 
+  //Get the index of this service by its id
   indexOfSquareById(id: number) {
     for (var i in this.nodes) {
       if (this.nodes[i].id == id) return Number(i);    
@@ -839,7 +605,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return -1;
   }
 
-  
+  //Get the index of the service by name
   indexOfServiceByName(name: string) {
     for (var i in this.services) {
       if (this.services[i].name == name) return Number(i);
@@ -847,6 +613,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return -1;
   }
 
+  //Get the index of service by id
   indexOfServiceById(id: number) {
     for (var i in this.services) {
       if (this.services[i].id == id) return Number(i);
@@ -854,6 +621,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return -1;
   }
 
+  //Get the index of link by id
   indexOfLink(id:number) {
     for (var i in this.links) {
       if (this.links[i].id == id) return Number(i);
@@ -861,6 +629,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return -1;
   }
 
+  //Check on which node there is this service
   whereIsService(service: ServiceP): NodeP {
     for (var i in this.nodes) {
       if (this.nodes[i].hasService(service)) {
@@ -870,6 +639,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return null;
   }
 
+  //Check if the service is on a node when moving
   onNode(service: ServiceP): NodeP {
     var right = service.x + service.r;
     var left = service.x - service.r;
@@ -887,6 +657,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     return null;
   }
 
+  /*
   tooCloseToAnotherNode(node1: Node) {
     //Limit of this node
     var right = node1.x + node1.width/2;
@@ -906,41 +677,14 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     }
     return false;
   }
+  */
 
+  //Get the index of the node by name
   indexOfNodeByName(name: string) {
     for (var i in this.nodes) {
       if (this.nodes[i].name == name) return Number(i);
     }
     return -1;
-  }
-
-  deleteLink(link: LinkP) {
-    for (var i=0; i<this.links.length; i++) {
-      if (this.links[i].id == link.id) {
-        //this.localStorageService.deleteLink(link);
-        this.links.splice(i, 1);
-        i--;
-        break;
-      }
-    }
-  }
-
-  deleteNode(node: NodeP) {
-    for (var i=0; i<this.nodes.length; i++) {
-      if (this.nodes[i].id == node.id) {
-        for (var j=0; j<this.links.length; j++) {
-          if (this.links[j].fromNode == node.name || this.links[j].toNode == node.name) {
-            //this.localStorageService.deleteLink(this.links[j]);
-            this.links.splice(j, 1);
-            j--;
-          }
-        }
-        //this.localStorageService.deleteNode(node);
-        this.nodes.splice(i, 1);
-        i--;
-        break;
-      }
-    }
   }
 
   /*--- DIALOGS METHODS ---*/S

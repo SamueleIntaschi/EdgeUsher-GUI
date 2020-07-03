@@ -30,12 +30,12 @@ export class QueryBuilderComponent implements OnInit {
   cond = 'list';
   rules: Array<Rule> = [];
   secRequisites = [
-    {name: 'Access Logs', id: 'access_logs'},
+    {name: 'Access logs', id: 'access_logs'},
     {name: 'Authentication', id: 'authentication'},
     {name: 'Host IDS', id: 'host_IDS'},
     {name: 'Process isolation', id: 'process_isolation'},
-    {name: 'Permission Model', id: 'permission_model'},
-    {name: 'Resource usage Monitoring', id: 'resource_monitoring'},
+    {name: 'Permission model', id: 'permission_model'},
+    {name: 'Resource usage monitoring', id: 'resource_monitoring'},
     {name: 'Restore points', id: 'restore_points'},
     {name: 'User data isolation', id: 'user_data_isolation'},
     {name: 'Certificates', id: 'certificates'},

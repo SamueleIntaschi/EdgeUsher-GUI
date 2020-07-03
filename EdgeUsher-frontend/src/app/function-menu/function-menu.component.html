@@ -63,8 +63,8 @@
       </mat-expansion-panel-header>
 
       <app-query-builder
-      [initCond]="this.data.cond"
-      [initRules]="this.data.securityRequirements"
+      [initCond]="this.cond"
+      [initRules]="this.rules"
       (rulesChange)="updateSecRules($event)"
       (condChange)="updateCond($event)"
       ></app-query-builder>

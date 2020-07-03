@@ -65,12 +65,6 @@ export class FunctionMenuComponent implements OnInit {
   onMouseWheel(event) {
   }
 
-  /*--- IOT device connected ---*/
-  /*addDevice() {
-    var device = '';
-    this.iotReqs.push(device);
-  }*/
-
   onIconClick(event, device) {
     event.preventDefault();
     if (event.button == 0) {
@@ -93,16 +87,6 @@ export class FunctionMenuComponent implements OnInit {
     }
     this.iotReqs.push(device);
   }
-
-  /*deleteDevice(s: string) {
-    for (var i=0; i<this.iotReqs.length; i++) {
-      if (this.iotReqs[i] == s) {
-        this.iotReqs.splice(i, 1);
-        i--;
-        break;
-      }
-    }
-  }*/
 
   deleteDevice(s: string) {
     for (var i=0; i<this.iotReqs.length; i++) {
@@ -167,6 +151,7 @@ export class FunctionMenuComponent implements OnInit {
       if (errType == -1) this.err = 'Function name not specified';
       else if (errType == -2) this.err = 'There must be no spaces in the name';
       else if (errType == -3) this.err = 'A function with this name already exists';
+      else if (errType == -4) this.err = 'There is characters in the name that are not allowed';
       errs++;
     }
     //Check for service time
@@ -198,6 +183,11 @@ export class FunctionMenuComponent implements OnInit {
       return -1;
     }
     else {
+      var cnter = this.data.name.indexOf('::') + this.data.name.indexOf('[') +
+      this.data.name.indexOf(']') + this.data.name.indexOf('(') + this.data.name.indexOf(')');
+      if (cnter >= 0) {
+        return -4;
+      }
       if (this.data.name.indexOf(' ') >= 0) {
         //Delete the spaces in the name
         var splitted = this.data.name.split(" ");

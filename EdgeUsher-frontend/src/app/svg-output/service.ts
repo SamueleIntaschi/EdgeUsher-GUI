@@ -20,11 +20,6 @@ export class ServiceP {
     if (event.button == 0) {
       this.svg.movedService = this.id;
       this.svg.svgPanZoom.disablePan();
-      this.svg.isDrawingLine = true;
-      /*var index = this.svg.indexOfUnplacedService(this);
-      if (index != -1) {
-        this.svg.unplacedServices.splice(index, 1);
-      }*/
     }
   }
 
@@ -60,10 +55,6 @@ export class ServiceP {
         this.svg.selectedPlacement = this.svg.userPlacement.placement;
         console.log(this.svg.selectedPlacement);
         newNode.placeServices();
-        //Remove from unplaced services
-        //var index = this.svg.indexOfUnplacedService(this);
-        //if (index != -1) this.svg.unplacedServices.splice(index, 1);
-        //this.svg.placeUnplacedServices();
       }
       else if (oldNode && !newNode) {
         //Case only oldNode, service become unplaced

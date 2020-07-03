@@ -3,15 +3,6 @@ import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog
 import { QueryBuilderConfig } from 'angular2-query-builder';
 import { Service } from '../svg-chain/service';
 
-/*
-  Not allowed characters in the name:
-  - ::
-  - [ ]
-  - ( )
-  - Uppercase letter for first
-  - 
-*/
-
 export interface DialogData {
   name: string;
   id: number;    
@@ -177,6 +168,7 @@ export class ServiceDialogComponent {
       if (errType == -1) this.err = 'Function name not specified';
       //else if (errType == -2) this.err = 'There must be no spaces in the name';
       else if (errType == -3) this.err = 'A function with this name already exists';
+      else if (errType == -4) this.err = 'There is characters in the name that are not allowed';
       errs++;
     }
     //Check for service time
@@ -202,12 +194,23 @@ export class ServiceDialogComponent {
     return errs;
   }
 
+  /*
+  Not allowed characters in the name:
+  - ::
+  - [ ]
+  - ( )
+  - Uppercase letter for first
+  - 
+  */
   checkName(): number {
     if (!this.data.name) return -1;
     else if (this.data.name == '') {
       return -1;
     }
     else {
+      var cnter = this.data.name.indexOf('::') + this.data.name.indexOf('[') +
+      this.data.name.indexOf(']') + this.data.name.indexOf('(') + this.data.name.indexOf(')');
+      if (cnter >= 0) return -4;
       if (this.data.name.indexOf(' ') >= 0) {
         //Delete the spaces in the name
         var splitted = this.data.name.split(" ");

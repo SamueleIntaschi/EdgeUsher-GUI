@@ -77,8 +77,6 @@ export class ExecutionDialogComponent implements OnInit {
   placements = Array<Placement>();
   //Specific placement requested for a service
   placesRequested = Array<Place>();
-  //String result of the query
-  result = '';
   //Variable that indicate that the heuristic mode is selected
   heuristicMode = false;
   //Threshold for heuristic version
@@ -1094,7 +1092,6 @@ export class ExecutionDialogComponent implements OnInit {
             this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 0).pipe(catchError(this.handleError.bind(this))).subscribe(async result => {
             //this.http.postQuery('http://127.0.0.1:5000/query/', query, h).subscribe(result => {
               this.spinner.close();
-              this.result = result;
               this.createResult(result);
               var last = 0;
               if (this.placements.length > 0) {
@@ -1118,7 +1115,6 @@ export class ExecutionDialogComponent implements OnInit {
             //this.http.postQuery('http://192.168.1.218:5000/query/', query, h).subscribe(result => {
             this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 1).pipe(catchError(this.handleError)).subscribe(result => {
               this.spinner.close();
-              this.result = result;
               this.createResult(result);
               if (this.placements.length > 0) {
                 this.router.navigate(['/placement']);
@@ -1175,9 +1171,8 @@ export class ExecutionDialogComponent implements OnInit {
             h = 'edgeusher';
             if (query) {
               //this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 1).subscribe(result => {
-              this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 1).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
+              this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 1).pipe(catchError(this.handleError).bind(this)).subscribe(result => {
                 this.spinner.close();
-                this.result = result;
                 //TODO: aggiornare pagina placements cancellando i vecchi per mostrare i nuovi
                 //TODO: in caso di restituzione valori da euristica ricalcolare la probabilità dei placement, che è sbagliata
                 this.createResult(result);

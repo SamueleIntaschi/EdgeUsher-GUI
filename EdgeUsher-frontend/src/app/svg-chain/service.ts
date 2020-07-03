@@ -44,7 +44,6 @@ export class Service {
     for (var j=0; j<s.length; j++) {
       var elem = s[j];
       angle = ((j / s.length) * (2 * Math.PI));
-      console.log(this.x, this.y);
       elem.x = this.x + (radius * Math.cos(angle));
       elem.y = this.y + (radius * Math.sin(angle));
     }
