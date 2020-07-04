@@ -18,6 +18,10 @@ export class HttpService {
     return this.http.post(url, {query: string, eu: eu, last: last}, {responseType: 'text'});
   }
 
+  postClearBackend(url) {
+    return this.http.post(url, {clear: 1}, {responseType: 'text'});
+  }
+
   postFile (url, file: FormData) {
     console.log('send file to ' + url);
     var f = JSON.stringify({file:file});

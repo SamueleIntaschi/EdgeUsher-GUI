@@ -38,7 +38,14 @@ export class NodeMenuComponent implements OnInit {
   }
 
   onChangeProb(event) {
-    
+    if (event == true) {
+      //Case pass from no probs to probs
+      this.data.probabilisticMode = true;
+    }
+    else {
+      //Case pass from probs to no probs
+      this.data.probabilisticMode = false;
+    }
   }
 
   /*--- DIALOG ACTIONS ---*/

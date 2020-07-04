@@ -1,9 +1,8 @@
 import { LocalStorageService } from '../../app/local-storage-service';
 import { HttpService } from '../../app/http-service.service';
-import {Component, Inject, Output, EventEmitter, OnInit, ChangeDetectorRef} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import { Component, Inject, Output, EventEmitter, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Router, Routes } from '@angular/router';
-import { Observable } from "rxjs";
 import { catchError, retry } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ProgressSpinnerDialogComponent } from '../progress-spinner-dialog-component/progress-spinner-dialog-component.component';
@@ -93,8 +92,10 @@ export class ExecutionDialogComponent implements OnInit {
   spinner: MatDialogRef<any>;
   chainFile = Array<String>();
   infrasFile = Array<String>();
+  //Url of the server
+  serverUrl = 'http://192.168.1.218:5000';
 
-  constructor(private cd: ChangeDetectorRef, public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: ExecutionDialogData, private router: Router, public dialogRef: MatDialogRef<ExecutionDialogComponent>, public localStorageService: LocalStorageService, private http: HttpService) {
+  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: ExecutionDialogData, private router: Router, public dialogRef: MatDialogRef<ExecutionDialogComponent>, public localStorageService: LocalStorageService, private http: HttpService) {
 
   }
 
@@ -210,7 +211,7 @@ export class ExecutionDialogComponent implements OnInit {
   getAntiaffinitiesFor(service: string) {
     var affs = Array<Affinity>();
     for (var i=0; i<this.antiAffinities.length; i++) {
-      console.log(this.antiAffinities[i]);
+      //console.log(this.antiAffinities[i]);
       if (this.antiAffinities[i].service1 == service || this.antiAffinities[i].service2 == service) affs.push(this.antiAffinities[i]);
     }
     if (affs.length > 0) return affs;
@@ -421,7 +422,7 @@ export class ExecutionDialogComponent implements OnInit {
           var pl = this.getPlaceNodeFor(s, this.data.placement.placement);
           var aff = this.getAffinitiesFor(s);
           var anaff = this.getAntiaffinitiesFor(s);
-          console.log(pl ,aff,anaff);
+          //console.log(pl ,aff,anaff);
           if (!pl) {
             //Case not placement specified for this node in the partial placement
             if (aff) {
@@ -524,7 +525,7 @@ export class ExecutionDialogComponent implements OnInit {
         }
       }
     }
-    console.log(p);
+    //console.log(p);
     this.tmpPlacement.placement = p;
   }
 
@@ -712,7 +713,7 @@ export class ExecutionDialogComponent implements OnInit {
   createQueryFromPlacement2(): string {
     var query: string;
     var tmpp: Array<Place> = [];
-    console.log(this.data.placement);
+    //console.log(this.data.placement);
     //Create a placement in tmpPlacement
     this.createQueryPlacement2();
     //Create routes in tmpPlacement
@@ -812,7 +813,6 @@ export class ExecutionDialogComponent implements OnInit {
       var prob: string = <string>placements[i].split(' : ')[1];
       if (prob) {
         prob = prob.trim();
-        console.log(prob);
       }
       var placement0 =  placements[i].split(',[')[1];
       if (placement0) {
@@ -865,8 +865,6 @@ export class ExecutionDialogComponent implements OnInit {
       tmp = str.split('),');
     }
     else return null;
-    console.log(str);
-    console.log(tmp);
     for (var i in tmp) {
       if (tmp[i]) {
         tmp2 = tmp[i].split('(');
@@ -889,7 +887,6 @@ export class ExecutionDialogComponent implements OnInit {
       }
       else return null;
     }
-    console.log(ps);
     return ps;
   }
 
@@ -920,17 +917,9 @@ export class ExecutionDialogComponent implements OnInit {
     }
     else return null;
     for (var i in tmp) {
-      console.log(tmp[i]);
       if (tmp[i].indexOf(',') <= 0) {
         //Case empty routes
         return [];
-        /*rts.push({
-          fromNode: '',
-          toNode: '',
-          usedBw: 0,
-          flows: [],
-        });
-        return rts;*/
       }
       if (tmp[i]) {
         tmp2 = tmp[i].split(',');
@@ -963,7 +952,6 @@ export class ExecutionDialogComponent implements OnInit {
                 from: s1,
                 to: s2
               })
-              console.log(flows);
             }
           }
         }
@@ -1008,7 +996,7 @@ export class ExecutionDialogComponent implements OnInit {
       });
       const formData: FormData = new FormData();
       formData.append('infra.pl', blob);
-      this.http.postFile('http://127.0.0.1:5000/infrastructure/', formData).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
+      this.http.postFile(this.serverUrl + '/infrastructure/', formData).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
         console.log(result);
       });
     }
@@ -1026,8 +1014,7 @@ export class ExecutionDialogComponent implements OnInit {
       });
       const formData: FormData = new FormData();
       formData.append('chain.pl', blob);
-      //this.http.postFile('http://127.0.0.1:5000/chain/', formData);
-      this.http.postFile('http://127.0.0.1:5000/chain/', formData).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
+      this.http.postFile(this.serverUrl + '/chain/', formData).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
         console.log(result);
       });
     }
@@ -1066,7 +1053,6 @@ export class ExecutionDialogComponent implements OnInit {
       prob = Number(tmp);
     }
     pl.prob = prob;
-    console.log(pl);
     return pl;
   }
 
@@ -1087,10 +1073,8 @@ export class ExecutionDialogComponent implements OnInit {
           this.openSpinnerDialog();
           if (this.heuristicMode == false) h = 'edgeusher';
           else h = 'hedgeusher';
-          //console.log(query);
           if (this.heuristicMode == true) {
-            this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 0).pipe(catchError(this.handleError.bind(this))).subscribe(async result => {
-            //this.http.postQuery('http://127.0.0.1:5000/query/', query, h).subscribe(result => {
+            this.http.postQuery(this.serverUrl + '/query/', query, h, 0).pipe(catchError(this.handleError.bind(this))).subscribe(async result => {
               this.spinner.close();
               this.createResult(result);
               var last = 0;
@@ -1112,8 +1096,7 @@ export class ExecutionDialogComponent implements OnInit {
             });
           }
           else {
-            //this.http.postQuery('http://192.168.1.218:5000/query/', query, h).subscribe(result => {
-            this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 1).pipe(catchError(this.handleError)).subscribe(result => {
+            this.http.postQuery(this.serverUrl + '/query/', query, h, 1).pipe(catchError(this.handleError)).subscribe(result => {
               this.spinner.close();
               this.createResult(result);
               if (this.placements.length > 0) {
@@ -1144,8 +1127,7 @@ export class ExecutionDialogComponent implements OnInit {
           this.openSpinnerDialog();
           if (this.heuristicMode == true) {
             h = 'hedgeusher';
-            //this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 0).subscribe(async result => {
-            this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 0).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
+            this.http.postQuery(this.serverUrl + '/query/', query, h, 0).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
               this.spinner.close();
               this.createResult(result);
               if (this.placements.length == 0) {
@@ -1162,7 +1144,6 @@ export class ExecutionDialogComponent implements OnInit {
                 }
                 this.localStorageService.storePlacements(this.placements);
                 this.reloadPage.emit(1);
-                //this.router.navigate(['/placement']);
                 this.dialogRef.close();
               }
             });
@@ -1170,8 +1151,7 @@ export class ExecutionDialogComponent implements OnInit {
           else {
             h = 'edgeusher';
             if (query) {
-              //this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 1).subscribe(result => {
-              this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 1).pipe(catchError(this.handleError).bind(this)).subscribe(result => {
+              this.http.postQuery(this.serverUrl, query, h, 1).pipe(catchError(this.handleError).bind(this)).subscribe(result => {
                 this.spinner.close();
                 //TODO: aggiornare pagina placements cancellando i vecchi per mostrare i nuovi
                 //TODO: in caso di restituzione valori da euristica ricalcolare la probabilità dei placement, che è sbagliata
@@ -1183,7 +1163,6 @@ export class ExecutionDialogComponent implements OnInit {
                 else {
                   this.localStorageService.storePlacements(this.placements);
                   this.reloadPage.emit(1);
-                  //this.router.navigate(['/placement']);
                   this.dialogRef.close();
                 }
               });
@@ -1237,11 +1216,9 @@ export class ExecutionDialogComponent implements OnInit {
     }
     rt = '[' + rt + ']';
     query = 'query(placement(' + placement.chainId + ', ' + pl + ', ' + rt +')).'
-    console.log(query);
     var h = 'edgeusher';
-    //return await this.http.postQuery('http://127.0.0.1:5000/query/', query, h, last).toPromise();
     //Retry for tree times if fail
-    return await this.http.postQuery('http://127.0.0.1:5000/query/', query, h, 1).pipe(retry(3)).toPromise();
+    return await this.http.postQuery(this.serverUrl + '/query/', query, h, last).pipe(retry(3)).toPromise();
   }
 
   openSpinnerDialog() {

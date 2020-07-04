@@ -69,6 +69,11 @@ def queryResult():
     #os.remove('infra.pl')
     return string  
 
+@app.route('/clear/', methods=['POST'])
+def clear():
+    os.remove('infra.pl')
+    os.remove('chain.pl')
+    return 'All removed'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port= 5000)
+    app.run(host='0.0.0.0', port= 5000, threaded=True)

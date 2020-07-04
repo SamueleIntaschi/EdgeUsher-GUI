@@ -96,12 +96,13 @@ export class NodeDialogComponent implements OnInit {
   }
 
   onChangeProb(event) {
-    //TODO: passare da una probabilità all'altra
     if (event == true) {
       //Case pass from no probs to probs
+      this.data.probabilisticMode = true;
     }
     else {
       //Case pass from probs to no probs
+      this.data.probabilisticMode = false;
     }
   }
 
