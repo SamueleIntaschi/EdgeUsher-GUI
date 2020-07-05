@@ -8,8 +8,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ProgressSpinnerDialogComponent } from '../progress-spinner-dialog-component/progress-spinner-dialog-component.component';
 import { throwError } from 'rxjs';
 
-//TODO close the spinner when an error happens
-
 /*
   POSSIBLE QUERIES:
   - with affinity: query(placement(Chain, [on(F1,N1), on(F2,N2), on(F3,N2)], Routes)).
@@ -1059,8 +1057,6 @@ export class ExecutionDialogComponent implements OnInit {
   //Send the query
   submitQuery() {
     var ok = 0;
-    this.sendInfrastructure();
-    this.sendChain();
     var h = '';
     /*  
       Case execution called from chain or infrastructure page:
@@ -1068,6 +1064,8 @@ export class ExecutionDialogComponent implements OnInit {
     if (this.data.type == 0) {
       ok = this.checkInformation1();
       if (ok == 1) {
+        this.sendInfrastructure();
+        this.sendChain();
         var query = this.createQuery();
         if (query) {
           this.openSpinnerDialog();
@@ -1075,7 +1073,6 @@ export class ExecutionDialogComponent implements OnInit {
           else h = 'hedgeusher';
           if (this.heuristicMode == true) {
             this.http.postQuery(this.serverUrl + '/query/', query, h, 0).pipe(catchError(this.handleError.bind(this))).subscribe(async result => {
-              this.spinner.close();
               this.createResult(result);
               var last = 0;
               if (this.placements.length > 0) {
@@ -1086,10 +1083,12 @@ export class ExecutionDialogComponent implements OnInit {
                   this.placements[i] = tmpl;
                 }
                 this.localStorageService.storePlacements(this.placements);
+                this.spinner.close();
                 this.router.navigate(['/placement']);
                 this.dialogRef.close();
               }
               else {
+                this.spinner.close();
                 console.log('no valid placement');
                 this.err = "There aren't valid placements";
               }
@@ -1121,6 +1120,8 @@ export class ExecutionDialogComponent implements OnInit {
       */
       ok = this.checkInformation2();
       if (ok == 1) {
+        this.sendInfrastructure();
+        this.sendChain();
         var query: string;
         query = this.createQueryFromPlacement2();
         if (query) {
@@ -1128,9 +1129,9 @@ export class ExecutionDialogComponent implements OnInit {
           if (this.heuristicMode == true) {
             h = 'hedgeusher';
             this.http.postQuery(this.serverUrl + '/query/', query, h, 0).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
-              this.spinner.close();
               this.createResult(result);
               if (this.placements.length == 0) {
+                this.spinner.close();
                 console.log('no valid placement');
                 this.err = "There aren't valid placements";
               }
@@ -1143,6 +1144,7 @@ export class ExecutionDialogComponent implements OnInit {
                   this.placements[i] = tmpl;
                 }
                 this.localStorageService.storePlacements(this.placements);
+                this.spinner.close();
                 this.reloadPage.emit(1);
                 this.dialogRef.close();
               }
@@ -1151,7 +1153,7 @@ export class ExecutionDialogComponent implements OnInit {
           else {
             h = 'edgeusher';
             if (query) {
-              this.http.postQuery(this.serverUrl, query, h, 1).pipe(catchError(this.handleError).bind(this)).subscribe(result => {
+              this.http.postQuery(this.serverUrl + '/query/', query, h, 1).pipe(catchError(this.handleError).bind(this)).subscribe(result => {
                 this.spinner.close();
                 //TODO: aggiornare pagina placements cancellando i vecchi per mostrare i nuovi
                 //TODO: in caso di restituzione valori da euristica ricalcolare la probabilità dei placement, che è sbagliata

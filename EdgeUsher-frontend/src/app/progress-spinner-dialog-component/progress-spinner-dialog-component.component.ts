@@ -12,9 +12,9 @@ import { HttpService } from '../../app/http-service.service';
 export class ProgressSpinnerDialogComponent implements OnInit {
 
   @HostListener('window:beforeunload') clear() {
-    this.http.postClearBackend('http://1921.68.1.218:5000/clear/').subscribe(result => {
+    /*this.http.postClearBackend('http://192.168.1.218:5000/clear/').subscribe(result => {
       console.log(result);
-    });
+    });*/
   }
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'determinate';

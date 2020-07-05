@@ -9,17 +9,11 @@
     <defs>
         <marker id="startcircle" markerWidth="8" markerHeight="8" refX="5" refY="5">
             <circle cx="5" cy="5" r="2" style="stroke: none; fill:red;"/>
-        </marker>    
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" />
-        </marker>
-        <marker id="arrowhead2" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="10" refY="0" viewBox="0 -5 10 10" orient="auto">
-            <path d="M0 -5L10 0L0 5 Z"></path>
-        </marker>
-        <marker id="arrowhead3" refX="4" refY="3" markerWidth="6" markerHeight="6" orient="auto" stroke="black">
+        </marker> 
+        <marker id="arrowhead1" refX="4" refY="3" markerWidth="6" markerHeight="6" orient="auto" stroke="black">
             <path d="M 0 0 L 4 3 L 0 6 Z"></path>
         </marker>
-        <marker id="arrowhead4" refX="4" refY="3" markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
+        <marker id="arrowhead" refX="4" refY="3" markerWidth="6" markerHeight="6" orient="auto" stroke="red" fill="red">
             <path d="M 0 0 L 4 3 L 0 6 Z"></path>
         </marker>
         <linearGradient id="gradient" x1="0%" y1="0%" x2="0" y2="100%">
@@ -37,7 +31,7 @@
             (mouseup)="sub.onMouseUp($event)" 
             stroke-dasharray="5,5"
             marker-start="url(#startcircle)"
-            marker-end="url(#arrowhead4)"
+            marker-end="url(#arrowhead)"
             />
             <path 
             [attr.d]="sub.textpath" 
@@ -64,7 +58,7 @@
             [attr.id]="'flow' + flow.id"
             class="flow"
             (mouseup)="flow.onMouseUp($event)"
-            marker-end="url(#arrowhead3)"
+            marker-end="url(#arrowhead1)"
             /> 
             <rect
             [attr.x]="((flow.coord1.x + flow.coord2.x) / 2) - (flow.bandwidth + ' mbps').length * 8 / 2"
@@ -131,7 +125,7 @@
         id="tmp-flow"
         class="flow"
         (mouseup)="tmpFlow.onMouseUp($event)"
-        marker-end="url(#arrowhead3)"
+        marker-end="url(#arrowhead1)"
         style="stroke:black;stroke-width:2;"/>
 
     </svg>

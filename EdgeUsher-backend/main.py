@@ -62,11 +62,9 @@ def queryResult():
             string = ('%s : %s' % (it))
         else:
             string = string + '\n' + ('%s : %s' % (it))
-    if last == 1:
-    	os.remove('infra.pl')
-    	os.remove('chain.pl')
-    #os.remove('chain.pl')
-    #os.remove('infra.pl')
+    #if last == 1:
+    #	os.remove('infra.pl')
+    #	os.remove('chain.pl')
     return string  
 
 @app.route('/clear/', methods=['POST'])

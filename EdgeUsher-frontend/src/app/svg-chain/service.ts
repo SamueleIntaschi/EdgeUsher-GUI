@@ -24,18 +24,6 @@ export class Service {
     this.svg = s;
   }
 
-  /*
-  Se questi sono i dati di partenza in tuo possesso, puoi facilmente trovare 
-  le posizioni dei fori. Diciamo che i fori sono n, numerati 0..n-1 e
-  supponiamo che l'angolo tra i fori sia a e il diametro della circonferenza
-  d. Diciamo anche che O(ox, oy) sia l'origine della tua circonferenza:
-
-  Per i: 0..n-1
-  x[i] = ox + d/2 * cos(i*alpha)
-  y[i] = oy + d/2 * sin(i*alpha) alpha in gradi
-  (angolo in radianti = angolo in gradi * pi/180).
-  */
-
   //Place the iot icons inside the circle
   placeIotIcons() {
     var s = this.iotReqs;
