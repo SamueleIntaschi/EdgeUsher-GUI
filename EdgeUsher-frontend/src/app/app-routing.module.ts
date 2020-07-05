@@ -11,8 +11,6 @@ import { WorkingPageOutputComponent } from './working-page-output/working-page-o
 const routes: Routes = [
   { path: '', component: StartPageComponent },
   { path: 'chain', component: WorkingPageComponent },
-  { path: 'catena', redirectTo: '/chain'},
-  { path: 'vnf-chain', redirectTo: '/chain'},
   { path: 'infrastructure', component: WorkingPageInfrastructureComponent},
   { path: 'placement', component: WorkingPageOutputComponent},
   { path: '**', component: PageNotFoundComponent }
