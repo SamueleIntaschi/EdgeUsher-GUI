@@ -798,6 +798,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
       var tmpfile = file.name.split('.');
       if (tmpfile[1] == 'eu') this.retrieveInformationFromFile(file);
       else if (tmpfile[1] == 'pl') this.retrieveInformationFromPrologFile(file);
+      else this.openErrorDialog('Wrong file extension');
     }
   }
 

@@ -20,6 +20,8 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+#TODO: inserire parsing del file di configurazione
+
 @app.route('/chain/', methods=['POST'])
 def resultChain():
     print(request)
@@ -72,6 +74,10 @@ def clear():
     os.remove('infra.pl')
     os.remove('chain.pl')
     return 'All removed'
+
+@app.route('/config/', methods=['GET'])
+def configuration():
+    #TODO: inviare informazioni di confgurazoine: porta e ip del server
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port= 5000, threaded=True)

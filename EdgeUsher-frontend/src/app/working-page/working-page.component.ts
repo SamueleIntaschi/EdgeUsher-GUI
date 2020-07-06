@@ -5,6 +5,7 @@ import { HttpService } from '../http-service.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ExecutionDialogComponent } from '../execution-dialog/execution-dialog.component';
 import { TutorialDialogComponent } from '../tutorial-dialog/tutorial-dialog.component';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
   substop = 0;
   isCodeView = false;
   title = 'Untitled chain';
-  constructor(private http: HttpService, public dialog: MatDialog) { }
+  constructor(private http: HttpService, public dialog: MatDialog, private errorService: ChainErrorCheckingService) { }
 
   ngOnInit(): void {
     document.getElementById("code").style.display = 'none';
@@ -143,13 +144,16 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
     });
   }
 
+  
+
   openExecutionDialog() {
+
     //Store the chain file to get it from the dialog
     //this.svg.localStorageService.storeChainFile(this.svg.createChainFile());
     var nservices = this.svg.localStorageService.getServices().length;
-    var chainFile: Array<String>;
+    var chainFile: Array<string>;
     if (nservices > 0) chainFile = this.svg.localStorageService.getChainFile();
-    var infrasFile: Array<String>;
+    var infrasFile: Array<string>;
     var nnodes = this.svg.localStorageService.getNodes().length;
     if (nnodes > 0) infrasFile = this.svg.localStorageService.getInfrastructureFile();
     console.log(chainFile, infrasFile);
@@ -163,13 +167,20 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
       this.svg.openErrorDialog('Infrastructure is missing');
     }
     else {
-      var dialogRef = this.dialog.open(ExecutionDialogComponent, {
-        width: '30%',
-        autoFocus: false,
-        data: {
-          type: 0,
-        },
-      });
+      var ok = this.errorService.checkChainFile(chainFile);
+      if (ok == 1) {
+        var dialogRef = this.dialog.open(ExecutionDialogComponent, {
+          width: '30%',
+          autoFocus: false,
+          data: {
+            type: 0,
+          },
+        });
+      }
+      else if (ok == -1) {
+        //TODO: error throwing
+      }
+      
     }
     
   }

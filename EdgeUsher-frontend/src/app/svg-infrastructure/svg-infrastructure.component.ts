@@ -743,6 +743,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       var tmpfile = file.name.split('.');
       if (tmpfile[1] == 'eu') this.retrieveInformationFromFile(file);
       else if (tmpfile[1] == 'pl') this.retrieveInformationFromAllPrologFile(file);
+      else this.openErrorDialog('Wrong file extension');
     }
   }
 
