@@ -1,4 +1,5 @@
 <div id="working-page">
+
     <app-svg-chain id="svg"
     (onChangeTitleFromUpload)="changeTitleFromUpload($event)"
     ></app-svg-chain>
@@ -20,10 +21,14 @@
     <app-chain-code id="code"
     ></app-chain-code>
 
+    <app-split-screen id="split-screen"></app-split-screen>
+
     <div id='radio-button-chain'>
         <div id="subdiv-radio-button-chain">
             <input id="left-radio-button" (click)="onCodeClick(1)" type="radio" name="radios"value="false">
             <label for="left-radio-button">Source code</label>
+            <input id="center-radio-button" (click)="onCodeClick(3)" type="radio" name="radios"value="all">
+            <label for="center-radio-button">Split screen</label>
             <input id="right-radio-button" (click)="onCodeClick(2)" type="radio" name="radios" value="all" checked>
             <label for="right-radio-button">Graphic editor</label>
         </div>

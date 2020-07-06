@@ -949,19 +949,25 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
       //If there aren't cycles check if the chain is connected correctly 
       var isConnected = this.checkIfConnected(roots);
       if (isConnected == true) {
-        //Case chain connected: download the file
-        var file = this.createChainFile();
-        let blob = new Blob([file.join('\n')], {
-          type: 'plain/text'
-        });
-        var fname = this.createFilename();
-        fname = fname + '.pl';
-        FileSaver.saveAs(blob, fname);
+        if (this.subchains.length == 1) {
+          //Case chain connected: download the file
+          var file = this.createChainFile();
+          let blob = new Blob([file.join('\n')], {
+            type: 'plain/text'
+          });
+          var fname = this.createFilename();
+          fname = fname + '.pl';
+          FileSaver.saveAs(blob, fname);
+        }
+        else {
+          this.openErrorDialog('There must be one max latency constraint');
+        }
       }
       else {
         //Case chain not properly connected
         this.openErrorDialog('The chain is not connected');
       }
+        
     }
     else {
       //Case cycle in the chain
@@ -1590,7 +1596,9 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
   //Open the service dialog for the first time to create a service
   openServiceDialog(s: Service) {
     var dialogRef = this.dialog.open(ServiceDialogComponent, {
-      //width: '30%',
+      width: '40%',
+      disableClose: true,
+      autoFocus: false,
       data: {
         name: s.name,
         serviceTime: s.serviceTime,
@@ -1630,7 +1638,9 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
   //Open flow dialog for its creation
   openFlowDialog(flow: Flow) {
     const dialogRef = this.dialog.open(FlowDialogComponent, {
-      //width: '30%',
+      width: '30%',
+      disableClose: true,
+      autoFocus: false,
       data: {
         bandwidth: flow.bandwidth,
         from: flow.fromService,
@@ -1671,7 +1681,9 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
   //Open subchain dialog for its creation
   openSubchainDialog(s: Subchain) {
     const dialogRef = this.dialog.open(ChainDialogComponent, {
-      //width: '30%',
+      width: '30%',
+      disableClose: true,
+      autoFocus: false,
       data: {
         id: s.id,
         maxLatency: s.maxLatency,
@@ -2413,25 +2425,6 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
 
   //Check if the services are connected to others services
   checkIfConnected(roots: Array<Service>) {
-    //Needless
-    /*for (var i=0; i<this.services.length; i++) {
-      if (this.services[i].connectedServices.length == 0) {
-        //Check if the service is connected with other services
-        var connect = false;
-        for (var j=0; j<this.services.length; j++) {
-          if (j != i) {
-            if (this.services[j].hasConnectedService(this.services[i].id)) {
-              connect = true;
-              break;
-            }
-          }
-        }
-        if (connect == false) {
-          //Not all the nodes are connected at other nodes
-          return false;
-        }
-      }
-    }*/
     var found = false;
     var firstSubtree = Array<number>();
     for (var i=0; i<roots.length; i++) {

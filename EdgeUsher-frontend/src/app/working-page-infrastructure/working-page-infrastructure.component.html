@@ -17,14 +17,13 @@
     ></app-header-infrastructure>
     <app-chain-code id="code"
     ></app-chain-code>
-    <!--div id="infrastructure-navigation">
-        <button id='infrastructure-src-code' (click)="onCodeClick(1)">Source code</button>
-        <button id='infrastructure-editor' (click)="onCodeClick(2)">Graphic editor</button>
-    </div-->
+    <app-split-screen id="split-screen"></app-split-screen>
     <div id='radio-button-infrastructure'>
         <div id="subdiv-radio-button-infrastructure">
             <input id="left-radio-button-infr" (click)="onCodeClick(1)" type="radio" name="radios"value="false">
             <label for="left-radio-button-infr">Source code</label>
+            <input id="center-radio-button" (click)="onCodeClick(3)" type="radio" name="radios"value="all">
+            <label for="center-radio-button">Split screen</label>
             <input id="right-radio-button-infr" (click)="onCodeClick(2)" type="radio" name="radios" value="all" checked>
             <label for="right-radio-button-infr">Graphic editor</label>
         </div>

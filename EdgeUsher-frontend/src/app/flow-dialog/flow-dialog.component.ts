@@ -25,6 +25,10 @@ export class FlowDialogComponent {
   ngOnInit(): void {
   }
 
+  onClose() {
+    this.dialogRef.close();
+  }
+
   onDeleteClick(event): void {
     var coord = [event.offsetX, event.offsetY];
     this.deleteLine.emit(coord);

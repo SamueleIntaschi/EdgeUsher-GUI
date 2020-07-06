@@ -2,7 +2,7 @@ import {Component, Inject, Output, EventEmitter, OnInit} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 
 export interface TutorialDialogData {
-  text: string;
+  from: string;
 }
 
 @Component({

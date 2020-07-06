@@ -1,7 +1,18 @@
 <h1>Tutorial</h1>
 
 <div id="tutorial-content">
-    <p>
-        {{data.text}}
-    </p>
+    <ul *ngIf="this.data.from == 'chain'">
+        <li>
+            Step 1: 
+            to insert a service click on the drawing area and specify the service requirements
+        </li>
+        <li>
+            Step 2:
+            to insert a flow click on a service and drag the mouse over another service, then specify the flow requirements
+        </li>
+        <li>
+            Step 3:
+            to insert a max latency constraint click on the button on the header, then click on a service to add it to the max latency constraint
+        </li>
+    </ul>
 </div>

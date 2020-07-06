@@ -1,6 +1,5 @@
 <div id="function-menu">
 <div id="title">
-    <!--button checked="false" id="close" (click)="onClose()">x</button-->
     <input id="function-name-menu" autocomplete="off" [(ngModel)]="data.name">
     <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
 </div>
@@ -38,7 +37,7 @@
                 <div id="select-icon">
                   <img 
                   *ngFor="let icon of icons; index as j"
-                  class='icon'
+                  [attr.class]="'icon' + i"
                   [attr.id]="'icon-' + j + '-device' + i + '-service' + data.id" 
                   [attr.src]="icon"
                   height="30"

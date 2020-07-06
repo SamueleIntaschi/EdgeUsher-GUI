@@ -52,6 +52,7 @@ import { SvgOutputComponent } from './svg-output/svg-output.component';
 import { TutorialDialogComponent } from './tutorial-dialog/tutorial-dialog.component';
 import { DotNavigationComponent } from './dot-navigation/dot-navigation.component';
 import { ProgressSpinnerDialogComponent } from './progress-spinner-dialog-component/progress-spinner-dialog-component.component';
+import { SplitScreenComponent } from './split-screen/split-screen.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { ProgressSpinnerDialogComponent } from './progress-spinner-dialog-compon
     TutorialDialogComponent,
     DotNavigationComponent,
     ProgressSpinnerDialogComponent,
+    SplitScreenComponent,
   ],
   imports: [
     BrowserModule,

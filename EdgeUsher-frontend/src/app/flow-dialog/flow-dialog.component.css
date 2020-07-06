@@ -1,14 +1,3 @@
-/*button#delete {
-    position: relative;
-    border: 3px solid rgb(33, 117, 173);
-}
-
-button#save {
-    position: relative;
-    margin-left: 200px;
-    border: 3px solid rgb(33, 117, 173);
-}*/
-
 #flow-dialog-content {
     font-size: 80%;
 }
@@ -66,4 +55,25 @@ input {
     font-size: 80%;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     background-color: lightcyan;
+}
+
+#title {
+    display: grid;
+    grid-template-columns: auto;
+    padding: 0%;
+    font-weight: 500;
+}
+
+#close {
+    grid-row: 1;
+    grid-column-start: 2;
+    height: 16px;
+    line-height: none !important;
+    width: 15px;
+    height: 15px;
+    justify-self: right;
+    line-height: 100%;
+    cursor: pointer;
+    background-color: lightskyblue;
+    box-shadow: none;
 }

@@ -95,6 +95,10 @@ export class NodeDialogComponent implements OnInit {
     });*/
   }
 
+  onClose() {
+    this.dialogRef.close();
+  }
+
   onChangeProb(event) {
     if (event == true) {
       //Case pass from no probs to probs

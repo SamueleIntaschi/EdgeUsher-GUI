@@ -3,6 +3,8 @@ import { SvgInfrastructureComponent } from '../svg-infrastructure/svg-infrastruc
 import { ChainCodeComponent } from '../chain-code/chain-code.component';
 import { ExecutionDialogComponent } from '../execution-dialog/execution-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
+import { SplitScreenComponent } from '../split-screen/split-screen.component';
 
 
 @Component({
@@ -14,9 +16,10 @@ export class WorkingPageInfrastructureComponent implements OnInit {
 
   @ViewChild(SvgInfrastructureComponent, {static: false}) private svg: SvgInfrastructureComponent;
   @ViewChild(ChainCodeComponent, {static: false}) private code: ChainCodeComponent;
+  @ViewChild(SplitScreenComponent, {static: true}) private splitScreen: SplitScreenComponent;
   //@ViewChild(HeaderInfrastructureComponent, {static: false}) header: HeaderInfrastructureComponent;
   title = 'Untitled infrastructure';
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private errorService: ChainErrorCheckingService) { }
 
   ngOnInit(): void {
     document.getElementById("code").style.display = 'none';
@@ -64,14 +67,23 @@ export class WorkingPageInfrastructureComponent implements OnInit {
       var d1 = document.getElementsByClassName("CodeMirror-gutter") as HTMLCollectionOf<HTMLElement>;
       //d1[0].style.backgroundColor = 'lightblue';
       document.getElementById("svg").style.display = 'none';
-      //document.getElementById("header").style.display = 'none';
+      document.getElementById("split-screen").style.display = 'none';
       document.getElementById("code").style.display = 'block';
       this.code.refresh();
     }
     else if (type == 2) {
       document.getElementById("svg").style.display = 'block';
-      //document.getElementById("header").style.display = 'block';
+      document.getElementById("split-screen").style.display = 'none';
       document.getElementById("code").style.display = 'none';
+    }
+    else if (type == 3) {
+      this.svg.dialog.closeAll();
+      this.svg.openNodeDialogs = [];
+      this.svg.openLinkDialogs = [];
+      this.splitScreen.resetPan();
+      document.getElementById("svg").style.display = 'none';
+      document.getElementById("code").style.display = 'none';
+      document.getElementById("split-screen").style.display = 'block';
     }
   }
 
@@ -105,9 +117,9 @@ export class WorkingPageInfrastructureComponent implements OnInit {
     //Store the chain file to get it from the dialog
     //this.svg.localStorageService.storeInfrastructureFile(this.svg.createInfrastructureFile());
     var nservices = this.svg.localStorageService.getServices().length;
-    var chainFile: Array<String>;
+    var chainFile: Array<string>;
     if (nservices > 0) chainFile = this.svg.localStorageService.getChainFile();
-    var infrasFile: Array<String>;
+    var infrasFile: Array<string>;
     var nnodes = this.svg.localStorageService.getNodes().length;
     if (nnodes > 0) infrasFile = this.svg.localStorageService.getInfrastructureFile();
     if (!chainFile && !infrasFile) {
@@ -120,14 +132,21 @@ export class WorkingPageInfrastructureComponent implements OnInit {
       this.svg.openErrorDialog('Infrastructure is missing');
     }
     else {
-      var dialogRef = this.dialog.open(ExecutionDialogComponent, {
-        //width: '30%',
-        autoFocus: false,
-        data: {
-          type: 0,
-          placement: null
-        },
-      });
+      var ok = this.errorService.checkChainFile(chainFile);
+      if (ok == 1) {
+        var dialogRef = this.dialog.open(ExecutionDialogComponent, {
+          width: '50%',
+          autoFocus: false,
+          data: {
+            type: 0,
+            placement: null
+          },
+        });
+      }
+      else {
+        this.svg.openErrorDialog('The chain is uncorrect, please check if there are cycles or if the services is correctly connected');
+      }
+      
     }
   }
 

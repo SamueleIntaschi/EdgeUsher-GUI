@@ -4,6 +4,7 @@ import { ChainCodeComponent } from '../chain-code/chain-code.component';
 import { Placement } from '../execution-dialog/execution-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ExecutionDialogComponent } from '../execution-dialog/execution-dialog.component';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 @Component({
   selector: 'app-working-page-output',
@@ -17,7 +18,7 @@ export class WorkingPageOutputComponent implements OnInit {
   placements = Array<Placement>();
   selectedPlacement: Placement;
   indexSelectedPlacement = -1;
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private errorService: ChainErrorCheckingService) { }
 
   ngOnInit(): void {
     document.getElementById("code").style.display = 'none';
@@ -90,9 +91,9 @@ export class WorkingPageOutputComponent implements OnInit {
     //Store the placement to get it from the dialog
     this.svg.localStorageService.storeActualPlacement(this.svg.selectedPlacement);
     var nservices = this.svg.localStorageService.getServices().length;
-    var chainFile: Array<String>;
+    var chainFile: Array<string>;
     if (nservices > 0) chainFile = this.svg.localStorageService.getChainFile();
-    var infrasFile: Array<String>;
+    var infrasFile: Array<string>;
     var nnodes = this.svg.localStorageService.getNodes().length;
     if (nnodes > 0) infrasFile = this.svg.localStorageService.getInfrastructureFile();
     if (!chainFile && !infrasFile) {
@@ -105,15 +106,21 @@ export class WorkingPageOutputComponent implements OnInit {
       this.svg.openErrorDialog('Infrastructure is missing');
     }
     else {
-      var dialogRef = this.dialog.open(ExecutionDialogComponent, {
-        width: '50%',
-        autoFocus: false,
-        disableClose: true,
-        data: {
-          type: 1,
-          placement: this.svg.selectedPlacement,
-        },
-      });
+      var ok = this.errorService.checkChainFile(chainFile);
+      if (ok == 1) {
+        var dialogRef = this.dialog.open(ExecutionDialogComponent, {
+          width: '50%',
+          autoFocus: false,
+          disableClose: true,
+          data: {
+            type: 1,
+            placement: this.svg.selectedPlacement,
+          },
+        });
+      }
+      else {
+        this.svg.openErrorDialog('The chain is uncorrect, please check if there are cycles or if the services is correctly connected');
+      }
 
       dialogRef.afterClosed().subscribe(result => {
         //location.reload();

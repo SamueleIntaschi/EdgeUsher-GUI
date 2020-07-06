@@ -1,4 +1,7 @@
-<input id="node-name" autocomplete="off" [(ngModel)]="data.name"> 
+<div id='title'>
+  <input id="node-name" autocomplete="off" [(ngModel)]="data.name"> 
+  <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
+</div>
 <p class="err" [textContent]="err"></p>
 <div mat-dialog-content id="service-dialog-content" >
 

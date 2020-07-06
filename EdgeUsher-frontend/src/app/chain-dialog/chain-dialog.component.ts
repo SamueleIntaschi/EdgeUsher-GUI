@@ -30,6 +30,10 @@ export class ChainDialogComponent {
     }
   }
 
+  onClose() {
+    this.dialogRef.close();
+  }
+
   onCancelClick() {
     this.cancelClick.emit(1);
   }

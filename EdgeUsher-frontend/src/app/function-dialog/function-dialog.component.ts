@@ -85,6 +85,7 @@ export class ServiceDialogComponent {
   @Output() deleteSquare = new EventEmitter<number>();   
   @Output() createSquare = new EventEmitter<DialogData>();
   @Output() moveSquare = new EventEmitter<number>();
+  @Output() closeClick = new EventEmitter<number>();
 
 
   /*--- IOT device connected ---*/
@@ -93,7 +94,8 @@ export class ServiceDialogComponent {
     event.preventDefault();
     if (event.button == 0) {
       //Border all icon with none
-      var icons = document.getElementsByClassName('icon') as HTMLCollectionOf<HTMLElement>;
+      var index = this.indexOfDevice(device);
+      var icons = document.getElementsByClassName('icon' + index) as HTMLCollectionOf<HTMLElement>;
       for (var i=0; i<icons.length; i++) {
         icons[i].style.border = 'none';
       }
@@ -124,6 +126,13 @@ export class ServiceDialogComponent {
     }
   }
 
+  indexOfDevice(s: string) {
+    for (var i=0; i<this.data.iotReqs.length; i++) {
+      if (this.data.iotReqs[i].device == s) return i;
+    }
+    return -1;
+  }
+
   trackByFn(index: any, item: any) {
     return index;
   } 
@@ -139,6 +148,11 @@ export class ServiceDialogComponent {
   }
 
   /*--- DIALOG METHOD ---*/
+
+  onClose() {
+    this.closeClick.emit(1);
+    this.dialogRef.close();
+  }
 
   onCreateClick(data): void {
     //Check if there are errors and adjust the parameters

@@ -43,7 +43,7 @@
             
             <text class="text-subchain" [attr.id]="'text-subchain' + sub.id" (mouseup)="sub.onMouseUp($event)" >
                 <textPath [attr.xlink:href]="'#'+ 'subchain-text' + sub.id" startOffset="50%" text-anchor="middle">
-                  {{sub.maxLatency + ' Mbps'}}
+                  {{sub.maxLatency + ' ms'}}
                 </textPath>
             </text>
             

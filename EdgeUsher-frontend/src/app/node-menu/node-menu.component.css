@@ -25,7 +25,7 @@ mat-checkbox {
 
 #node-menu {
     display: grid;
-    grid-template-rows: 20px 20px 220px 20px;
+    grid-template-rows: 20px 20px 175px 20px;
 }
 
 #node-menu-content {

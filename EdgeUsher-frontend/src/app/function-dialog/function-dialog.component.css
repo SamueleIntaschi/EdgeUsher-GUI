@@ -140,6 +140,26 @@ input {
     height: 10%;
 }
 
+#title {
+    display: grid;
+    grid-template-columns: auto;
+    padding: 0%;
+    font-weight: 500;
+}
+
+#close {
+    grid-row: 1;
+    grid-column-start: 2;
+    height: 16px;
+    line-height: none !important;
+    width: 15px;
+    height: 15px;
+    justify-self: right;
+    line-height: 100%;
+    cursor: pointer;
+    background-color: lightskyblue;
+    box-shadow: none;
+}
 
 /*--- OTHER REQUIREMENT STYLE ---*/
 

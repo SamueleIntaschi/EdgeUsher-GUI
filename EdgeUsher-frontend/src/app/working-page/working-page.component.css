@@ -15,6 +15,10 @@
     display: none;
 }
 
+#split-screen {
+  display: none;
+}
+
 #header {
     grid-row-start: 1;
 }
@@ -64,6 +68,12 @@ input[type=radio] + label {
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   border: 2px solid rgb(33, 117, 173);
+  border-right-color: skyblue;
+}
+
+#center-radio-button + label {
+  border-top: 2px solid rgb(33, 117, 173);
+  border-bottom: 2px solid rgb(33, 117, 173);
   border-right-color: skyblue;
 }
 /*

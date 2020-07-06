@@ -1,4 +1,8 @@
-<h1 mat-dialog-title>Flow from {{data.from}} to {{data.to}}</h1>
+
+<div id='title'>
+  <h1 mat-dialog-title>Flow from {{data.from}} to {{data.to}}</h1>
+  <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
+</div>
 <p id="err" [textContent]="err"></p>
 <div mat-dialog-content id="flow-dialog-content">
     <p>

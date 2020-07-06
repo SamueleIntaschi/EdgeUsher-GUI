@@ -151,4 +151,8 @@ export class LinkDialogComponent {
     }
   }
 
+  onClose() {
+    this.dialogRef.close();
+  }
+
 }

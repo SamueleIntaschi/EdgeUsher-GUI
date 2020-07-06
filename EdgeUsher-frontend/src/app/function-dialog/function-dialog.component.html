@@ -1,4 +1,7 @@
-<input id="function-name" autocomplete="off" [(ngModel)]="data.name">
+<div id='title'>
+  <input id="function-name" autocomplete="off" [(ngModel)]="data.name">
+  <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
+</div>
 <p class="err" [textContent]="err"></p>
 <div mat-dialog-content id="service-dialog-content" >
   <!--Service name: <input autocomplete="off" id="service-name-input" [(ngModel)]="data.squareName"> <br><br-->
@@ -30,7 +33,7 @@
                 <div id="select-icon">
                   <img 
                   *ngFor="let icon of icons; index as j"
-                  class='icon'
+                  [attr.class]="'icon' + i"
                   [attr.id]="'icon-' + j + '-device' + i + '-service' + data.id" 
                   [attr.src]="icon"
                   height="30"

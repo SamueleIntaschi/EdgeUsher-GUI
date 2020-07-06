@@ -68,7 +68,8 @@ export class FunctionMenuComponent implements OnInit {
   onIconClick(event, device) {
     event.preventDefault();
     if (event.button == 0) {
-      var icons = document.getElementsByClassName('icon') as HTMLCollectionOf<HTMLElement>;
+      var index = this.indexOfDevice(device);
+      var icons = document.getElementsByClassName('icon' + index) as HTMLCollectionOf<HTMLElement>;
       for (var i=0; i<icons.length; i++) {
         icons[i].style.border = 'none';
       }
@@ -86,6 +87,13 @@ export class FunctionMenuComponent implements OnInit {
       y: 0,
     }
     this.iotReqs.push(device);
+  }
+
+  indexOfDevice(s: string) {
+    for (var i=0; i<this.data.iotReqs.length; i++) {
+      if (this.iotReqs[i].device == s) return i;
+    }
+    return -1;
   }
 
   deleteDevice(s: string) {

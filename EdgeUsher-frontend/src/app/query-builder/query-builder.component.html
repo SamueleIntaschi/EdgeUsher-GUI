@@ -14,9 +14,9 @@
         </div>
         <div class="add-type-div">
           <button id="add-rule" class="add" (click)='this.addRule0()'>Add rule</button>
-          <button id="add-rule" class="add" *ngIf="this.cond != 'list'" (click)='addRuleset0()'>Add ruleset</button>
+          <button id="add-rule" class="add" *ngIf="this.cond != 'list'" (click)='addRuleset0()'>Add AND/OR</button>
           <button id="list-req" class="add" (click)='listReq()'>List</button>
-          <button id="ruleset-req" class="add" (click)='ruleReq()'>Ruleset</button>
+          <button id="ruleset-req" class="add" (click)='ruleReq()'>AND/OR</button>
         </div>
       </div>
       
@@ -38,14 +38,9 @@
                 </div>
                 <div class="add-type-div">
                   <button id="add-rule" class="add" (click)='addRule(rule)'>Add rule</button>
-                  <button id="add-rule" class="add" *ngIf="this.cond != 'list'" (click)='addRuleset(rule)'>Add ruleset</button>
+                  <button id="add-rule" class="add" *ngIf="this.cond != 'list'" (click)='addRuleset(rule)'>Add AND/OR</button>
                 </div>
               </div>
-
-                <!--button id="and-req" class="cond" *ngIf="rule.cond != 'single'" (click)='andReq(rule)'>AND</button>
-                <button id="or-req" class="cond" *ngIf="rule.cond != 'single'" (click)='orReq(rule)'>OR</button>
-                <button id="add-rule" class="add" (click)='addRule(rule)'>Add rule</button>
-                <button id="add-rule" class="add" *ngIf="rule.cond != 'single'" (click)='addRuleset(rule)'>Add ruleset</button-->
                 <p class="help" *ngIf="rule.nestedRules.length == 0">A ruleset must not be empty</p>
                 <ul class="nested-ul" *ngIf="rule.nestedRules.length > 0">
                   <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: rule.nestedRules }"></ng-container>

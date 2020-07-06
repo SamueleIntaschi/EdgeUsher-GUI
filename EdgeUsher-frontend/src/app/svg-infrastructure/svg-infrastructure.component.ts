@@ -892,67 +892,6 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     }
     
     return file;
-    /*
-    if (this.probabilisticMode == 'static') {
-      file[j] = '% Nodes';
-      j++;
-      //Create node(NodeId, HWCaps, IoTCaps, SecCaps).
-      for (i = 0; i < this.nodes.length; i++) {
-        var node = this.nodes[i];
-        tmp = 'node(' + node.name + ', ' + node.singleValue.hwCaps + ', [' + node.createIoTCaps() + '], [' + node.createSecCaps() + ']).' 
-        file[j] = tmp;
-        j++;
-      }
-      file[j] = '% Links';
-      j++;
-      //Create link(NodeA, NodeB, Latency, Bandwidth).
-      for (var k in this.links) {
-        var link = this.links[k];
-        tmp = 'link(' + link.fromNode + ', ' + link.toNode + ', ' + link.latency + ', ' + link.bandwidth  + ').';
-        file[j] = tmp;
-        j++;
-      }
-    }
-    else if (this.probabilisticMode != 'static') {
-      for (i = 0; i < this.nodes.length; i++) {
-        var node = this.nodes[i];
-        for (var k in node.probs) {
-          tmp = 'node(' + node.name + ', ' 
-                 + node.probs[k].value.hwCaps + ', [' 
-                 + node.createProbIoTCaps(node.probs[k]) 
-                 + '], [' + node.createProbSecCaps(node.probs[k]) + '])';
-          if (node.probs[k].prob == 0) {
-            //Do nothing, probably return error if we are in complete case
-          }
-          else {
-            var probd = node.probs[k].prob;
-            tmp = probd + '::' + tmp;
-            if (!file[j]) file[j] = tmp;
-            else file[j] = file[j] + ';'+ tmp;
-          }
-        }
-        file[j] = file[j] + '.';
-        j++;
-      }
-      for (var z in this.links) {
-        var link = this.links[z];
-        for (var k in link.probs) {
-          tmp = 'link(' + link.fromNode + ', ' + link.toNode + ', ' + link.probs[k].latvalue + ', ' + link.probs[k].bandvalue  + ')';
-          if (link.probs[k].prob == 0) {
-            //Do nothing
-          }
-          else {
-            var probd = link.probs[k].prob;
-            //probd = Math.round((probd + Number.EPSILON) * 1000) / 1000;
-            tmp = probd + '::' + tmp;
-            if (!file[j]) file[j] = tmp;
-            else file[j] = file[j] + ';' + tmp;
-          }
-        }
-        file[j] = file[j] + '.';
-        j++;
-      }
-    }*/
   }
 
 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -1371,7 +1310,8 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   openNodeDialog(node: Node) {
     var prevName = node.name;
     const dialogRef = this.dialog.open(NodeDialogComponent, {
-      //width: '30%',
+      width: '40%',
+      disableClose: true,
       autoFocus: false,
       data: {
         name: node.name,
@@ -1406,7 +1346,8 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   openLinkDialog(link: Link) {
     const dialogRef = this.dialog.open(LinkDialogComponent, {
       autoFocus: false,
-      //width: '30%',
+      disableClose: true,
+      width: '30%',
       data: {
         probs: link.probs,
         bandwidth: link.bandwidth,
@@ -1455,7 +1396,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     pageX = (node.x * this.svgPanZoom.getZoom() + this.svgPanZoom.getPan().x) + p.left;
     pageY = (node.y * this.svgPanZoom.getZoom() + this.svgPanZoom.getPan().y) + p.top;
     //pageX = this.svgPanZoom.getSizes().height - node.x - (this.svgPanZoom.getSizes().height - (p.height*this.svgPanZoom.getZoom()) + this.svgPanZoom.getPan().x) / this.svgPanZoom.getZoom();
-    var hd = 300;
+    var hd = 255;
     var wd = 300;
     corner = 'topLeft';
     if (pageY+ hd > p.bottom) {
@@ -1467,9 +1408,15 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       if (corner == 'bottomLeft') corner = 'bottomRight';
       else corner = 'topRight';
     }
+    if (pageX < p.left || pageX + wd > p.right || pageY < p.top || pageY + hd > p.bottom) {
+      //Do nothing
+    }
+    else {
+      //TODO: open it
+    }
     dialogRef = this.dialog.open(NodeMenuComponent, {
       width: '300px',
-      height: '300px',
+      height: '255px',
       position: {
         top: pageY+'px',
         left: pageX+'px'
@@ -1723,100 +1670,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       if (type == 'reset') {
         this.new();
       }
-      //Pass to no-probs mode
-      /*else if (type == 'no-probs') {
-        //Close all opened dialogs
-        this.dialog.closeAll();
-        this.openLinkDialogs = [];
-        this.openNodeDialogs = [];
-        if (this.probabilisticMode != 'static') {
-          this.probabilisticMode = 'static';
-          this.localStorageService.setProbabilisticMode(this.probabilisticMode);
-          //Update the probability values of all nodes
-          for (var i in this.nodes) {
-            var node = this.nodes[i];
-            var maxProbIndex = 0;
-            var maxProbValue = 0;
-            //Search the max probability
-            for (var j=0; j<node.probs.length; j++) {
-              if (node.probs[j].prob > maxProbValue) {
-                maxProbIndex = j;
-                maxProbValue = node.probs[j].prob;
-              }
-            }
-            node.singleValue = node.probs[maxProbIndex].value;
-            this.localStorageService.modifyNode(node);
-          }
-          for (var i in this.links) {
-            var link = this.links[i];
-            var maxProbIndex = 0;
-            var maxProbValue = 0;
-            //Search the max probability
-            for (var j=0; j<link.probs.length; j++) {
-              if (link.probs[j].prob > maxProbValue) {
-                maxProbIndex = j;
-                maxProbValue = link.probs[j].prob;
-              }
-            }
-            link.bandwidth = link.probs[maxProbIndex].bandvalue;
-            link.latency = link.probs[maxProbIndex].latvalue;
-            this.localStorageService.modifyLink(link);
-          }
-        }
-      }
-      //Pass to complete or partial mode
-      else if (type == 'complete') {
-        this.dialog.closeAll();
-        this.openLinkDialogs = [];
-        this.openNodeDialogs = [];
-        if (this.probabilisticMode == 'static') {
-          this.probabilisticMode = type;
-          this.localStorageService.setProbabilisticMode(this.probabilisticMode);
-          //TODO: non fare nulla se il nodo contiene già dei valori di probabilità
-          for (var i in this.nodes) {
-            var node = this.nodes[i];
-            console.log(node.name + ': ' + node.probs.length);
-            if (node.probs.length == 0) {
-              var nodeProb: NodeProb = {
-                value: node.singleValue,
-                prob: 1,
-              }
-              node.probs.push(nodeProb);
-              this.localStorageService.modifyNode(node);
-            }
-            console.log(node.probs);
-          }
-          for (var i in this.links) {
-            var link = this.links[i];
-            if (link.probs.length == 0) {
-              var prob: LinkProb = {
-                bandvalue: link.bandwidth,
-                latvalue: link.latency,
-                prob: 1,
-              }
-              link.probs.push(prob);
-              this.localStorageService.modifyLink(link);
-            }
-          }
-        }
-        else if (this.probabilisticMode == 'partial') {
-          this.probabilisticMode = 'complete';
-          this.localStorageService.setProbabilisticMode(this.probabilisticMode);
-          //TODO: aggiungere la differenza settata con tutti 1
-        }
-      }
-      else if (type == 'partial') {
-        if (this.probabilisticMode == 'static') {
-          this.probabilisticMode = 'partial';
-          this.localStorageService.setProbabilisticMode(this.probabilisticMode);
-          //TODO creare una probabilità, probabilmente con 100%
-        }
-        else if (this.probabilisticMode == 'complete') {
-          this.probabilisticMode = 'partial';
-          this.localStorageService.setProbabilisticMode(this.probabilisticMode);
-          //TODO mantenere solo la probabilità maggiore oppure lasciare uguale
-        }
-      }*/
+      
     });
     
     dialogRef.componentInstance.negativeClick.subscribe(() => {
@@ -1849,7 +1703,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
         var p = document.getElementById('svgelem').getBoundingClientRect();
         pageX = (node.x * this.svgPanZoom.getZoom() + this.svgPanZoom.getPan().x) + p.left;
         pageY = (node.y * this.svgPanZoom.getZoom() + this.svgPanZoom.getPan().y) + p.top;
-        var h = 300;
+        var h = 255;
         var w = 300;
         corner = 'topLeft';
         if (pageY + h > p.bottom) {

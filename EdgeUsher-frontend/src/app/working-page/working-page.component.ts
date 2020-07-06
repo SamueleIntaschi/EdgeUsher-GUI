@@ -6,6 +6,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ExecutionDialogComponent } from '../execution-dialog/execution-dialog.component';
 import { TutorialDialogComponent } from '../tutorial-dialog/tutorial-dialog.component';
 import { ChainErrorCheckingService } from '../chain-error-checking.service';
+import { SplitScreenComponent } from '../split-screen/split-screen.component';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
 
   @ViewChild(SvgChainComponent, {static: false}) private svg: SvgChainComponent;
   @ViewChild(ChainCodeComponent, {static: false}) private code: ChainCodeComponent;
+  @ViewChild(SplitScreenComponent, {static: true}) private splitScreen: SplitScreenComponent;
   //@ViewChild(HeaderChainComponent, {static: false}) private header: HeaderChainComponent;
   modifyFlow = Array<string>();
   modifySubChain: number;
@@ -29,6 +31,7 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     document.getElementById("code").style.display = 'none';
+    document.getElementById("split-screen").style.display = 'none';
     document.getElementById('dot-navigation-component').style.display = 'block';
   }
 
@@ -82,12 +85,25 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
       //d1[0].style.backgroundColor = 'lightblue';
       document.getElementById("svg").style.display = 'none';
       document.getElementById("code").style.display = 'block';
+      document.getElementById("split-screen").style.display = 'none';
       this.code.refresh();
       this.isCodeView = true;
     }
     else if (type == 2) {
       document.getElementById("svg").style.display = 'block';
       document.getElementById("code").style.display = 'none';
+      document.getElementById("split-screen").style.display = 'none';
+      this.isCodeView = false;
+    }
+    else if (type == 3) {
+      this.svg.dialog.closeAll();
+      this.svg.openFlowDialogs = [];
+      this.svg.openServiceDialogs = [];
+      this.splitScreen.resetZoom();
+      this.splitScreen.resetPan();
+      document.getElementById("svg").style.display = 'none';
+      document.getElementById("code").style.display = 'none';
+      document.getElementById("split-screen").style.display = 'block';
       this.isCodeView = false;
     }
   }
@@ -122,13 +138,18 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
   }
 
   subchain() {
-    if (this.svg.isChainMode >= 0) {
-      console.log('stop subchain');
-      this.svg.onSubchainStopClick();
+    if (this.svg.subchains.length == 0) {
+      if (this.svg.isChainMode >= 0) {
+        console.log('stop subchain');
+        this.svg.onSubchainStopClick();
+      }
+      else {
+        console.log('start subchain');
+        this.svg.onSubchainStartClick();
+      }
     }
     else {
-      console.log('start subchain');
-      this.svg.onSubchainStartClick();
+      this.svg.openErrorDialog('There must be one max latency constraint');
     }
   }
 
@@ -136,10 +157,10 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
     var text= 'To insert a service, click with the mouse on the drawing area and insert the requirements.\n' + 
     'To insert a flow, press on the service from which the flow must start and drag it to the service on which it must end, then insert the requirements.';
     var dialogRef = this.dialog.open(TutorialDialogComponent, {
-      width: '30%',
+      width: '50%',
       autoFocus: false,
       data: {
-        text: text,
+        from: 'chain'
       }
     });
   }
@@ -156,7 +177,6 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
     var infrasFile: Array<string>;
     var nnodes = this.svg.localStorageService.getNodes().length;
     if (nnodes > 0) infrasFile = this.svg.localStorageService.getInfrastructureFile();
-    console.log(chainFile, infrasFile);
     if (!chainFile && !infrasFile) {
       this.svg.openErrorDialog('Chain and infrastructure is missing');
     }
@@ -170,7 +190,7 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
       var ok = this.errorService.checkChainFile(chainFile);
       if (ok == 1) {
         var dialogRef = this.dialog.open(ExecutionDialogComponent, {
-          width: '30%',
+          width: '50%',
           autoFocus: false,
           data: {
             type: 0,
@@ -178,7 +198,7 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
         });
       }
       else if (ok == -1) {
-        //TODO: error throwing
+        this.svg.openErrorDialog('The chain is uncorrect, please check if there are cycles or if the services is correctly connected');
       }
       
     }
