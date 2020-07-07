@@ -53,6 +53,11 @@ import { TutorialDialogComponent } from './tutorial-dialog/tutorial-dialog.compo
 import { DotNavigationComponent } from './dot-navigation/dot-navigation.component';
 import { ProgressSpinnerDialogComponent } from './progress-spinner-dialog-component/progress-spinner-dialog-component.component';
 import { SplitScreenComponent } from './split-screen/split-screen.component';
+import { SettingsHttpService } from './settings-http.service';
+
+export function app_Init(settingsHttpService: SettingsHttpService) {
+  return () => settingsHttpService.initializeApp();
+}
 
 @NgModule({
   declarations: [
