@@ -7,6 +7,8 @@ import { catchError, retry } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ProgressSpinnerDialogComponent } from '../progress-spinner-dialog-component/progress-spinner-dialog-component.component';
 import { throwError } from 'rxjs';
+import { app_Init } from '../app.module';
+import { SettingsService } from '../settings.service';
 
 /*
   POSSIBLE QUERIES:
@@ -91,13 +93,14 @@ export class ExecutionDialogComponent implements OnInit {
   chainFile = Array<String>();
   infrasFile = Array<String>();
   //Url of the server
-  serverUrl = 'http://192.168.1.218:5000';
+  serverUrl: string;
 
-  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: ExecutionDialogData, private router: Router, public dialogRef: MatDialogRef<ExecutionDialogComponent>, public localStorageService: LocalStorageService, private http: HttpService) {
+  constructor(private settingService: SettingsService, public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: ExecutionDialogData, private router: Router, public dialogRef: MatDialogRef<ExecutionDialogComponent>, public localStorageService: LocalStorageService, private http: HttpService) {
 
   }
 
   ngOnInit(): void {
+    this.serverUrl = this.settingService.settings.apiUrl;
     //Get nodes and services from storage
     var tmp = this.localStorageService.getServices();
     for (var i in tmp) this.services.push(tmp[i].name);
