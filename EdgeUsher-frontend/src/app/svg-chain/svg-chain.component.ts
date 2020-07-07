@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
+nimport { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Service } from './service';
 import { Flow } from './flow';
@@ -1725,7 +1725,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
     var p = document.getElementById('svgchainelem').getBoundingClientRect();
     var pageX = (s.x * this.svgPanZoom.getZoom() + this.svgPanZoom.getPan().x) + p.left;
     var pageY = (s.y * this.svgPanZoom.getZoom() + this.svgPanZoom.getPan().y) + p.top;
-    var hd = 300;
+    var hd = 255;
     var wd = 300;
     corner = 'topLeft';
     //Search for page coordinates
@@ -2083,7 +2083,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
         //Search the page coordinate for the service
         pageX = (s.x * this.svgPanZoom.getZoom() + this.svgPanZoom.getPan().x) + p.left;
         pageY = (s.y * this.svgPanZoom.getZoom() + this.svgPanZoom.getPan().y) + p.top;
-        var h = 300;
+        var h = 255;
         var w = 300;
         corner = 'topLeft';
         if (pageY + h > p.bottom) {
