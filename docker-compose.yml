@@ -5,14 +5,12 @@ services:
     build: ./EdgeUsher-backend
     network_mode: host
     ports: 
-      - ${SERVER_PORT}:5000
+      - "${SERVER_PORT}:5000"
   frontend:
     build: ./EdgeUsher-frontend
     network_mode: host
     ports:
-      - ${CLIENT_PORT}:4200
+      - "${CLIENT_PORT}:4200"
     depends_on:
       - backend
-    env_file:
-      - ./config.env
-    command: /bin/sh -c "envsubst '$${SERVER_URL},$${SERVER_PORT}' < /app/src/assets/config.template.json > /app/src/assets/config.json" 
+    #command: /bin/sh -c "envsubst '$${SERVER_URL},$${SERVER_PORT}' < src/assets/config.template.json > src/assets/config.json" 

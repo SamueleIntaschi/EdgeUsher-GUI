@@ -1,4 +1,4 @@
-import { Injectable, Promise } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SettingsService } from '../app/settings.service';
 import { Settings } from './settings';

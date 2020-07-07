@@ -20,8 +20,6 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-#TODO: inserire parsing del file di configurazione
-
 @app.route('/chain/', methods=['POST'])
 def resultChain():
     print(request)
@@ -51,12 +49,8 @@ def queryResult():
     print(string0)
     p = PrologString(string0)
     lf = LogicFormula.create_from(p)   # ground the program
-    #dag = LogicDAG.create_from(lf)     # break cycles in the ground program
-    #cnf = CNF.create_from(dag)         # convert to CNF
-    #ddnnf = DDNNF.create_from(cnf)       # compile CNF to ddnnf
     sdd = SDD.create_from(lf)
     string = ''
-    #result = get_evaluatable().create_from(p).evaluate()
     result = sdd.evaluate()
     print(result)
     for it in result.items() :
@@ -64,20 +58,6 @@ def queryResult():
             string = ('%s : %s' % (it))
         else:
             string = string + '\n' + ('%s : %s' % (it))
-    #if last == 1:
-    #	os.remove('infra.pl')
-    #	os.remove('chain.pl')
-    return string  
-
-@app.route('/clear/', methods=['POST'])
-def clear():
-    os.remove('infra.pl')
-    os.remove('chain.pl')
-    return 'All removed'
-
-@app.route('/config/', methods=['GET'])
-def configuration():
-    #TODO: inviare informazioni di confgurazoine: porta e ip del server
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port= 5000, threaded=True)

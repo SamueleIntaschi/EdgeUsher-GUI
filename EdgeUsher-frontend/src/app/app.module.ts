@@ -118,6 +118,12 @@ export function app_Init(settingsHttpService: SettingsHttpService) {
   bootstrap: [AppComponent],
   providers: [
     LocalStorageService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: app_Init,
+      deps: [SettingsHttpService],
+      multi: true
+    }
   ],
   entryComponents: [
     SvgInfrastructureComponent,
