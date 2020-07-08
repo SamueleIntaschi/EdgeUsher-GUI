@@ -53,6 +53,9 @@ export class SubchainMenuComponent implements OnInit {
       errs++;
       this.err = 'The maximum latency constraint must be a positive number';
     }
+    else {
+      this.data.maxLatency = Number(this.data.maxLatency);
+    }
     return errs;
   }
 

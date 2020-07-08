@@ -1,6 +1,7 @@
 import {Component, Inject, Output, EventEmitter, OnInit} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {Rule, SecRequirement, DialogData, IotRequirement} from '../function-dialog/function-dialog.component';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 //TODO: una volta riaperto il meno la condizione viene impostata sempre su and
 
@@ -51,7 +52,11 @@ export class FunctionMenuComponent implements OnInit {
   iotReqs: Array<IotRequirement> = JSON.parse(JSON.stringify(this.data.iotReqs));
 
 
-  constructor(public dialogRef: MatDialogRef<FunctionMenuComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData, public dialog: MatDialog) {    
+  constructor(public dialogRef: MatDialogRef<FunctionMenuComponent>, 
+    @Inject(MAT_DIALOG_DATA) 
+    public data: DialogData, 
+    public dialog: MatDialog,
+    private errorService: ChainErrorCheckingService) {    
   }
 
   @Output() deleteSquare = new EventEmitter<number>();   
@@ -178,7 +183,7 @@ export class FunctionMenuComponent implements OnInit {
     }
     //Check for iot requirements and delete the undefined
     else if (this.checkIotReqs() == false) {
-      this.err = 'There are spaces in an IoT device connected';
+      this.err = 'There are invalid characters in an IoT device connected';
       errs++;
     }
     //Security requirements correct for construction
@@ -191,11 +196,7 @@ export class FunctionMenuComponent implements OnInit {
       return -1;
     }
     else {
-      var cnter = this.data.name.indexOf('::') + this.data.name.indexOf('[') +
-      this.data.name.indexOf(']') + this.data.name.indexOf('(') + this.data.name.indexOf(')');
-      if (cnter >= 0) {
-        return -4;
-      }
+      if (this.errorService.checkSpecialCharacters(this.data.name) != 1) return -4;
       if (this.data.name.indexOf(' ') >= 0) {
         //Delete the spaces in the name
         var splitted = this.data.name.split(" ");
@@ -249,6 +250,13 @@ export class FunctionMenuComponent implements OnInit {
       //Remove the element if it's empty
       if (elem == '') {
         this.iotReqs.splice(i, 1);
+      }
+      else if (this.errorService.checkSpecialCharacters(elem) != 1) {
+        //Border of red if there is an error here
+        var input = document.getElementById('service-' + this.data.id + '-device-'+i);
+        input.style.border = 'solid';
+        input.style.borderColor = 'red';
+        return false;
       }
       //Check if there are spaces in the device name
       else if (elem.indexOf(' ') >= 0) {

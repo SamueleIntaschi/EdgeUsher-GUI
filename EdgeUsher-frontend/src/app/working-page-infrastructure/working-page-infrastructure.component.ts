@@ -131,22 +131,18 @@ export class WorkingPageInfrastructureComponent implements OnInit {
     else if (!infrasFile) {
       this.svg.openErrorDialog('Infrastructure is missing');
     }
+    else if (this.errorService.checkChainFile(chainFile) == 1) {
+      var dialogRef = this.dialog.open(ExecutionDialogComponent, {
+        width: '50%',
+        autoFocus: false,
+        data: {
+          type: 0,
+          placement: null
+        },
+      });
+    }
     else {
-      var ok = this.errorService.checkChainFile(chainFile);
-      if (ok == 1) {
-        var dialogRef = this.dialog.open(ExecutionDialogComponent, {
-          width: '50%',
-          autoFocus: false,
-          data: {
-            type: 0,
-            placement: null
-          },
-        });
-      }
-      else {
-        this.svg.openErrorDialog('The chain is uncorrect, please check if there are cycles or if the services is correctly connected');
-      }
-      
+      this.svg.openErrorDialog('The chain is uncorrect, please check if there are cycles or if the services is correctly connected');
     }
   }
 

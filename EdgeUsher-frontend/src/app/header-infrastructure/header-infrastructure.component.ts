@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 @Component({
   selector: 'app-header-infrastructure',
@@ -24,7 +25,7 @@ export class HeaderInfrastructureComponent implements OnInit {
   @Output() tutorialClick = new EventEmitter<number>();
   @Input() title: string;
   codeMode = false;
-  constructor() { }
+  constructor(private errorService: ChainErrorCheckingService) { }
 
   ngOnInit(): void {
   }
@@ -65,7 +66,14 @@ export class HeaderInfrastructureComponent implements OnInit {
   }
 
   onChangeTitle(event) {
-    this.changeTitle.emit(event);
+    var title = event;
+    if (this.errorService.checkSpecialCharacters(title) != 1) {
+      document.getElementById("infrastructure-name").style.border = "2px solid red";
+    }
+    else{
+      document.getElementById("infrastructure-name").style.border = "none";
+      this.changeTitle.emit(event);
+    }
   }
 
   onCodeClick(type) {

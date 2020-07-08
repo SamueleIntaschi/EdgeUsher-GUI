@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 @Component({
   selector: 'app-header-chain',
@@ -24,7 +24,7 @@ export class HeaderChainComponent implements OnInit {
   @Output() tutorialClick = new EventEmitter<number>();
   @Input() title: string;
   codeMode = false;
-  constructor(public dialog: MatDialog) { }
+  constructor(private errorService: ChainErrorCheckingService) { }
 
   ngOnInit(): void {
   }
@@ -70,7 +70,14 @@ export class HeaderChainComponent implements OnInit {
   }
 
   onChangeTitle(event) {
-    this.changeTitle.emit(event);
+    var title = event;
+    if (this.errorService.checkSpecialCharacters(title) != 1) {
+      document.getElementById("chain-name").style.border = "2px solid red";
+    }
+    else{
+      document.getElementById("chain-name").style.border = "none";
+      this.changeTitle.emit(event);
+    }
   }
 
   exe() {

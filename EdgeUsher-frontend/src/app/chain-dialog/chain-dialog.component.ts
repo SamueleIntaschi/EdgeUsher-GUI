@@ -52,6 +52,9 @@ export class ChainDialogComponent {
       errs++;
       this.err = 'The maximum latency constraint must be a positive number';
     }
+    else {
+      this.data.maxLatency = Number(this.data.maxLatency);
+    }
     return errs;
   }
 

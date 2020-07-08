@@ -38,7 +38,7 @@ export class ChainErrorCheckingService {
 
         //Get the service name
         var name = params[0].trim();
-        if (name != '' && name.indexOf(' ') < 0) {
+        if (name != '' && name.indexOf(' ') < 0 && this.checkSpecialCharacters(name) == 1) {
           service.name = name;
         }
         else {
@@ -56,7 +56,7 @@ export class ChainErrorCheckingService {
         var params = str.split(',');
         //Get the first service name
         var servicename = params[0].trim();
-        if (servicename != '' && servicename.indexOf(' ') < 0) {
+        if (servicename != '' && servicename.indexOf(' ') < 0 && this.checkSpecialCharacters(name) == 1) {
           flow.fromService = servicename.toLowerCase();
         }          
         else {
@@ -65,7 +65,7 @@ export class ChainErrorCheckingService {
         }
         //Get the second service name
         servicename = params[1].trim();
-        if (servicename != '' && servicename.indexOf(' ')) {
+        if (servicename != '' && servicename.indexOf(' ') && this.checkSpecialCharacters(name) == 1) {
           flow.toService = servicename.toLowerCase();
         }
         else {
@@ -250,6 +250,15 @@ export class ChainErrorCheckingService {
       for (var j in a) b.push(a[j]);
     }
     return b;
+  }
+
+  checkSpecialCharacters(str: string): number {
+    if (str.indexOf('::') != -1 ||
+     str.indexOf('[') != -1 ||
+     str.indexOf(']') != -1 || 
+     str.indexOf('(') != -1 || 
+     str.indexOf(')') != -1) return -1;
+    else return 1;
   }
 
 }

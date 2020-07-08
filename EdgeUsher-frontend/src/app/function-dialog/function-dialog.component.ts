@@ -2,6 +2,7 @@ import {Component, Inject, Output, EventEmitter} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import { QueryBuilderConfig } from 'angular2-query-builder';
 import { Service } from '../svg-chain/service';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 export interface DialogData {
   name: string;
@@ -78,7 +79,10 @@ export class ServiceDialogComponent {
   cond = 'list';
   rules: Array<Rule> = this.data.securityRequirements;
 
-  constructor(public dialogRef: MatDialogRef<ServiceDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData, public dialog: MatDialog) {}
+  constructor(private errorService: ChainErrorCheckingService, 
+    public dialogRef: MatDialogRef<ServiceDialogComponent>, 
+    @Inject(MAT_DIALOG_DATA) public data: DialogData, 
+    public dialog: MatDialog) {}
 
   @Output() deleteSquare = new EventEmitter<number>();   
   @Output() createSquare = new EventEmitter<DialogData>();
@@ -199,7 +203,7 @@ export class ServiceDialogComponent {
     }
     //Check for iot requirements and delete the undefined
     else if (this.checkIotReqs() == false) {
-      this.err = 'There are spaces in an IoT device connected';
+      this.err = 'There are invalid characters in an IoT device connected';
       errs++;
     }
     //Security requirements correct for construction
@@ -220,9 +224,7 @@ export class ServiceDialogComponent {
       return -1;
     }
     else {
-      var cnter = this.data.name.indexOf('::') + this.data.name.indexOf('[') +
-      this.data.name.indexOf(']') + this.data.name.indexOf('(') + this.data.name.indexOf(')');
-      if (cnter >= 0) return -4;
+      if (this.errorService.checkSpecialCharacters(this.data.name) != 1) return -4;
       if (this.data.name.indexOf(' ') >= 0) {
         //Delete the spaces in the name
         var splitted = this.data.name.split(" ");
@@ -286,6 +288,12 @@ export class ServiceDialogComponent {
       //Remove the element if it's empty
       if (elem == '') {
         this.data.iotReqs.splice(i, 1);
+      }
+      else if (this.errorService.checkSpecialCharacters(elem) != 1) {
+        var input = document.getElementById('device' + i);
+        input.style.border = 'solid';
+        input.style.borderColor = 'red';
+        return false;
       }
       //Check if there are spaces in the device name
       else if (elem.indexOf(' ') >= 0) {

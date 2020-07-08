@@ -2,6 +2,7 @@ import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog
 import {Component, Inject, Output, EventEmitter, OnInit} from '@angular/core';
 import {DialogData, NodeProb, NodeFields, SecurityCapabilities} from '../node-dialog/node-dialog.component';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 
 @Component({
@@ -27,7 +28,10 @@ export class NodeMenuComponent implements OnInit {
     "../../icons/network/ups.svg",
   ]
 
-  constructor(public dialogRef: MatDialogRef<NodeMenuComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData, public dialog: MatDialog) {    }
+  constructor(public dialogRef: MatDialogRef<NodeMenuComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData, 
+    public dialog: MatDialog,
+    private errorService: ChainErrorCheckingService) {    }
 
   @Output() deleteSquare = new EventEmitter<number>();
   @Output() createSquare = new EventEmitter<DialogData>();
@@ -129,7 +133,7 @@ export class NodeMenuComponent implements OnInit {
         }
       } 
     });
-    console.log(this.probs);
+    //console.log(this.probs);
   }
 
   deleteProbability(prob: NodeProb) {
@@ -222,9 +226,7 @@ export class NodeMenuComponent implements OnInit {
       return -1;
     }
     else {
-      var cnter = this.data.name.indexOf('::') + this.data.name.indexOf('[') +
-      this.data.name.indexOf(']') + this.data.name.indexOf('(') + this.data.name.indexOf(')');
-      if (cnter >= 0) return -4;
+      if (this.errorService.checkSpecialCharacters(this.data.name) != 1) return -4;
       if (this.data.name.indexOf(' ') >= 0) {
         //Delete the spaces in the name
         var splitted = this.data.name.split(" ");
@@ -294,6 +296,12 @@ export class NodeMenuComponent implements OnInit {
           this.singleValue.iotCaps.splice(i, 1);
           i--;
         }
+        else if(this.errorService.checkSpecialCharacters(elem) != 1) {
+          var input = document.getElementById('node-' + this.data.id +  '-device-no-probs-' + i);
+          input.style.border = 'solid';
+          input.style.borderColor = 'red';
+          return false;
+        }
         //Check if there are spaces in the device name
         else if (elem.indexOf(' ') >= 0) {
           var input = document.getElementById('node-' + this.data.id +  '-device-no-probs-' + i);
@@ -317,6 +325,12 @@ export class NodeMenuComponent implements OnInit {
           //Remove the element if it's empty
           if (elem == '') {
             p.value.iotCaps.splice(i, 1);
+          }
+          else if (this.errorService.checkSpecialCharacters(elem) != 1) {
+            var input = document.getElementById('node-' + this.data.id + '-device-' + i + '-prob-' + Number(j));
+            input.style.border = 'solid';
+            input.style.borderColor = 'red';
+            return false;
           }
           //Check if there are spaces in the device name
           else if (elem.indexOf(' ') >= 0) {

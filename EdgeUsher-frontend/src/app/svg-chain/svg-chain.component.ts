@@ -109,6 +109,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
   hideCode() {
     document.getElementById("svg").style.display = 'block';
     document.getElementById("code").style.display = 'none';
+    document.getElementById("split-screen").style.display = "none";
     var elem = <any>document.getElementById("left-radio-button") as HTMLInputElement;
     elem.checked = false;
     elem = <any>document.getElementById("right-radio-button");

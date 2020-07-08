@@ -11,6 +11,7 @@ import * as SvgPanZoom from 'svg-pan-zoom';
 import { ConfirmationRequestComponent } from '../confirmation-request/confirmation-request.component';
 import { NodeMenuComponent } from '../node-menu/node-menu.component';
 import { LinkMenuComponent } from '../link-menu/link-menu.component';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 //TODO: aumentare area cliccabile link
 
@@ -48,7 +49,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   openNodeDialogs = Array<number>();
   openLinkDialogs = Array<number>();
 
-  constructor(public dialog: MatDialog, public localStorageService: LocalStorageService) {}
+  constructor(public dialog: MatDialog, public localStorageService: LocalStorageService, private errorService: ChainErrorCheckingService) {}
 
 
   ngOnInit(): void {
@@ -89,6 +90,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   hideCode() {
     document.getElementById("svg").style.display = 'block';
     document.getElementById("code").style.display = 'none';
+    document.getElementById("split-screen").style.display = "none";
     var elem = <any>document.getElementById("left-radio-button-infr") as HTMLInputElement;
     elem.checked = false;
     elem = <any>document.getElementById("right-radio-button-infr");
@@ -226,6 +228,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     fileReader.readAsText(file);
   }
 
+  //TODO: controllo parametri immessi per caratteri speciali
   //Get the information from the prolog file
   retrieveInformationFromAllPrologFile(file: File) {
     var errs;
@@ -244,7 +247,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
         var prob = Number(tmp[0].split('::')[0]);
         var type: string;
         //console.log(tmp);
-        if (prob && prob <= 1 && prob >= 0 ) {
+        if (prob && prob <= 1 && prob >= 0) {
           //Case probability for this node or link
           type = tmp[0].trim().split('::')[1];
           if (type == 'node') {
@@ -259,7 +262,10 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
                 var str = tmp2[1].trim().split(')')[0].trim();
                 var params = str.split(',');
                 node.id = this.nodeId;
-                node.name = params[0].trim();
+                if (params[0].trim().indexOf(' ') == -1 && this.errorService.checkSpecialCharacters(params[0].trim()) == 1) node.name = params[0].trim();
+                else {
+                  //ERROR
+                }
                 node.imageUrl = "../../icons/network/building.svg";
                 var nodeFields = this.retrieveNodeFieldsFromPrologFile(nodesStrings[j].trim().substring(nodesStrings[j].indexOf('::')+1));
                 node.probs.push({
@@ -426,7 +432,10 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       iot.push('');
     }
     else if (firstiot.indexOf(']') >= 0) {
-      iot.push(firstiot.split(']')[0]);
+      if (this.errorService.checkSpecialCharacters(firstiot.split(']')[0]) == 1) iot.push(firstiot.split(']')[0]);
+      else {
+        //ERROR
+      }
     }
     else {
       iot.push(firstiot);
@@ -434,10 +443,16 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       while (!stop) {
         if (params[i].indexOf(']') >= 0) {
           var pi = params[i].trim().split(']')[0].trim();
-          iot.push(pi);
+          if (this.errorService.checkSpecialCharacters(pi) == 1) iot.push(pi);
+          else {
+            //ERROR
+          }
           stop = true;
         }
-        else iot.push(params[i].trim());
+        else if (this.errorService.checkSpecialCharacters(params[i].trim()) == 1) iot.push(params[i].trim());
+        else {
+          //ERROR
+        }
         i++;
       }
     }
@@ -478,7 +493,10 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     var params = str.split(',');
     var node = new Node(this);
     node.id = this.nodeId;
-    node.name = params[0].trim();
+    if (this.errorService.checkSpecialCharacters(params[0].trim()) == 1) node.name = params[0].trim();
+    else {
+      //ERROR
+    }
     if (node.name == '' || this.indexOfNodeByName(node.name) != -1) {
       return null;
     }
@@ -486,6 +504,10 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     if (!node.singleValue.hwCaps || Number(node.singleValue.hwCaps) < 0 ) {
       return null;
     }
+
+
+    //TODO: controllo caratteri speciali
+
     //Assign an icon
     node.imageUrl = "../../icons/network/building.svg";
     var iot = Array<string>();
