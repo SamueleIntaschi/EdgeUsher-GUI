@@ -1,4 +1,4 @@
-nimport { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Service } from './service';
 import { Flow } from './flow';

@@ -205,58 +205,6 @@ export class Service {
       secRule = this.cond + '(' + tmp + ')';
     }
     return secRule;
-    /*
-    var req = '';
-    if (this.securityRequirements.cond == 'list') {
-      for (var i=0; i<this.securityRequirements.nestedRules.length; i++) {
-        if (this.securityRequirements.nestedRules[i].cond == 'single') {
-          if (req == '') req = this.securityRequirements.nestedRules[i].singleReq;
-          else req = req + ', ' + this.securityRequirements.nestedRules[i].singleReq;
-        }
-        else {
-          //Do nothing or print error
-        }
-      }
-      req = '[' + req + ']';
-    }
-    else {
-      for (var k in this.securityRequirements.nestedRules) {
-        var rule1 = this.securityRequirements.nestedRules[k];
-        var req1 = '';
-        if (rule1.cond == 'single') {
-          if (req == '') req = rule1.singleReq;
-          else req = req + ', ' + rule1.singleReq;
-        }
-        else {
-          for (var j in rule1.nestedRules) {
-            var rule2 = rule1.nestedRules[j];
-            var req2 = '';
-            if (rule2.cond == 'single') {
-              if (req1 == '') req1 = rule2.singleReq;
-              else req1 = req1 + ', ' + rule2.singleReq;
-            }
-            else {
-              for (var z in rule2.nestedRules) {
-                var rule3 = rule2.nestedRules[z];
-                if (rule3.cond == 'single') {
-                  if (req2 == '') req2 = rule3.singleReq;
-                  else req2 = req2 + ', ' + rule3.singleReq;
-                }
-                else {
-                  //Not possible to reach, do nothing
-                }
-              }
-              if (req1 == '') req1 = rule2.cond + '(' + req2 + ')';
-              else req1 = req1 + ', ' + rule2.cond + '(' + req2 + ')';
-            }
-          }
-          if (req == '') req = rule1.cond + '(' + req1 + ')';
-          else req = req + ', ' + rule1.cond + '(' + req1 + ')';
-        }
-      }
-      req = this.securityRequirements.cond + '(' + req + ')'
-    }
-    return req;*/
   }
 
 }

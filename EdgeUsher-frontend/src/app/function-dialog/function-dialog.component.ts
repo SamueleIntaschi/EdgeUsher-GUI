@@ -32,8 +32,6 @@ export class SecRequirement {
   name: string;
   id: string;
 }
-
-//TODO: i device devono diventare interfacce <nome, icona> anzichè solo stringhe e poi l'icona va mostrata dentro il cerchio
   
 @Component({
   selector: 'function-dialog',

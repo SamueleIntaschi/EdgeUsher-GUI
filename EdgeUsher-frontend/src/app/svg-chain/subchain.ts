@@ -503,66 +503,8 @@ export class Subchain {
       this.services.push(s);
       var index = this.indexOfService(s);
       document.getElementById('service'+this.services[index].id).style.stroke = 'red';
-      /*
-      if (this.services.length > 1) {
-        var found = false;
-        for (var i in this.svg.flows) {
-          var f = this.svg.flows[i];
-          if (f.toService == s.name) {
-            if (f.fromService == this.services[index - 1].name) {
-              this.insertFlow(f);
-              found = true;
-            }
-          }
-        }
-        if (found == true) {
-          document.getElementById('service'+this.services[index].id).style.stroke = 'red';
-        }
-        else {
-          this.svg.isChainMode = -1;
-          this.svg.tmpSubchain = null;
-          //document.getElementById('subchain-button').style.backgroundColor = 'lightskyblue';
-          for (var i in this.services) {
-            document.getElementById('service'+this.services[i].id).style.stroke = 'black';
-          }
-          this.svg.openErrorDialog('This service is not connected with the others');
-        }
-      }
-      else {
-        document.getElementById('service'+s.id).style.stroke = 'red';
-      }*/
-    //}
-    /*else {
-      this.svg.isChainMode = -1;
-      this.svg.tmpSubchain = null;
-      //document.getElementById('subchain-button').style.backgroundColor = 'lightskyblue';
-      for (var i in this.services) {
-        document.getElementById('service'+this.services[i].id).style.stroke = 'black';
-      }
-      this.svg.openErrorDialog('The subchain contains already this service');
-    }*/
     
   }
-
-  /*
-  insertFlow(f: Flow) {
-    this.flows.push(f);
-  }
-
-  modifyFlow(f: Flow) {
-    for (var i in this.flows) {
-      if (this.flows[i].id == f.id) {
-        this.flows[i] = f;
-      }
-    }
-  }
-
-  containsFlow(f: Flow) {
-    for (var i in this.flows) {
-      if (this.flows[i].id == f.id) return true;
-    }
-    return false;
-  }*/
 
   indexOfService(s: Service) {
     for (var i in this.services) {
@@ -588,61 +530,6 @@ export class Subchain {
       }
     }
   }
-
-  
-  //checkSubchain() {
-    /*
-    for (var i=0; i<this.services.length; i++) {
-      var s = this.services[i];
-      for (var j=0; j<this.services.length; j++) {
-        var s2 = this.services[j];
-        //Check if this services appear in other services connection through the flows
-        for (var k=0; k<this.flows.length; k++) {
-          var f = this.flows[k];
-          if (f.fromService == s2.name) {
-            if (f.toService == s.name) return false;
-          }
-        }
-      }
-      return true;
-    }*/
-    /*
-    var isCycle = false;
-    var roots = Array<Service>();
-    var root = 1;
-    for (var p=0; p<this.services.length; p++) {
-      //Check if the node is a root
-      var h = 0;
-      while (h<this.services.length && root != -1) {
-        if (h != p) {
-          //If the square p is connected to square h, the square p is not a root
-          if (this.services[h].hasConnectedService(this.services[p].id)) {
-            root = -1;
-          }
-        }
-        h++;
-      }
-      if (root == 1) {
-        roots.push(this.services[p]);
-      }
-      else root = 1;
-    }
-    //If there aren't roots, there is a cycle for sure
-    if (roots.length == 0) {
-      console.log('there is not roots');
-      isCycle = true;
-    }
-    else if (roots.length > 1) {
-      console.log('too much roots');
-      isCycle = true;
-    }
-    else {
-      isCycle = this.svg.DFS(roots[0].id, roots[0].connectedServices, []);
-    }
-    if (isCycle == false) {
-
-    }*/
-  //}
   
 
 }
