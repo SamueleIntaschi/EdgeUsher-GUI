@@ -14,6 +14,7 @@ import { ServiceDialogComponent, Rule } from '../function-dialog/function-dialog
 import { Subchain } from './subchain';
 import { ChainDialogComponent } from '../chain-dialog/chain-dialog.component';
 import { SubchainMenuComponent } from '../subchain-menu/subchain-menu.component';
+import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 @Component({
   selector: 'app-svg-chain',
@@ -67,7 +68,9 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
   //Temporary subchain during the creation
   tmpSubchain: Subchain;
 
-  constructor(public dialog: MatDialog, public localStorageService: LocalStorageService) {}
+  constructor(public dialog: MatDialog, 
+    public localStorageService: LocalStorageService,
+    public errorService: ChainErrorCheckingService) {}
 
   ngOnInit(): void {
     //Don't display the temporary flow
@@ -264,7 +267,8 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
           cntChain++;
           //Get the chain title
           var t = tmp[1].trim().split(',')[0];
-          if (t != '') {
+          //Check if the title is valid
+          if (t != '' && this.errorService.checkSpecialCharacters(t) == 1) {
             this.title = t;
             this.onChangeTitleFromUpload.emit(this.title);
             this.localStorageService.setChainTitle(this.title);
@@ -287,11 +291,11 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
 
           //Get the service name
           var name = params[0].trim();
-          if (name != '' && name.indexOf(' ') < 0) {
+          if (name != '' && name.indexOf(' ') < 0 && this.errorService.checkSpecialCharacters(name) == 1) {
             service.name = name;
           }
           else {
-            //Case no name for service
+            //Case no name for service or invalid name
             if (lineerrs.indexOf(line) < 0) lineerrs.push(line);
           }
 
@@ -327,8 +331,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
           else if (firstiot.indexOf(']') >= 0) {
             //Case only one device connected
             var firstiot2 = firstiot.split(']')[0].trim();
-            console.log(firstiot2);
-            if (firstiot2 != '' && firstiot2.indexOf(' ') < 0) {
+            if (firstiot2 != '' && firstiot2.indexOf(' ') < 0 && this.errorService.checkSpecialCharacters(firstiot2) == 1) {
               iot.push(firstiot2);
             }
             else {
@@ -339,7 +342,9 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
           }
           else {
             //Add the first device if it not contains space inside or is not empty
-            if (firstiot != '' && firstiot.indexOf(' ') < 0) iot.push(firstiot);
+            if (firstiot != '' && firstiot.indexOf(' ') < 0 && this.errorService.checkSpecialCharacters(firstiot) == 1) {
+              iot.push(firstiot);
+            }
             else {
               //Case device contains spaces or is empty
               console.log('Case device contains spaces or is empty');
@@ -356,7 +361,9 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
                 stop = true;
               }
               //Case this is not the last
-              else if (params[i].trim() != '' && params[i].trim().indexOf(' ') < 0)iot.push(params[i].trim());
+              else if (params[i].trim() != '' && params[i].trim().indexOf(' ') < 0 && this.errorService.checkSpecialCharacters(params[i].trim()) == 1) {
+                iot.push(params[i].trim());
+              }
               i++;
             }
           }
@@ -393,11 +400,12 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
               sec.push(firstRule);
             }
             else if (firstsec.indexOf(']') >= 0) {
+              var secr = firstsec.split(']')[0].trim();
               //Case only one security requisite
-              if (firstsec.split(']')[0].trim().indexOf(' ') < 0) {
+              if (secr.indexOf(' ') < 0 && this.errorService.checkSpecialCharacters(secr) == 1) {
                 var firstRule: Rule = {
                   cond: 'single',
-                  singleReq: firstsec.split(']')[0].trim(),
+                  singleReq: secr,
                   nestedRules: [],
                 };
                 sec.push(firstRule);
@@ -420,11 +428,12 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
               var stop = false;
               while (!stop) {
                 if (params[i].indexOf(']') >= 0) {
+                  var secr = params[i].trim().split(']')[0].trim();
                   //Case final requisite
-                  if (params[i].trim().split(']')[0].trim().indexOf(' ') < 0) {
+                  if (secr.indexOf(' ') < 0 && this.errorService.checkSpecialCharacters(secr) == 1) {
                     var rule = {
                       cond: 'single',
-                      singleReq: params[i].trim().split(']')[0].trim(),
+                      singleReq: secr,
                       nestedRules: [],
                     }
                     sec.push(rule);
@@ -436,10 +445,11 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
                   stop = true;
                 }
                 else { 
-                  if (params[i].trim().indexOf(' ') < 0) {
+                  var secr = params[i].trim();
+                  if (secr.indexOf(' ') < 0 && this.errorService.checkSpecialCharacters(secr) == 1)  {
                     var rule = {
                       cond: 'single',
-                      singleReq: params[i].trim(),
+                      singleReq: secr,
                       nestedRules: [],
                     }
                     sec.push(rule);
@@ -669,21 +679,27 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
         var elem = tmp2[i].trim();
         if (elem.indexOf('.') >= 0) {
           var elem2 = elem.split(')')[0];
-          var rule2 = Array<Rule>();
-          var rule = {
-            cond: 'single',
-            singleReq: elem2,
-            nestedRules: rule2,
-          };
-          if (lastRules.length > 0) lastRules[lastRules.length-1].nestedRules.push(rule);
-          else rules.push(rule);
-          var count = (elem.match(/\)/g) || []).length;
-          var j = 0;
-          while (j < count) {
-            lastRules.pop();
-            j++;
-            stop = true;
+          if (this.errorService.checkSpecialCharacters(elem2) == 1) {
+            var rule2 = Array<Rule>();
+            var rule = {
+              cond: 'single',
+              singleReq: elem2,
+              nestedRules: rule2,
+            };
+            if (lastRules.length > 0) lastRules[lastRules.length-1].nestedRules.push(rule);
+            else rules.push(rule);
+            var count = (elem.match(/\)/g) || []).length;
+            var j = 0;
+            while (j < count) {
+              lastRules.pop();
+              j++;
+              stop = true;
+            }
           }
+          else {
+            this.openErrorDialog('There is an error in the security requirements specification');
+          }
+          
         }
         else if (elem.indexOf(')') >= 0) {
           cntp--;
@@ -709,7 +725,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
           lastRules[lastRules.length - 1].nestedRules.push(rule);
           lastRules.push(rule);
         }
-        else if (elem != ' ' &&  elem != '' && lastRules.length > 0) {
+        else if (elem != ' ' &&  elem != '' && this.errorService.checkSpecialCharacters(elem) == 1 && lastRules.length > 0) {
           var rule = {
             cond: 'single',
             singleReq: elem,
@@ -717,13 +733,16 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
           };
           lastRules[lastRules.length - 1].nestedRules.push(rule);
         }
-        else if (elem != ' ' &&  elem != '' && lastRules.length == 0) {
+        else if (elem != ' ' &&  elem != '' && this.errorService.checkSpecialCharacters(elem) == 1 && lastRules.length == 0) {
           var rule = {
             cond: 'single',
             singleReq: elem,
             nestedRules: Array<Rule>()
           };
           rules.push(rule);
+        }
+        else if (this.errorService.checkSpecialCharacters(elem) == -1) {
+          this.openErrorDialog('There is an error in the security requirements specification');
         }
         i++;
       }

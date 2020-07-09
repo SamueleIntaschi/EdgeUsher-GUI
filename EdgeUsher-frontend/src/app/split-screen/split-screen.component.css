@@ -7,7 +7,7 @@
 #svg-infra-div {
     grid-column: 2;
     height: 510px;
-    width: 97%;
+    width: 98%;
     border: solid;
     border-radius: 20px;
     overflow: hidden;
@@ -23,7 +23,7 @@
 #svg-chain-div {
     grid-column: 1;
     height: 510px;
-    width: 97%;
+    width: 98%;
     border: solid;
     border-radius: 20px;
     overflow: hidden;

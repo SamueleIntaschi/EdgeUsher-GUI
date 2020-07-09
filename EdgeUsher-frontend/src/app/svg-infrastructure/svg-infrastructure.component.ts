@@ -294,7 +294,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
               var link: Link;
 
               for (var j=0; j<linkStrings.length; j++) {
-                console.log(linkStrings[j]);
+                //console.log(linkStrings[j]);
                 //Create the link
                 if (j == 0) {
                   link = new Link(this);
@@ -477,6 +477,9 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
           }
           else { 
             sec1 = params[i].trim();
+            if (sec1.indexOf('[') >= 0) {
+              sec1 = sec1.split('[')[1];
+            }
           }
           fields = this.updateFieldSecCaps(fields, sec1);
           i++;
@@ -495,7 +498,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     node.id = this.nodeId;
     if (this.errorService.checkSpecialCharacters(params[0].trim()) == 1) node.name = params[0].trim();
     else {
-      //ERROR
+      this.openErrorDialog("There is an invalid characters in a node specification");
     }
     if (node.name == '' || this.indexOfNodeByName(node.name) != -1) {
       return null;
@@ -517,19 +520,42 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       iot.push('');
     }
     else if (firstiot.indexOf(']') >= 0) {
-      iot.push(firstiot.split(']')[0]);
+      if (this.errorService.checkSpecialCharacters(firstiot.split(']')[0]) == 1) {
+        iot.push(firstiot.split(']')[0]);
+      }
+      else {
+        this.openErrorDialog("There is an invalid character in a node specification");
+      }
     }
     else {
-      iot.push(firstiot);
+      if (this.errorService.checkSpecialCharacters(firstiot) == 1) {
+        iot.push(firstiot);
+      }
+      else {
+        this.openErrorDialog("There is an invalid character in a node specification");
+      }
       var stop = false;
       while (!stop) {
         if (params[i].indexOf(']') >= 0) {
           var pi = params[i].trim().split(']')[0].trim();
-          if (pi != '') iot.push(pi.toLowerCase());
+          if (pi != '') {
+            if (this.errorService.checkSpecialCharacters(pi.toLowerCase()) == 1) {
+              iot.push(pi.toLowerCase());
+            }
+            else {
+              this.openErrorDialog("There is an invalid character in a node specification");
+            }
+          }
           stop = true;
         }
         else if (params[i] != '' && params[i].indexOf(' ') < 0) {
-          iot.push(params[i].trim().toLowerCase());
+          //iot.push(params[i].trim().toLowerCase());
+          if (this.errorService.checkSpecialCharacters(params[i].trim().toLowerCase()) == 1) {
+            iot.push(params[i].trim().toLowerCase());
+          }
+          else {
+            this.openErrorDialog("There is an invalid character in a node specification");
+          }
         }
         i++;
       }
@@ -603,69 +629,72 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     if (sec == 'access_logs') {
       singleValue.secCaps.virtualisation.accessLogs = true;
     }
-    if (sec == 'authentication') {
+    else if (sec == 'authentication') {
       singleValue.secCaps.virtualisation.auth = true
     }
-    if (sec == 'host_IDS') {
+    else if (sec == 'host_IDS') {
       singleValue.secCaps.virtualisation.hIds = true;
     }
-    if (sec == 'process_isolation') {
+    else if (sec == 'process_isolation') {
       singleValue.secCaps.virtualisation.procIsol = true;
     }
-    if (sec == 'permission_model') {
+    else if (sec == 'permission_model') {
       singleValue.secCaps.virtualisation.permMdl = true;
     }
-    if (sec == 'resource_monitoring') {
+    else if (sec == 'resource_monitoring') {
       singleValue.secCaps.virtualisation.resMon = true;
     }
-    if (sec == 'restore_points') {
+    else if (sec == 'restore_points') {
       singleValue.secCaps.virtualisation.restPnts = true;
     }
-    if (sec == 'user_data_isolation') {
+    else if (sec == 'user_data_isolation') {
       singleValue.secCaps.virtualisation.userIsol = true;
     }
     //Communications requisites
-    if (sec == 'certificates') {
+    else if (sec == 'certificates') {
       singleValue.secCaps.communications.certificates = true;
     }
-    if (sec == 'firewall') {
+    else if (sec == 'firewall') {
       singleValue.secCaps.communications.firewall = true;
     }
-    if (sec == 'iot_data_encryption') {
+    else if (sec == 'iot_data_encryption') {
       singleValue.secCaps.communications.dataEncr = true;
     }
-    if (sec == 'node_isolation_mechanisms') {
+    else if (sec == 'node_isolation_mechanisms') {
       singleValue.secCaps.communications.nodeIsol = true;
     }
-    if (sec == 'network_IDS') {
+    else if (sec == 'network_IDS') {
       singleValue.secCaps.communications.netIDS = true;
     }
-    if (sec == 'pki') {
+    else if (sec == 'pki') {
       singleValue.secCaps.communications.keyCrypt = true;
     }
-    if (sec == 'wireless_security') {
+    else if (sec == 'wireless_security') {
       singleValue.secCaps.communications.wirelessSec = true;
     }
     //Data requisites
-    if (sec == 'backup') {
+    else if (sec == 'backup') {
       singleValue.secCaps.data.backup = true;
     }
-    if (sec == 'encrypted_storage') {
+    else if (sec == 'encrypted_storage') {
       singleValue.secCaps.data.encrStorage = true;
     }
-    if (sec == 'obfuscated_storage') {
+    else if (sec == 'obfuscated_storage') {
       singleValue.secCaps.data.obfsStorage = true;
     }
     //Physiscal requisites
-    if (sec == 'access_control') {
+    else if (sec == 'access_control') {
       singleValue.secCaps.physical.accessCtrl = true;
     }
-    if (sec == 'anti_tampering') {
+    else if (sec == 'anti_tampering') {
       singleValue.secCaps.physical.antiTamp = true;
     }
     //Other requisites
-    if (sec == 'audit') {
+    else if (sec == 'audit') {
       singleValue.secCaps.other.audit = true;
+    }
+    else {
+      this.openErrorDialog("There is an invalid security requirements in a node specification");
     }
     return singleValue;
   }
