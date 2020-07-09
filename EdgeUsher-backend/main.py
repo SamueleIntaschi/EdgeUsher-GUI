@@ -58,6 +58,7 @@ def queryResult():
             string = ('%s : %s' % (it))
         else:
             string = string + '\n' + ('%s : %s' % (it))
+    return string
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port= 5000, threaded=True)

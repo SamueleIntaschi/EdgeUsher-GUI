@@ -1,27 +1,13 @@
-# Edgeusher
+# Edgeusher-GUI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.7.
+This project is a web application that implement a GUI for EdgeUsher (https://github.com/di-unipi-socc/EdgeUsher).
 
-## Development server
+## Execution
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To run this program you need to install docker-compose (https://docs.docker.com/compose/) first.
+On Ubuntu it can be done with the command `sudo apt install docker-compose`.
 
-## Code scaffolding
+At this point simply run the command `sudo docker-compose up` to start the application on localhost with the front-end is listening on port 8080 and the back-end is listening on port 5000.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+If you want to change the default ports go to docker-compose.yml file and change the number of the ports there, if you want to start the back-end on another IP address go to conf.env file and change SERVER_NAME and SERVER_PORT environment variables.
+If you change the port number of backend in the docker-compose.yml file, you need to change the SERVER_PORT in conf.env too.

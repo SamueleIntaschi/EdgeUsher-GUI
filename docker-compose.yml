@@ -3,14 +3,16 @@ version: '3.7'
 services:
   backend:
     build: ./EdgeUsher-backend
-    network_mode: host
+    env_file:
+      - ./conf.env
     ports: 
-      - "${SERVER_PORT}:5000"
+      - "5000:5000"
   frontend:
     build: ./EdgeUsher-frontend
-    network_mode: host
     ports:
-      - "${CLIENT_PORT}:4200"
+      - "8080:8080"
     depends_on:
       - backend
-    #command: /bin/sh -c "envsubst '$${SERVER_URL},$${SERVER_PORT}' < src/assets/config.template.json > src/assets/config.json" 
+    env_file:
+      - ./conf.env
+    command: /bin/sh -c "envsubst '$${SERVER_URL},$${SERVER_PORT}' < /usr/share/nginx/html/assets/config.template.json > /usr/share/nginx/html/assets/config.json && exec nginx -g 'daemon off;'" 
