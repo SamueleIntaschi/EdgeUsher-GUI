@@ -434,7 +434,8 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     else if (firstiot.indexOf(']') >= 0) {
       if (this.errorService.checkSpecialCharacters(firstiot.split(']')[0]) == 1) iot.push(firstiot.split(']')[0]);
       else {
-        //ERROR
+        this.openErrorDialog('There are invalid characters in a node specification');
+        return null;
       }
     }
     else {
@@ -445,13 +446,15 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
           var pi = params[i].trim().split(']')[0].trim();
           if (this.errorService.checkSpecialCharacters(pi) == 1) iot.push(pi);
           else {
-            //ERROR
+            this.openErrorDialog('There are invalid characters in a node specification');
+            return null;
           }
           stop = true;
         }
         else if (this.errorService.checkSpecialCharacters(params[i].trim()) == 1) iot.push(params[i].trim());
         else {
-          //ERROR
+          this.openErrorDialog('There are invalid characters in a node specification');
+          return null;
         }
         i++;
       }
@@ -499,6 +502,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     if (this.errorService.checkSpecialCharacters(params[0].trim()) == 1) node.name = params[0].trim();
     else {
       this.openErrorDialog("There is an invalid characters in a node specification");
+      return null;
     }
     if (node.name == '' || this.indexOfNodeByName(node.name) != -1) {
       return null;
@@ -507,10 +511,6 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     if (!node.singleValue.hwCaps || Number(node.singleValue.hwCaps) < 0 ) {
       return null;
     }
-
-
-    //TODO: controllo caratteri speciali
-
     //Assign an icon
     node.imageUrl = "../../icons/network/building.svg";
     var iot = Array<string>();
@@ -525,6 +525,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       }
       else {
         this.openErrorDialog("There is an invalid character in a node specification");
+        return null;
       }
     }
     else {
@@ -533,6 +534,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       }
       else {
         this.openErrorDialog("There is an invalid character in a node specification");
+        return null;
       }
       var stop = false;
       while (!stop) {
@@ -544,6 +546,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
             }
             else {
               this.openErrorDialog("There is an invalid character in a node specification");
+              return null;
             }
           }
           stop = true;
@@ -555,6 +558,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
           }
           else {
             this.openErrorDialog("There is an invalid character in a node specification");
+            return null;
           }
         }
         i++;
@@ -774,18 +778,6 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     this.onChangeTitleFromUpload.emit(this.title);
   }
 
-  /*
-  uploadInfrastructureProject(event) {
-    this.hideCode();
-    if (event.target.files && event.target.files.length) {
-      var file = event.target.files[0];
-      var tmpfile = file.name.split('.');
-      if (tmpfile[1] == 'eu') this.retrieveInformationFromFile(file);
-      else this.openErrorDialog('File extension not correct');
-    }
-  }
-  */
-
   uploadInfrastructure(event) {
     if (event.target.files && event.target.files.length) {
       //Hide the code if it is visible
@@ -797,37 +789,6 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       else this.openErrorDialog('Wrong file extension');
     }
   }
-
-  /*
-  uploadInfrastructureNoProbs(event) {
-    this.hideCode();
-    if (event.target.files && event.target.files.length) {
-      var file = event.target.files[0];
-      var tmpfile = file.name.split('.');
-      if (tmpfile[1] == 'pl') this.retrieveInformationFromPrologFileNoProbs(file);
-      else this.openErrorDialog('File extension not correct');
-    }
-  }
-
-  uploadInfrastructureComplete(event) {
-    this.hideCode();
-    if (event.target.files && event.target.files.length) {
-      var file = event.target.files[0];
-      var tmpfile = file.name.split('.');
-      if (tmpfile[1] == 'pl') this.retrieveInformationFromPrologFileComplete(file);
-      else this.openErrorDialog('File extension not correct');
-    }
-  }
-
-  uploadInfrastructurePartial(event) {
-    this.hideCode();
-    if (event.target.files && event.target.files.length) {
-      var file = event.target.files[0];
-      var tmpfile = file.name.split('.');
-      if (tmpfile[1] == 'pl') this.retrieveInformationFromPrologFileComplete(file);
-      else this.openErrorDialog('File extension not correct');
-    }
-  }*/
 
   save() {
     var file = this.createInfrastructureFile();
@@ -988,14 +949,10 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       //Update the lines
       for (var i in this.links) {
         if (this.links[i].fromNode == this.nodes[index].name) {
-          //this.links[i].x1 = this.nodes[index].x;
-          //this.links[i].y1 = this.nodes[index].y;
           this.links[i].modifyLinkFrom(this.nodes[index]);
           this.localStorageService.modifyLink(this.links[i]);
         }
         if (this.links[i].toNode == this.nodes[index].name) {
-          //this.links[i].x2 = this.nodes[index].x;
-          //this.links[i].y2 = this.nodes[index].y;
           this.links[i].modifyLinkto(this.nodes[index]);
           this.localStorageService.modifyLink(this.links[i]);
         }
@@ -1056,14 +1013,10 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
             if (this.links[i].fromNode == this.nodes[index].name) {
               this.links[i].modifyLinkFrom(this.nodes[index]);
               this.localStorageService.modifyLink(this.links[i]);
-              //this.links[i].x1 = this.nodes[index].x;
-              //this.links[i].y1 = this.nodes[index].y;
             }
             if (this.links[i].toNode == this.nodes[index].name) {
               this.links[i].modifyLinkto(this.nodes[index]);
               this.localStorageService.modifyLink(this.links[i]);
-              //this.links[i].x2 = this.nodes[index].x;
-              //this.links[i].y2 = this.nodes[index].y;
             }
           }
         } 
@@ -1181,7 +1134,6 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     var left = node1.x - node1.width/2;
     var bottom = node1.y + node1.height/2;
     var top = node1.y - node1.height/2;
-    //console.log(right, left, top, bottom); 
     for (var i in this.nodes) {
       if (this.nodes[i].id != node1.id) {
         //Limit of the node i
@@ -1190,13 +1142,6 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
         var leftLimit = node.x - node.width/2;
         var bottomLimit = node.y + node.height/2;
         var topLimit = node.y - node.height/2;
-        //console.log(rightLimit, leftLimit, topLimit, bottomLimit);
-        /*
-        if ((right > leftLimit && right < rightLimit) || (left < rightLimit && left > leftLimit)) {
-          if ((top < bottomLimit && top > topLimit) || (bottom > topLimit && bottom < bottomLimit)) {
-            return true;
-          }
-        }*/
         if (!(right < leftLimit || left > rightLimit || top > bottomLimit || bottom < topLimit)) return true;
       }
     }

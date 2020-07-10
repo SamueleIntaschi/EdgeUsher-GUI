@@ -95,7 +95,11 @@ export class ExecutionDialogComponent implements OnInit {
   //Url of the server
   serverUrl: string;
 
-  constructor(private settingService: SettingsService, public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: ExecutionDialogData, private router: Router, public dialogRef: MatDialogRef<ExecutionDialogComponent>, public localStorageService: LocalStorageService, private http: HttpService) {
+  constructor(private settingService: SettingsService, 
+    public dialog: MatDialog, 
+    @Inject(MAT_DIALOG_DATA) public data: ExecutionDialogData, 
+    private router: Router, public dialogRef: MatDialogRef<ExecutionDialogComponent>, 
+    public localStorageService: LocalStorageService, private http: HttpService) {
 
   }
 

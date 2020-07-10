@@ -1760,7 +1760,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
     }
 
     dialogRef = this.dialog.open(FunctionMenuComponent, {
-      width: 300 + 'px',
+      width: 255 + 'px',
       height: 300 + 'px',
       position: {
         top: pageY + 'px',
@@ -1776,7 +1776,8 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
         hwReqs: s.hwReqs,
         iotReqs: s.iotReqs,
         id: s.id,
-        cond: s.cond
+        cond: s.cond,
+        functions: this.services
       },
       id: 'service-menu' + s.id,
     });

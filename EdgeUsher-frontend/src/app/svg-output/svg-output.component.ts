@@ -401,15 +401,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   }
 
   onMouseUpUnplaced($event) {
-    /*var index = this.indexOfServiceById(this.movedService);
-    var service = this.services[index];
-    var oldNode = this.whereIsService(service);
-    oldNode.removeService(service);
-    this.userPlacement.removePlace(service.name, oldNode.name);
-    this.selectedPlacement = this.userPlacement.placement;
-    this.unplacedServices.push(service);
-    this.placeUnplacedServices();
-    oldNode.placeServices();*/
   }
 
   onMouseLeaveUnplaced() {
@@ -502,8 +493,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     //Check if the mouse is on other service
     if (this.movedService != -1) {
       var index = this.indexOfServiceById(this.movedService);
-      //var node = this.whereIsService(this.services[index]);
-      //node.placeServices();
       var node = this.whereIsService(this.services[index]);
       if (node) {
         node.removeService(this.services[index]);
@@ -623,28 +612,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     }
     return null;
   }
-
-  /*
-  tooCloseToAnotherNode(node1: Node) {
-    //Limit of this node
-    var right = node1.x + node1.width/2;
-    var left = node1.x - node1.width/2;
-    var bottom = node1.y + node1.height/2;
-    var top = node1.y - node1.height/2;
-    for (var i in this.nodes) {
-      if (this.nodes[i].id != node1.id) {
-        //Limit of the node i
-        var node = this.nodes[i];
-        var rightLimit = node.x + node.width/2;
-        var leftLimit = node.x - node.width/2;
-        var bottomLimit = node.y + node.height/2;
-        var topLimit = node.y - node.height/2;
-        if (!(right < leftLimit || left > rightLimit || top > bottomLimit || bottom < topLimit)) return true;
-      }
-    }
-    return false;
-  }
-  */
 
   //Get the index of the node by name
   indexOfNodeByName(name: string) {
