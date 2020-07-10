@@ -1,9 +1,5 @@
 import {Component, Inject, Input, Output, EventEmitter, OnInit} from '@angular/core';
 
-//TODO: nella parte dove si vede il risultato scrivere gli and/or di giallo arancione o rosso
-
-//TODO: lasciare la parte mostrante il risultato sempre presente in alto, magari settando un'altezza fissata e permettendo lo scrolling
-
 export class Rule {
   cond: string;
   singleReq: string;

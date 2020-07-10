@@ -154,10 +154,8 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
   }
 
   openTutorialDialog() {
-    var text= 'To insert a service, click with the mouse on the drawing area and insert the requirements.\n' + 
-    'To insert a flow, press on the service from which the flow must start and drag it to the service on which it must end, then insert the requirements.';
     var dialogRef = this.dialog.open(TutorialDialogComponent, {
-      width: '50%',
+      width: '80%',
       autoFocus: false,
       data: {
         from: 'chain'
@@ -187,6 +185,8 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
       this.svg.openErrorDialog('Infrastructure is missing');
     }
     else if (this.errorService.checkChainFile(chainFile) == 1) {
+      this.svg.hideCode();
+      this.svg.closeAllDialogs();
       var dialogRef = this.dialog.open(ExecutionDialogComponent, {
         width: '50%',
         autoFocus: false,

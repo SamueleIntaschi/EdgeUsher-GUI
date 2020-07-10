@@ -167,6 +167,10 @@ ul li::after {
     background-color: lightcyan;
 }
 
+.iot-result-node-dialog {
+    color: green;
+}
+
 
 /*--- ICONS STYLE ---*/
 

@@ -95,7 +95,7 @@ export class FunctionMenuComponent implements OnInit {
   }
 
   indexOfDevice(s: string) {
-    for (var i=0; i<this.data.iotReqs.length; i++) {
+    for (var i=0; i<this.iotReqs.length; i++) {
       if (this.iotReqs[i].device == s) return i;
     }
     return -1;
@@ -114,6 +114,16 @@ export class FunctionMenuComponent implements OnInit {
   trackByFn(index: any, item: any) {
     return index;
   } 
+
+  createIotReqString() {
+    var str = '';
+    for (var i=0; i<this.iotReqs.length; i++) {
+      if (i == 0) str = this.iotReqs[i].device;
+      else str = str + ', ' + this.iotReqs[i].device;
+    }
+    str = '[' + str + ']';
+    return str;
+  }
 
   /*--- Security requirements rules updates ---*/
 

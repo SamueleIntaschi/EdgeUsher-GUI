@@ -24,7 +24,6 @@ export class ServiceP {
   }
 
   onMouseUp(event) {
-    console.log(this.name)
     event.preventDefault();
     if (event.button == 0 && event.target.id == 'service' + this.id) {
       var oldNode = this.svg.whereIsService(this);
@@ -53,16 +52,15 @@ export class ServiceP {
         newNode.addService(this);
         this.svg.userPlacement.addPlace(this.name, newNode.name);
         this.svg.selectedPlacement = this.svg.userPlacement.placement;
-        console.log(this.svg.selectedPlacement);
         newNode.placeServices();
       }
       else if (oldNode && !newNode) {
         //Case only oldNode, service become unplaced
-        this.svg.unplacedServices.push(this);
-        this.svg.placeUnplacedServices();
         oldNode.removeService(this);
         this.svg.userPlacement.removePlace(this.name, oldNode.name);
         this.svg.selectedPlacement = this.svg.userPlacement.placement;
+        this.svg.unplacedServices.push(this);
+        this.svg.placeUnplacedServices();
         oldNode.placeServices();
       }
       else if (!newNode && !oldNode) {

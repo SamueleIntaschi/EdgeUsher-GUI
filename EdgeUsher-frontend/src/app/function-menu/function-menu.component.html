@@ -21,6 +21,7 @@
           IoT devices connected
         </mat-panel-title>
       </mat-expansion-panel-header>
+        <p class="iot-result-menu" [textContent]="this.createIotReqString()"></p>
         <button class='add' id="add-device" (click)="addDevice()">Add connected device</button>
           <div id='iot-reqs-div' *ngFor="let iot of this.iotReqs; let i = index; trackBy: trackByFn">
             <label [for]="'service-' + this.data.id + '-device-'+i">Device: </label>

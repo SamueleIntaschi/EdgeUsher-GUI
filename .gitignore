@@ -45,3 +45,7 @@ node_modules/
 # System Files
 .DS_Store
 Thumbs.db
+
+#Program temporary files
+/infra.pl
+/chain.pl

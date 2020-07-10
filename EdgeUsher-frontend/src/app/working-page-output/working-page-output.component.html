@@ -6,6 +6,7 @@
     ></app-svg-output>
     <app-header-output id ="header-placement"
     (savePlacement)="save()"
+    (tutorialClick)="this.openTutorialDialog()"
     (codeClick)="onCodeClick($event)"
     (logoClick)="onLogoClick()"
     (changeSelectedPlacement)="changeSelectedPlacement($event)"

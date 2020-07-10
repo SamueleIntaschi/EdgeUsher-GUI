@@ -135,6 +135,16 @@ export class ServiceDialogComponent {
     return -1;
   }
 
+  createIotReqString() {
+    var str = '';
+    for (var i=0; i<this.data.iotReqs.length; i++) {
+      if (i == 0) str = this.data.iotReqs[i].device;
+      else str = str + ', ' + this.data.iotReqs[i].device;
+    }
+    str = '[' + str + ']';
+    return str;
+  }
+
   trackByFn(index: any, item: any) {
     return index;
   } 

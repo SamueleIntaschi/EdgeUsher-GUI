@@ -246,6 +246,10 @@ div#actions {
     font-size: 100%;
 }
 
+.iot-result-menu {
+    color: green;
+}
+
 /*--- OTHER REQUIREMENTS STYLE ---*/
 
 #hardware-requirements-input {

@@ -5,6 +5,7 @@ import { Placement } from '../execution-dialog/execution-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ExecutionDialogComponent } from '../execution-dialog/execution-dialog.component';
 import { ChainErrorCheckingService } from '../chain-error-checking.service';
+import { TutorialDialogComponent } from '../tutorial-dialog/tutorial-dialog.component';
 
 @Component({
   selector: 'app-working-page-output',
@@ -106,6 +107,7 @@ export class WorkingPageOutputComponent implements OnInit {
       this.svg.openErrorDialog('Infrastructure is missing');
     }
     else if (this.errorService.checkChainFile(chainFile) == 1) {
+      this.svg.hideCode();
       var dialogRef = this.dialog.open(ExecutionDialogComponent, {
         width: '50%',
         autoFocus: false,
@@ -124,5 +126,26 @@ export class WorkingPageOutputComponent implements OnInit {
       this.svg.openErrorDialog('The chain is uncorrect, please check if there are cycles or if the services is correctly connected');
     }
 
+  }
+
+  openTutorialDialog() {
+    if (this.placements.length > 0) {
+      var dialogRef = this.dialog.open(TutorialDialogComponent, {
+        width: '80%',
+        autoFocus: false,
+        data: {
+          from: 'placement-result'
+        }
+      });
+    }
+    else if (this.placements.length == 0) {
+      var dialogRef = this.dialog.open(TutorialDialogComponent, {
+        width: '80%',
+        autoFocus: false,
+        data: {
+          from: 'placement-creation'
+        }
+      });
+    }
   }
 }

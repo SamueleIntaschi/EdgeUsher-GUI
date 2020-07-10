@@ -183,6 +183,10 @@ input {
     border: 2px solid grey;
 }
 
+#iot-result-dialog {
+    color: green;
+}
+
 /*--- GENERAL DIALOG STYLE ---*/
 
 button {

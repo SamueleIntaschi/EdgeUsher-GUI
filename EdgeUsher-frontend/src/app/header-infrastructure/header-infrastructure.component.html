@@ -10,56 +10,20 @@
         >
     </div>
     <input id="infrastructure-name" autocomplete="off" value="Untitled chain" type="text" [(ngModel)]="this.title" (ngModelChange)="onChangeTitle($event)"/> 
-    <!--div id="buttons">
-        <button id="new-chain" (click)="chainClick()" routerLink="/chain">Create a chain</button>
-        <button id="code-button" *ngIf="!codeMode" (click)="onCodeClick(1)">Infrastructure file preview</button>
-        <button id="code-button" *ngIf="codeMode == true" (click)="onCodeClick(2)">Graphic editor</button>
-        <button id="reset" (click)="new()">Reset</button>
-        <button id="save" (click)="save()">Download infrastructure</button>
-        <button id='prob-mode' (click)=setProbabilisticMode()>Probabilistic mode</button>
-        <input id="upload" type="file" ng2FileSelect (change)="upload($event)" onclick="this.value=null"/>
-    </div-->
     <div id="header-infrastructure-actions">
-        <!--input id="placement-button" title="Create a placement" routerLink="/placement" type="image" src="../../icons/right_arrow.png" (click)="chainClick()"/--> 
         <input id="settings-infrastructure-button" title="Actions" type="image" src="../../icons/settings.png" [matMenuTriggerFor]="settingsmenu"/> 
         <mat-menu #settingsmenu="matMenu">
             <div id='settings-menu-infrastructure-content'>
                 <button mat-menu-item id="reset-infrastructure" (click)="new()">Reset infrastructure</button>
                 <button mat-menu-item id="save-infrastructure" (click)="save()">Download infrastructure file</button>
                 <button mat-menu-item id="download-json-infrastructure" (click)="saveJson()">Download infrastructure project</button>
-                <!--button mat-menu-item id="no-prob-mode" (click)="setProbabilisticMode('no-probs')">No probability mode</button>
-                <button mat-menu-item id="partial-prob-mode" (click)="setProbabilisticMode('partial')">Partial probability mode</button>
-                <button mat-menu-item id="complete-prob-mode" (click)="setProbabilisticMode('complete')">Complete probability mode</button-->
-
-                <!--div class="upload-btn-wrapper">
-                    <button mat-menu-item>Upload infrastructure project</button>
-                    <input type="file" ng2FileSelect (change)="upload($event, 0)" name="myfile" />
-                </div>
-
-                <div class="upload-btn-wrapper">
-                    <button mat-menu-item >Upload infrastructure file with  complete probability</button>
-                    <input type="file" ng2FileSelect (change)="upload($event, 3)" name="myfile" />
-                </div>
-
-                <div class="upload-btn-wrapper">
-                    <button mat-menu-item>Upload infrastructure file with partial probability</button>
-                    <input type="file" ng2FileSelect (change)="upload($event, 2)" name="myfile" />
-                </div>
-
-                <div class="upload-btn-wrapper">
-                    <button mat-menu-item>Upload infrastructure file without probability</button>
-                    <input type="file" ng2FileSelect (change)="upload($event, 1)" name="myfile" />
-                </div-->
 
                 <div class="upload-btn-wrapper">
                     <button mat-menu-item>Upload infrastructure file</button>
                     <input type="file" ng2FileSelect (change)="upload2($event)" name="myfile" />
                 </div>
-
-                <!--input id="upload-infrastructure" type="file" ng2FileSelect (change)="upload($event)" value="Upload chain" onclick="this.value=null"/-->
             </div>
         </mat-menu>
-        <!--button id="exe-from-chain" (click)="exe()">EdgeUsher!</button-->
         <input id="img-exe-from-infrastructure" title="Run EdgeUsher" type="image" src="../../icons/play.png" (click)="exe()"/>
         <input id="tutorial-button-infrastructure" title="Tutorial" (click)=tutorial() type="image" src="../../icons/tutorial.png"/>
     </div>

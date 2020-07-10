@@ -59,6 +59,7 @@
               IoT devices connected
             </mat-panel-title>
           </mat-expansion-panel-header>
+          <p class="iot-result-node-menu" [textContent]="this.createIotReqString(this.singleValue.iotCaps)"></p>
           <button class='add' id="add-device" (click)="addDevice(null)">Add connected device</button>
           <div id='iot-caps-div-no-probs' *ngFor="let iot of this.singleValue.iotCaps; let i = index; trackBy: trackByFn">
             <label [for]="'node-' + this.data.id +  '-device-no-probs-' + i">Device: </label>
@@ -154,6 +155,7 @@
                   IoT devices connected
                 </mat-panel-title>
               </mat-expansion-panel-header>
+              <p class="iot-result-node-menu" [textContent]="this.createIotReqString(prob.value.iotCaps)"></p>
               <button class='add' id="add-device" (click)="addDevice(prob)">Add connected device</button>
               <div id='iot-caps-div-probs' *ngFor="let iot of prob.value.iotCaps; let j = index; trackBy: trackByFn">
                 <label [for]="'node-' + this.data.id + '-device-' + j + '-prob-'+ i">Device: </label>

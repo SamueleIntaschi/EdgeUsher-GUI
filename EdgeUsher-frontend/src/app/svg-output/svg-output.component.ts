@@ -25,9 +25,6 @@ import { PlacementObject } from './placement-object';
 })
 
 
-//TODO: controllare procedura che carica file per vedere i placement
-
-
 export class SvgOutputComponent implements OnInit, AfterViewInit {
 
   @ViewChild('svgelemoutput', { static: true }) svg: ElementRef<SVGSVGElement>;
@@ -404,7 +401,15 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   }
 
   onMouseUpUnplaced($event) {
-    //Do nothing
+    /*var index = this.indexOfServiceById(this.movedService);
+    var service = this.services[index];
+    var oldNode = this.whereIsService(service);
+    oldNode.removeService(service);
+    this.userPlacement.removePlace(service.name, oldNode.name);
+    this.selectedPlacement = this.userPlacement.placement;
+    this.unplacedServices.push(service);
+    this.placeUnplacedServices();
+    oldNode.placeServices();*/
   }
 
   onMouseLeaveUnplaced() {
@@ -444,26 +449,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
       this.movementX += deltaX;
       this.movementY += deltaY;
     }
-    /*
-    else if (this.movedNode >= 0) {
-      document.getElementById('node'+this.nodes[this.movedNode].id).style.cursor = 'move';
-      var index = this.indexOfSquareById(this.movedNode);
-      this.nodes[index].x = x;
-      this.nodes[index].y = y;
-      //Update the services connected
-      this.nodes[index].placeServices();
-      //Update the lines
-      for (var i in this.links) {
-        if (this.links[i].fromNode == this.nodes[index].name) {
-          this.links[i].modifyLinkFrom(this.nodes[index]);
-          //this.localStorageService.modifyLink(this.links[i]);
-        }
-        if (this.links[i].toNode == this.nodes[index].name) {
-          this.links[i].modifyLinkto(this.nodes[index]);
-          //this.localStorageService.modifyLink(this.links[i]);
-        }
-      }
-    }*/
     else if (this.movedService >= 0) {
       var index = this.indexOfServiceById(this.movedService);
       if (index != -1) {
@@ -500,26 +485,6 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
       }
       else {
         //Do nothing
-        /*
-        if (this.movedNode >= 0) {
-          document.getElementById('node'+this.nodes[this.movedNode].id).style.cursor = 'move';
-          var index = this.indexOfSquareById(this.movedNode);
-          this.nodes[index].x = x;
-          //var y = (panZoomHeight - divY - (panZoomHeight-(viewboxHeight*realZoom)) + currentPan.y) / realZoom;    
-          this.nodes[index].y = y;
-          //Update the lines
-          for (var i in this.links) {
-            if (this.links[i].fromNode == this.nodes[index].name) {
-              this.links[i].modifyLinkFrom(this.nodes[index]);
-              //this.localStorageService.modifyLink(this.links[i]);
-            }
-            if (this.links[i].toNode == this.nodes[index].name) {
-              this.links[i].modifyLinkto(this.nodes[index]);
-              //this.localStorageService.modifyLink(this.links[i]);
-            }
-          }
-        }
-        */
       }
     }
     this.dragging = false;
@@ -542,6 +507,8 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
       var node = this.whereIsService(this.services[index]);
       if (node) {
         node.removeService(this.services[index]);
+        this.userPlacement.removePlace(this.services[index].name, node.name);
+        this.selectedPlacement = this.userPlacement.placement;
         node.placeServices();
       }
       this.unplacedServices.push(this.services[index]);

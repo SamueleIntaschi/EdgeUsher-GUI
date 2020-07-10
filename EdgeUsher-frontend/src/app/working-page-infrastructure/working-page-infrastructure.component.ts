@@ -5,6 +5,7 @@ import { ExecutionDialogComponent } from '../execution-dialog/execution-dialog.c
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ChainErrorCheckingService } from '../chain-error-checking.service';
 import { SplitScreenComponent } from '../split-screen/split-screen.component';
+import { TutorialDialogComponent } from '../tutorial-dialog/tutorial-dialog.component';
 
 
 @Component({
@@ -132,6 +133,8 @@ export class WorkingPageInfrastructureComponent implements OnInit {
       this.svg.openErrorDialog('Infrastructure is missing');
     }
     else if (this.errorService.checkChainFile(chainFile) == 1) {
+      this.svg.hideCode();
+      this.svg.closeAllDialogs();
       var dialogRef = this.dialog.open(ExecutionDialogComponent, {
         width: '50%',
         autoFocus: false,
@@ -144,6 +147,17 @@ export class WorkingPageInfrastructureComponent implements OnInit {
     else {
       this.svg.openErrorDialog('The chain is uncorrect, please check if there are cycles or if the services is correctly connected');
     }
+  }
+
+  openTutorialDialog() {
+    console.log('tutorial');
+    var dialogRef = this.dialog.open(TutorialDialogComponent, {
+      width: '80%',
+      autoFocus: false,
+      data: {
+        from: 'infrastructure',
+      },
+    });
   }
 
 }

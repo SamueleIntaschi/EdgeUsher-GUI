@@ -3,16 +3,113 @@
 <div id="tutorial-content">
     <ul *ngIf="this.data.from == 'chain'">
         <li>
-            Step 1: 
-            to insert a service click on the drawing area and specify the service requirements
+            Overview: In the header you can specify a title from the chain, set a max latency constraint, execute EdgeUsher
+            or open the settings menu to reset, download or upload a chain file or a chain project (same upload button).
+            In the left side you can navigate the view of the application through the dots.
+            At the cente there is the drawing area to draw the chain.
+            In the bottom of the page there are buttons to change the view mode for this chain or to view chain and 
+            infrastructure together.
+            If you hover with the mouse on an icon or a button you can see what it do.
         </li>
+        <br>
+        <li>
+            Step 1: 
+            to insert a service click on the drawing area and specify the service's requirements.
+        </li>
+        <br>
         <li>
             Step 2:
-            to insert a flow click on a service and drag the mouse over another service, then specify the flow requirements
+            to insert a flow click on a service and drag the mouse over another service, then specify the flow's requirements.
         </li>
         <li>
             Step 3:
-            to insert a max latency constraint click on the button on the header, then click on a service to add it to the max latency constraint
+            to insert a max latency constraint click on the button on the header, then click on a service to add it to the max latency constraint.
         </li>
+        <br>
+        <li>
+            Step 4:
+            to start EdgeUsher click on the play icon on the header, next specify the placement requested 
+            or the affinity/anti-affinity constraint then click "submit". You can also request an heuristic execution of the program adding the two thresholds.
+
+        </li>
+        
+    </ul>
+    <ul *ngIf="this.data.from == 'infrastructure'">
+            <li>
+                Overview: In the header you can specify a title from the chain, execute EdgeUsher
+                or open the settings menu to reset, download or upload a chain file or an infrastructure project (same upload button).
+                In the left side you can navigate the view of the application through the dots.
+                At the cente there is the drawing area to build the infrastructure.
+                In the bottom of the page there are buttons to change the view mode for this infrastructure or to view chain and 
+                infrastructure together.
+                If you hover with the mouse on an icon or a button you can see what it do.
+            </li>
+            <br>
+            <li>
+                Step 1: 
+                to insert a node click on the drawing area and specify the node's requirements.
+            </li>
+            <br>
+            <li>
+                Step 2:
+                to insert a link click on a service and drag the mouse over another service, then specify the link's requirements.
+            </li>
+            <br>
+            <li>
+                Step 4:
+                to start EdgeUsher click on the play icon on the header, next specify the placement requested 
+                or the affinity/anti-affinity constraint then click "submit". You can also request an heuristic execution of the program adding the two thresholds.
+            </li>
+    </ul>
+    <ul *ngIf="this.data.from == 'placement-result'">
+            <li>
+                Overview: In the header you can select a placement between those returned by EdgeUsher,
+                open the settings menu to reset all or download a file that represent the selected placement or execute EdgeUsher.
+                In the left side you can navigate the view of the application through the dots.
+                At the cente there is the drawing area to customize the placement.
+                In the bottom of the page there are buttons to change the view mode for this placement (source code or graphic editor).
+                If you hover with the mouse on an icon or a button you can see what it do.
+            </li>
+            <br>
+            <li>
+                Step 1:
+                select a placement in the menu at the top-left corner of the page.
+            </li>
+            <br>
+            <li>
+                Step 2:
+                to customize the placement selected click on a service and drag the service on another node or on the unplaced area, 
+                then drop it.
+            </li>
+            <br>
+            <li>
+                Step 3: 
+                if you have modified the placement you can run EdheUsher to evaluate it by clicking on the play button on the header,
+                next specify the affinity or anti-affinity constraint for the unplaced services or set the threshold for heuristic version
+                (both optional) then click submit and wait for the result.
+            </li>
+    </ul>
+    <ul *ngIf="this.data.from == 'placement-creation'">
+            <li>
+                Overview: In the header you can open the settings menu to reset all or download a file that represent the selected
+                placement or execute EdgeUsher.
+                In the left side you can navigate the view of the application through the dots.
+                At the cente there is the drawing area to customize the placement.
+                In the bottom of the page there are buttons to change the view mode for this placement (source code or graphic editor).
+                If you hover with the mouse on an icon or a button you can see what it do.
+            </li>
+            <br>
+            <li>
+                Step 1:
+                Click on an unplaced services and drag it on a node to assign it to this. You can move the placed services too or move
+                a placed services on the unplaced area.
+            </li>
+            <br>
+            <li>
+                Step 2: 
+                You can run EdheUsher to evaluate the partial (or complete) placement created by clicking on the play button on the header,
+                next specify the affinity or anti-affinity constraint for the unplaced services or set the threshold for heuristic version
+                (both optional) then click submit and wait for the result.
+            </li>
     </ul>
 </div>

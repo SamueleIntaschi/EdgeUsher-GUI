@@ -1,3 +1,3 @@
 {
-    "apiUrl": "https://${SERVER_NAME}:${SERVER_PORT}" 
+    "apiUrl": "http://${SERVER_NAME}:${SERVER_PORT}" 
 }

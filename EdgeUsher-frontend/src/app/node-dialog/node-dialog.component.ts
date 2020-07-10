@@ -148,6 +148,18 @@ export class NodeDialogComponent implements OnInit {
     }
   }
 
+  createIotReqString(iots: Array<string>) {
+    var str = '';
+    if (this.data.probabilisticMode == false) {
+      for (var i=0; i<iots.length; i++) {
+        if (i == 0) str = iots[i];
+        else str = str + ', ' + iots[i];
+      }
+    }
+    str = '[' + str + ']';
+    return str;
+  }
+
   trackByFn(index: any, item: any) {
     return index;
   } 
