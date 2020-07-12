@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Service } from './service';
 import { Flow } from './flow';
@@ -90,6 +90,11 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
       mouseWheelZoomEnabled: false,
       dblClickZoomEnabled: false,
     });
+  }
+
+  ngOnDestroy() {
+    this.hideCode();
+    this.closeAllDialogs();
   }
 
   /*--- RESIZE METHODS ---*/
@@ -1760,8 +1765,8 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
     }
 
     dialogRef = this.dialog.open(FunctionMenuComponent, {
-      width: 255 + 'px',
-      height: 300 + 'px',
+      width: 300 + 'px',
+      height: 255 + 'px',
       position: {
         top: pageY + 'px',
         left: pageX + 'px'

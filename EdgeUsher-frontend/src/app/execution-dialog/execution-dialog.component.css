@@ -1,5 +1,9 @@
 /*--- GENERAL DIALOG STYLE ---*/
 
+#execution-dialog {
+    max-height: 500px;
+}
+
 h1 {
     font-size: larger;
 }

@@ -154,6 +154,7 @@ export class WorkingPageInfrastructureComponent implements OnInit {
     var dialogRef = this.dialog.open(TutorialDialogComponent, {
       width: '80%',
       autoFocus: false,
+      disableClose: true,
       data: {
         from: 'infrastructure',
       },

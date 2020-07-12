@@ -246,6 +246,11 @@ div#actions {
     font-size: 100%;
 }
 
+#iot-reqs-div {
+    border-radius: 4px;
+    border: 2px solid grey;
+}
+
 .iot-result-menu {
     color: green;
 }

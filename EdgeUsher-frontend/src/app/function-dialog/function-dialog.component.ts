@@ -73,6 +73,7 @@ export class ServiceDialogComponent {
     "../../icons/devices/coffeepot.png",
     "../../icons/devices/doorlock.png",
     "../../icons/devices/car.png",
+    "../../icons/devices/windfarm.png",
     "../../icons/devices/generic.png"
   ];
   firstRule = this.data.securityRequirements;

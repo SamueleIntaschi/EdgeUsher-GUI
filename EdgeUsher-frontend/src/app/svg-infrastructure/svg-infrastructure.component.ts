@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Renderer2, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2, AfterViewInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Node } from './node';
 import { Link } from './link';
@@ -68,6 +68,11 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       //minZoom: 0.1
     });
     //this.svgPanZoom.zoom(0.1);
+  }
+
+  ngOnDestroy() {
+    this.hideCode();
+    this.closeAllDialogs();
   }
 
   /*--- RESIZE METHODS ---*/

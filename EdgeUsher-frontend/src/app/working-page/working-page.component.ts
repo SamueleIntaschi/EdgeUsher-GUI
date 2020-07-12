@@ -190,6 +190,7 @@ export class WorkingPageComponent implements OnInit, AfterViewInit {
       var dialogRef = this.dialog.open(ExecutionDialogComponent, {
         width: '50%',
         autoFocus: false,
+        disableClose: true,
         data: {
           type: 0,
         },

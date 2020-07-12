@@ -63,7 +63,6 @@ export class DotNavigationComponent implements OnInit {
       //Do nothing
     }
     else if (type == 'chain') {
-      
       this.router.navigate(['/chain']);
     }
     else if (type == 'infrastructure') {

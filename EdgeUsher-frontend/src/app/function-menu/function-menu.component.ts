@@ -43,6 +43,7 @@ export class FunctionMenuComponent implements OnInit {
     "../../icons/devices/coffeepot.png",
     "../../icons/devices/doorlock.png",
     "../../icons/devices/car.png",
+    "../../icons/devices/windfarm.png",
     "../../icons/devices/generic.png"
   ];
   //JSON parsing in order to not bind the fields
