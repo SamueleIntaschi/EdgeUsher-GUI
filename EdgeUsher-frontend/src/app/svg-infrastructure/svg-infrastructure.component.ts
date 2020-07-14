@@ -1348,7 +1348,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(LinkDialogComponent, {
       autoFocus: false,
       disableClose: true,
-      width: '30%',
+      width: '35%',
       data: {
         probs: link.probs,
         bandwidth: link.bandwidth,
@@ -1358,6 +1358,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
         to: link.toNode,
         id: link.id,
         type: link.type,
+        reverse: false,
       },
     });
 
@@ -1367,7 +1368,6 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.componentInstance.createLine.subscribe(result => {
-      
       link.id = result.id;
       link.latency = result.latency;
       link.probs = result.probs;
@@ -1378,10 +1378,58 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       link.createPath();
       link.createTitle();
       this.localStorageService.storeLink(link);
-      this.localStorageService.storeInfrastructureFile(this.createInfrastructureFile());
       this.linkId++;
-
-
+      if (result.reverse) {
+        var reverseLink = new Link(this);
+        reverseLink.bandwidth = link.bandwidth;
+        reverseLink.latency = link.latency;
+        reverseLink.probs = link.probs;
+        reverseLink.toNode = link.fromNode;
+        reverseLink.fromNode = link.toNode;
+        reverseLink.type = link.type;
+        reverseLink.id = this.linkId;
+        reverseLink.probabilistic = link.probabilistic;
+        console.log(reverseLink);
+        var dup = false;
+        for (var i in this.links) {
+          if ((this.links[i].fromNode == reverseLink.fromNode && this.links[i].toNode == reverseLink.toNode)) {
+            dup = true;
+            break;
+          }
+        }
+        if (dup == false) {
+          reverseLink.x1 = link.x2;
+          reverseLink.y1 = link.y2;
+          reverseLink.x2 = link.x1;
+          reverseLink.y2 = link.y1;
+          if (link.vdirection == 'down') {
+            reverseLink.vdirection = 'up';
+            reverseLink.x1 -=5;
+            reverseLink.x2 -=5;
+          }
+          else {
+            reverseLink.vdirection = 'down';
+            reverseLink.x1 +=5;
+            reverseLink.x2 +=5;
+          }
+          if (link.hdirection = 'right') {
+            reverseLink.hdirection = 'left';
+            reverseLink.y1 +=5;
+            reverseLink.y2 +=5;
+          }
+          else {
+            reverseLink.hdirection = 'right';
+            reverseLink.y1 -=5;
+            reverseLink.y2 -=5;
+          }
+          reverseLink.createPath();
+          reverseLink.createTitle();
+          this.links.push(reverseLink);
+          this.localStorageService.storeLink(reverseLink);
+          this.linkId++;
+        }
+      }
+      this.localStorageService.storeInfrastructureFile(this.createInfrastructureFile());
     });
   }
 

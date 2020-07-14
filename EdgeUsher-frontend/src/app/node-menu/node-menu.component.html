@@ -1,6 +1,5 @@
 <div id="node-menu">
   <div id="title">
-    <!--button checked="false" id="close" (click)="onClose()">x</button-->
     <input id="node-name-menu" autocomplete="off" [(ngModel)]="data.name"> 
     <input id="close" type="image" src="../../icons/close-button1.png" (click)="onClose()"/>
   </div>
@@ -28,7 +27,7 @@
       </mat-expansion-panel>
     </mat-accordion>
 
-    <mat-slide-toggle id='prob-slide-toggle-menu' [(ngModel)]="this.data.probabilisticMode" (ngModelChange)="onChangeProb($event)" labelPosition="before">Probability</mat-slide-toggle>
+    <mat-slide-toggle [id]="'prob-slide-toggle-menu-' + this.data.id" [(ngModel)]="this.data.probabilisticMode" (ngModelChange)="onChangeProb($event)" labelPosition="before">Probability</mat-slide-toggle>
 
     <!--Normal mode-->
 

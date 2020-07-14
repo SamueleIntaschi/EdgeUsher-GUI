@@ -6,7 +6,7 @@
 <p id="err" [textContent]="err"></p>
 <div mat-dialog-content id="flow-dialog-content">
 
-  <mat-slide-toggle id='prob-link-slide-toggle-menu' [(ngModel)]="data.probabilisticMode" labelPosition="before">Probability</mat-slide-toggle>
+  <mat-slide-toggle [id]="'prob-link-slide-toggle-menu' + this.data.id" [(ngModel)]="data.probabilisticMode" labelPosition="before">Probability</mat-slide-toggle>
 
   <!-- CASE NOT PROBABILITIES -->
   <div id="no-prob-link" *ngIf="!data.probabilisticMode">

@@ -12,7 +12,7 @@ export class HeaderOutputComponent implements OnInit {
   
   @Output() savePlacement = new EventEmitter<number>();
   @Output() codeClick = new EventEmitter<number>();
-  //@Output() onChClick = new EventEmitter<number>();
+  @Output() hideLinksFromHeader = new EventEmitter<boolean>();
   @Output() openSettings = new EventEmitter<number>();
   @Output() logoClick = new EventEmitter<number>();
   @Output() exeEU = new EventEmitter<number>();
@@ -24,6 +24,7 @@ export class HeaderOutputComponent implements OnInit {
   @Input() indexSelectedPlacement: number;
   selectedPId = -1;
   codeMode = false;
+  hideLinksVar = false;
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -41,6 +42,10 @@ export class HeaderOutputComponent implements OnInit {
     //TODO: a questo punto, se il placement è stato restituito dalla versione euristica, ricalcolare la probabilità (forse)
     this.selectedPlacement = this.placements[this.indexSelectedPlacement];
     this.changeSelectedPlacement.emit(this.selectedPlacement);
+  }
+
+  hideLinks() {
+    this.hideLinksFromHeader.emit(this.hideLinksVar);
   }
 
   exe() {

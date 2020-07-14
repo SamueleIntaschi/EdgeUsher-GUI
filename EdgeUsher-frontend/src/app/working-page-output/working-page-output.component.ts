@@ -47,8 +47,8 @@ export class WorkingPageOutputComponent implements OnInit {
 
   }
 
-  onChClick() {
-
+  hideLinks(event) {
+    this.svg.hideLinks = event;
   }
 
   changeSelectedPlacement(event) {

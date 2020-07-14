@@ -52,6 +52,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   userPlacement: PlacementObject = new PlacementObject();
   onUnplacedSVG = false;
   placementId = 0;
+  hideLinks = false;
   unplacedArea = {
     x: 100,
     y: 100,
@@ -144,6 +145,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   new() {
     this.userPlacement = new PlacementObject();
     this.localStorageService.storePlacements([]);
+    this.clearRoutes();
     this.placements = [];
     this.movedService = -1;
     this.movementX = 0;
@@ -157,6 +159,12 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     this.clearPlacements.emit(1);
     this.unplacedServices = [];
     this.placementId = 0;
+  }
+
+  clearRoutes() {
+    for (var i in this.links) {
+      this.links[i].usedBw = 0;
+    }
   }
 
   //Retrieve placements saved in local storage

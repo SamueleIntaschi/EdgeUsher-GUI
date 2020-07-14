@@ -18,6 +18,8 @@
         <option *ngFor="let p of this.placements; index as i" [attr.selected]="i == indexSelectedPlacement ? true : null" [attr.value]="i">placement {{p.id}}, prob: {{p.prob}}</option>
     </select>
 
+    <mat-slide-toggle id='hide-links-slide-toggle' *ngIf="this.placements.length > 0" [(ngModel)]="this.hideLinksVar" (ngModelChange)="this.hideLinks()" labelPosition="before">Hide infrastructure links</mat-slide-toggle>
+
     <div id="header-placement-actions">
         <input id="settings-placement-button" title="Actions" type="image" src="../../icons/settings.png" [matMenuTriggerFor]="settingsmenu"/> 
         <mat-menu #settingsmenu="matMenu">

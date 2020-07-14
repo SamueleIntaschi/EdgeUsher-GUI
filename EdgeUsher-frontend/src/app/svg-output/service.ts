@@ -32,42 +32,43 @@ export class ServiceP {
         this.svg.placeUnplacedServices();
       }
       else {
-      if (oldNode && newNode && oldNode.id != newNode.id) {
-        //Case movement from a node to another
-        oldNode.removeService(this);
-        this.svg.userPlacement.removePlace(this.name, oldNode.name);
-        this.svg.selectedPlacement = this.svg.userPlacement.placement;
-        oldNode.placeServices();
-        newNode.addService(this);
-        this.svg.userPlacement.addPlace(this.name, newNode.name);
-        this.svg.selectedPlacement = this.svg.userPlacement.placement;
-        newNode.placeServices();
-      }
-      else if (newNode && oldNode && newNode.id == oldNode.id) {
-        //Case service remain in same node
-        newNode.placeServices();
-      }
-      else if  (newNode && !oldNode) {
-        //Case only newNode
-        newNode.addService(this);
-        this.svg.userPlacement.addPlace(this.name, newNode.name);
-        this.svg.selectedPlacement = this.svg.userPlacement.placement;
-        newNode.placeServices();
-      }
-      else if (oldNode && !newNode) {
-        //Case only oldNode, service become unplaced
-        oldNode.removeService(this);
-        this.svg.userPlacement.removePlace(this.name, oldNode.name);
-        this.svg.selectedPlacement = this.svg.userPlacement.placement;
-        this.svg.unplacedServices.push(this);
-        this.svg.placeUnplacedServices();
-        oldNode.placeServices();
-      }
-      else if (!newNode && !oldNode) {
-        //Case service remain unplaced
-        this.svg.placeUnplacedServices();
-      }
-    }
+        if (oldNode && newNode && oldNode.id != newNode.id) {
+          //Case movement from a node to another
+          oldNode.removeService(this);
+          this.svg.userPlacement.removePlace(this.name, oldNode.name);
+          this.svg.selectedPlacement = this.svg.userPlacement.placement;
+          oldNode.placeServices();
+          newNode.addService(this);
+          this.svg.userPlacement.addPlace(this.name, newNode.name);
+          this.svg.selectedPlacement = this.svg.userPlacement.placement;
+          newNode.placeServices();
+        }
+        else if (newNode && oldNode && newNode.id == oldNode.id) {
+          //Case service remain in same node
+          newNode.placeServices();
+        }
+        else if  (newNode && !oldNode) {
+          //Case only newNode
+          newNode.addService(this);
+          this.svg.userPlacement.addPlace(this.name, newNode.name);
+          this.svg.selectedPlacement = this.svg.userPlacement.placement;
+          newNode.placeServices();
+        }
+        else if (oldNode && !newNode) {
+          //Case only oldNode, service become unplaced
+          oldNode.removeService(this);
+          this.svg.userPlacement.removePlace(this.name, oldNode.name);
+          this.svg.selectedPlacement = this.svg.userPlacement.placement;
+          this.svg.unplacedServices.push(this);
+          this.svg.placeUnplacedServices();
+          oldNode.placeServices();
+        }
+        else if (!newNode && !oldNode) {
+          //Case service remain unplaced
+          this.svg.unplacedServices.push(this);
+          this.svg.placeUnplacedServices();
+        }
+      }  
     }
     this.svg.movedService = -1;
     this.svg.svgPanZoom.enablePan();

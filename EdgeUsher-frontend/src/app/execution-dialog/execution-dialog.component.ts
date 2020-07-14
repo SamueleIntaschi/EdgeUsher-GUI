@@ -162,6 +162,21 @@ export class ExecutionDialogComponent implements OnInit {
 
   /*--- AFFINITY METHODS ---*/
 
+  onAffinityChange(elem) {
+    var service1 = elem.service1;
+    var service2 = elem.service2;
+    var pl = this.getPlaceRequestedFor(service1, this.tmpPlacement);
+    if (pl) {
+      this.err = 'A service involved in a constraint is already placed';
+    }
+    else {
+      pl = this.getPlaceRequestedFor(service2, this.tmpPlacement);
+      if (pl) {
+        this.err = 'A service involved in a constraint is already placed';
+      }
+    }
+  }
+
   //Add an affinity constraint
   addAffinity(): void {
     this.affinities.push({
@@ -329,7 +344,7 @@ export class ExecutionDialogComponent implements OnInit {
   }
 
   //Get the node where the service is in the placement passed
-  getPlaceNodeFor(service: string, p: Array<Place>) {
+  getPlaceNodeFor(service: string, p: Array<Place>): string {
     for (var i=0; i<p.length; i++) {
       if (service == p[i].service) {
         return p[i].node;
@@ -339,7 +354,7 @@ export class ExecutionDialogComponent implements OnInit {
   }
 
   //Get the node where the service is in a partial placement
-  getPlaceInPFor(s: string, p: Array<Place>) {
+  getPlaceInPFor(s: string, p: Array<Place>): string {
     for (var i=0; i<p.length; i++) {
       if (s == p[i].service) {
         return p[i].node;
@@ -393,17 +408,22 @@ export class ExecutionDialogComponent implements OnInit {
     return str;
   }
 
-  //Create placement when a partial placement exists already
+  //Create placement when a partial placement exists already, when the execution is called from placement page
   createQueryPlacement2() {
+    var errs = 0;
+    //Order the services
     var order = this.createPlacementBase();
     this.tmpPlacement.placement = [];
-    var p = this.tmpPlacement.placement;
+    //var p = this.tmpPlacement.placement;
+    var p = Array<Place>();
+    //If there aren't aff, antiaff and place requested
     if (this.affinities.length == 0 && this.antiAffinities.length == 0 && this.placesRequested.length == 0) {
       if (order) {
         for (var i=0; i<order.length; i++) {
           var s = order[i];
           //Search the place in the placement passed by page
           var n = this.getPlaceNodeFor(s, this.data.placement.placement);
+          //console.log(order[i] + ' va su ' + n);
           if (n) {
             p.push({
               service: s,
@@ -420,14 +440,89 @@ export class ExecutionDialogComponent implements OnInit {
       }
     }
     else {
+      //Else if there are aff, antiaff or placements requested
       if (order) {
+        //Add all the placement for first
+        for (var i=0; i<order.length; i++) {
+          var pl = this.getPlaceNodeFor(order[i], this.data.placement.placement);
+          if (pl) {
+            p.push({
+              service: order[i],
+              node: pl
+            });
+          }
+          else {
+            p.push({
+              service: order[i],
+              node: 'N' + i,
+            });
+          }
+        }
         for (var i=0; i<order.length; i++) {
           var s = order[i];
           //Search the place in the placement passed by page
-          var pl = this.getPlaceNodeFor(s, this.data.placement.placement);
+          var pl = this.getPlaceNodeFor(s, p);
           var aff = this.getAffinitiesFor(s);
           var anaff = this.getAntiaffinitiesFor(s);
-          //console.log(pl ,aff,anaff);
+          if (pl) {
+            //Do nothing because there is already a placement
+          }
+          if (aff) {
+            for(var j in aff) {
+              if (aff[j].service1 == s) {
+                var pl1 = this.getPlaceNodeFor(aff[j].service1, this.data.placement.placement);
+                var pl2 = this.getPlaceNodeFor(aff[j].service2, this.data.placement.placement);
+                if (pl1 && pl2) {
+                  console.log('ERROR');
+                  //Restore the situation
+                }
+                else if (pl1) {
+                  if (aff[j].service2) this.getPlaceFor(aff[j].service2, p).node = pl1;
+                }
+                else if (pl2) {
+                  if (aff[j].service1) this.getPlaceFor(aff[j].service1, p).node = pl2;
+                }
+                else {
+                  var pltmp = this.getPlaceNodeFor(aff[j].service1, p);
+                  this.getPlaceFor(aff[j].service2, p).node = pltmp;
+                }
+              }
+              else if (aff[j].service2 == s) {
+                var pl1 = this.getPlaceNodeFor(aff[j].service1, this.data.placement.placement);
+                var pl2 = this.getPlaceNodeFor(aff[j].service2, this.data.placement.placement);
+                if (pl1 && pl2) {
+                  console.log('ERROR');
+                  //Do nothing
+                }
+                else if (pl1) {
+                  this.getPlaceFor(aff[j].service2, p).node = pl1;
+                }
+                else if (pl2) {
+                  this.getPlaceFor(aff[j].service1, p).node = pl2;
+                }
+                else {
+                  var pltmp = this.getPlaceNodeFor(aff[j].service1, p);
+                  this.getPlaceFor(aff[j].service2, p).node = pltmp;
+                }
+              }
+            }
+          }
+          if (anaff) {
+            //Check if it's correct
+            for (var j in anaff) {
+              for (var z in aff) {
+                if ((aff[z].service1 == anaff[j].service1 && aff[z].service2 == anaff[j].service2) || 
+                (aff[z].service2 == anaff[j].service1 && aff[z].service1 == anaff[j].service2)) {
+                  //Case anti-affinity = affinity
+                  console.log('a service has been placed before');
+                  //this.err = "A service involved in a constraint is already placed";
+                  errs++;
+                }
+              }
+            }
+          }
+
+          /*
           if (!pl) {
             //Case not placement specified for this node in the partial placement
             if (aff) {
@@ -443,42 +538,37 @@ export class ExecutionDialogComponent implements OnInit {
               for (var j in aff) {
                 if (aff[j].service1 == s) {
                   //Check if the other service is already placed in the partial placement specified by the user
-                  if (!this.getPlaceNodeFor(aff[j].service2, this.data.placement.placement)) {
-                    //Check if the other service is already placed in the temporary placement, for an affinity
-                    var node2 = this.getPlaceNodeFor(aff[j].service2, this.tmpPlacement.placement);
-                    if (!node2) {
-                      p.push({
-                        service: aff[j].service2,
-                        node: n0
-                      });
-                    }
-                    else {
-                      //Update the service for this node
-                      this.getPlaceFor(s, this.tmpPlacement.placement).node = node2;
-                    }
+                  //Check if the other service is already placed in the temporary placement, for an affinity
+                  var node2 = this.getPlaceNodeFor(aff[j].service2, this.data.placement.placement);
+                  //If there aren't placement for the node
+                  if (!node2) {
+                    p.push({
+                      service: aff[j].service2,
+                      node: n0
+                    });
                   }
                   else {
-                    console.log('a service has been placed before');
-                    return null;
+                    this.getPlaceFor(s, p).node = node2;
+                    //Update the service for this node                      
+                    //this.getPlaceFor(s, this.data.placement.placement).node = node2;
+                    //Do nothing: restore the placement
                   }
                 }
                 else if (aff[j].service2 == s) {
                   //Check if the other service is already placed in the partial placement specified by the user
-                  if (!this.getPlaceNodeFor(aff[j].service1, this.data.placement.placement)) {
-                    var node1 = this.getPlaceNodeFor(aff[j].service1, this.tmpPlacement.placement);
-                    if (node1) {
-                      p.push({
-                        service: aff[j].service1,
-                        node: n0,                  
-                      });
-                    }
-                    else {
-                      this.getPlaceFor(s, this.tmpPlacement.placement).node = node1;
-                    }
+                  var node1 = this.getPlaceNodeFor(aff[j].service1, this.data.placement.placement);
+                  if (node1) {
+                    p.push({
+                      service: aff[j].service1,
+                      node: n0,                  
+                    });
                   }
                   else {
-                    console.log('a service has been placed before');
-                    return null;                    
+                    //this.getPlaceFor(s, this.data.placement.placement).node = node1;
+                    p.push({
+                      service: aff[j].service1,
+                      node: node1
+                    });
                   }
                 }
               }
@@ -497,7 +587,8 @@ export class ExecutionDialogComponent implements OnInit {
                   (aff[z].service2 == anaff[j].service1 && aff[z].service1 == anaff[j].service2)) {
                     //Case anti-affinity = affinity
                     console.log('a service has been placed before');
-                    return null;
+                    //this.err = "A service involved in a constraint is already placed";
+                    errs++;
                   }
                 }
               }
@@ -510,23 +601,31 @@ export class ExecutionDialogComponent implements OnInit {
                 }
                 else {
                   console.log('a service has been placed before');
-                  return null;
+                  //this.err = "A service involved in a constraint is already placed";
+                  errs++;
                 }
               }
             }
-          } 
+          }*/
+          /* 
           else {
-            if (aff || anaff) {
+            if (aff) {
               console.log('a service has been placed before');
-              return null;
+              //this.err = "A service involved in a constraint is already placed";
+              errs++;
+              p.push({
+                service: s,
+                node: pl
+              });
             }
             else {
               p.push({
                 service: s,
                 node: pl,
               });
+              //console.log(s, pl);
             }
-          }
+          }*/
         }
       }
     }
@@ -539,7 +638,8 @@ export class ExecutionDialogComponent implements OnInit {
     //Reset the placement
     this.tmpPlacement.placement = [];
     var order = this.createPlacementBase();
-    var p = this.tmpPlacement;
+    //var p = this.tmpPlacement;
+    var p = Array<Place>();
     if (this.affinities.length == 0 && this.antiAffinities.length == 0 && this.placesRequested.length == 0) {
       if (order) {
         for (var i=0; i<order.length; i++) {
@@ -553,6 +653,95 @@ export class ExecutionDialogComponent implements OnInit {
     }
     else {
       if (order) {
+
+
+
+        //Add all the placement for first
+        for (var i=0; i<order.length; i++) {
+          var pl = this.getPlaceNodeFor(order[i], this.placesRequested);
+          if (pl) {
+            p.push({
+              service: order[i],
+              node: pl
+            });
+          }
+          else {
+            p.push({
+              service: order[i],
+              node: 'N' + i,
+            });
+          }
+        }
+        for (var i=0; i<order.length; i++) {
+          var s = order[i];
+          //Search the place in the placement passed by page
+          var pl = this.getPlaceNodeFor(s, p);
+          var aff = this.getAffinitiesFor(s);
+          var anaff = this.getAntiaffinitiesFor(s);
+          if (pl) {
+            //Do nothing because there is already a placement
+          }
+          if (aff) {
+            for(var j in aff) {
+              if (aff[j].service1 == s) {
+                var pl1 = this.getPlaceNodeFor(aff[j].service1, this.placesRequested);
+                var pl2 = this.getPlaceNodeFor(aff[j].service2, this.placesRequested);
+                if (pl1 && pl2) {
+                  console.log('ERROR');
+                  //Restore the situation
+                }
+                else if (pl1) {
+                  if (aff[j].service2) this.getPlaceFor(aff[j].service2, p).node = pl1;
+                }
+                else if (pl2) {
+                  if (aff[j].service1) this.getPlaceFor(aff[j].service1, p).node = pl2;
+                }
+                else {
+                  var pltmp = this.getPlaceNodeFor(aff[j].service1, p);
+                  this.getPlaceFor(aff[j].service2, p).node = pltmp;
+                }
+              }
+              else if (aff[j].service2 == s) {
+                var pl1 = this.getPlaceNodeFor(aff[j].service1, this.placesRequested);
+                var pl2 = this.getPlaceNodeFor(aff[j].service2, this.placesRequested);
+                if (pl1 && pl2) {
+                  console.log('ERROR');
+                  //Do nothing
+                }
+                else if (pl1) {
+                  this.getPlaceFor(aff[j].service2, p).node = pl1;
+                }
+                else if (pl2) {
+                  this.getPlaceFor(aff[j].service1, p).node = pl2;
+                }
+                else {
+                  var pltmp = this.getPlaceNodeFor(aff[j].service1, p);
+                  this.getPlaceFor(aff[j].service2, p).node = pltmp;
+                }
+              }
+            }
+          }
+        }
+
+
+        if (anaff) {
+          //Check if it's correct
+          for (var j in anaff) {
+            for (var z in aff) {
+              if ((aff[z].service1 == anaff[j].service1 && aff[z].service2 == anaff[j].service2) || 
+              (aff[z].service2 == anaff[j].service1 && aff[z].service1 == anaff[j].service2)) {
+                //Case anti-affinity = affinity
+                console.log('a service has been placed before');
+                //this.err = "A service involved in a constraint is already placed";
+              }
+            }
+          }
+        }
+
+
+
+
+        /*
         for (var i=0; i<order.length; i++) {
           var s = order[i];
           var pl = this.getCustomPlaceRequestedFor(s);
@@ -638,9 +827,10 @@ export class ExecutionDialogComponent implements OnInit {
               }
             }
           } 
-        }
+        }*/
       }
     }
+    this.tmpPlacement.placement = p;
   }
 
   //Create query for routes
@@ -748,13 +938,15 @@ export class ExecutionDialogComponent implements OnInit {
 
   //Create a preview of the query to view it in the dialog
   queryPreview() {
-    //this.err = '';
+    this.err = '';
     var query: string;
     if (this.data.type == 0) {
       var query: string;
-      this.createQueryPlacement();
-      this.createQueryRoutes();
       var pl = '';
+      //Create a placement in tmpPlacement
+      this.createQueryPlacement();
+      //Create routes in tmpPlacement
+      this.createQueryRoutes();
       if (this.placesRequested.length == 0 && this.affinities.length == 0 && this.antiAffinities.length == 0) pl = 'Placement';
       else pl = this.createPlacementStringFromPlacement(this.tmpPlacement);
       var rt = this.createRoutesStringFromRoutes(this.tmpPlacement);

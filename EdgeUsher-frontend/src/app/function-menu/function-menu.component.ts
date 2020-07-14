@@ -3,8 +3,6 @@ import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog
 import {Rule, SecRequirement, DialogData, IotRequirement} from '../function-dialog/function-dialog.component';
 import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
-//TODO: una volta riaperto il meno la condizione viene impostata sempre su and
-
 @Component({
   selector: 'function-menu',
   templateUrl: 'function-menu.component.html',
@@ -102,9 +100,9 @@ export class FunctionMenuComponent implements OnInit {
     return -1;
   }
 
-  deleteDevice(s: string) {
+  deleteDevice(s: IotRequirement) {
     for (var i=0; i<this.iotReqs.length; i++) {
-      if (this.iotReqs[i].device == s) {
+      if (this.iotReqs[i].device == s.device) {
         this.iotReqs.splice(i, 1);
         i--;
         break;

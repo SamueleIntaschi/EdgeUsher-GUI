@@ -60,6 +60,8 @@
       </mat-select>
     </mat-form-field>
   </div>
+
+  <mat-slide-toggle id='reverse-slide-toggle' [(ngModel)]="data.reverse" labelPosition="before">Copy link in the opposite direction</mat-slide-toggle>
 </div>
 <div id="actions" mat-dialog-actions>
   <button id="delete" mat-button mat-dialog-close (click)="onDeleteClick($event)">Cancel</button>

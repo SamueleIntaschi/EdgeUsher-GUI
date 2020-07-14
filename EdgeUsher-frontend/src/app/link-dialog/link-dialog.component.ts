@@ -11,6 +11,7 @@ export interface LinkDialogData {
   type: string;
   id: number;
   probabilisticMode: boolean;
+  reverse: boolean;
 }
 
 export interface LinkProb {
