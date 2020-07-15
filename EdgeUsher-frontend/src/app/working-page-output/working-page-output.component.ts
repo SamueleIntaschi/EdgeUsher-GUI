@@ -54,6 +54,7 @@ export class WorkingPageOutputComponent implements OnInit {
   changeSelectedPlacement(event) {
     this.svg.selectedPlacement = event;
     this.svg.userPlacement.placement = this.selectedPlacement;
+    this.svg.hideCode();
     this.svg.setSelectedPlacement();
     this.svg.placeServices();
     console.log(this.svg.selectedPlacement);

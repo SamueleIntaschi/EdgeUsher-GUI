@@ -250,9 +250,10 @@ export class ExecutionDialogComponent implements OnInit {
       var aff = this.getAffinitiesFor(s);
       var anaff = this.getAntiaffinitiesFor(s);
       if (pl && (aff || anaff)) {
+        //Do nothing because it is allowed
         //Case requested placement and affinity or anti-affinity
-        this.err = 'A placement involved in a constraint is already placed';
-        return -1;
+        //this.err = 'A placement involved in a constraint is already placed';
+        //return -1;
       }
       else if (aff && anaff) {
         for (var j=0; j<anaff.length; j++) {
@@ -293,9 +294,10 @@ export class ExecutionDialogComponent implements OnInit {
       var aff = this.getAffinitiesFor(s);
       var anaff = this.getAntiaffinitiesFor(s);
       if (pl && (aff || anaff)) {
+        //Do nothing because it is allowed
         //Case requested placement and affinity or anti-affinity
-        this.err = 'A placement involved in a constraint is already placed';
-        return -1;
+        //this.err = 'A placement involved in a constraint is already placed';
+        //return -1;
       }
       else if (aff && anaff) {
         for (var j=0; j<anaff.length; j++) {
