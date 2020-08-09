@@ -9,6 +9,7 @@ import { ProgressSpinnerDialogComponent } from '../progress-spinner-dialog-compo
 import { throwError } from 'rxjs';
 import { app_Init } from '../app.module';
 import { SettingsService } from '../settings.service';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 /*
   POSSIBLE QUERIES:
@@ -940,7 +941,7 @@ export class ExecutionDialogComponent implements OnInit {
 
   //Create a preview of the query to view it in the dialog
   queryPreview() {
-    this.err = '';
+    //this.err = '';
     var query: string;
     if (this.data.type == 0) {
       var query: string;
@@ -1291,7 +1292,7 @@ export class ExecutionDialogComponent implements OnInit {
               else {
                 this.spinner.close();
                 console.log('no valid placement');
-                this.err = "There aren't valid placements";
+                this.openErrorDialog("There aren't valid placements for this chain over this infrastructure with this constraints");
               }
             });
           }
@@ -1305,7 +1306,7 @@ export class ExecutionDialogComponent implements OnInit {
               }
               else {
                 console.log('no valid placement');
-                this.err = "There aren't valid placements";
+                this.openErrorDialog("There aren't valid placements for this chain over this infrastructure with this constraints");
               }
             });
           }
@@ -1334,7 +1335,7 @@ export class ExecutionDialogComponent implements OnInit {
               if (this.placements.length == 0) {
                 this.spinner.close();
                 console.log('no valid placement');
-                this.err = "There aren't valid placements";
+                this.openErrorDialog("There aren't valid placements for this chain over this infrastructure with this constraints");
               }
               else {
                 var last = 0;
@@ -1361,7 +1362,7 @@ export class ExecutionDialogComponent implements OnInit {
                 this.createResult(result);
                 if (this.placements.length == 0) {
                   console.log('no valid placement');
-                  this.err = "There aren't valid placements";
+                  this.openErrorDialog("There aren't valid placements for this chain over this infrastructure with this constraints");
                 }
                 else {
                   this.localStorageService.storePlacements(this.placements);
@@ -1428,6 +1429,18 @@ export class ExecutionDialogComponent implements OnInit {
     this.spinner = this.dialog.open(ProgressSpinnerDialogComponent, {
       autoFocus: false,
       disableClose: true,
+    });
+  }
+
+  //Open a dialog to show an error
+  openErrorDialog(err: string) {
+    const dialogRef = this.dialog.open(ErrorDialogComponent, {
+      data: {
+        err: err
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      //Do nothing
     });
   }
     

@@ -36,7 +36,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
   subchainId = 0;
   //Temporary flow for flow creation
   tmpFlow = new Flow(this);
-  //Service when moving
+  //Index of the service that is been moving
   movedService = -1;
   //First service for flow creation
   service1: Service;
@@ -174,6 +174,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
       sub.services = subs[i].services;
       sub.path = subs[i].path;
       sub.textpath = subs[i].textpath;
+      sub.createPath();
       this.subchains.push(sub);
       this.subchainId = sub.id + 1;
     }
@@ -239,6 +240,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
             //sub.flows = subj.flows;
             sub.path = subj.path;
             sub.textpath = subj.textpath;
+            sub.createPath();
             this.subchains.push(sub);
             this.localStorageService.storeSubchain(sub);
             this.subchainId = sub.id + 1;
@@ -256,6 +258,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
     this.new();
     //Variable for errors
     var cntChain = 0;
+    var subchainAsString = Array<Array<string>>();
     //Variable that indicate the number of lines that contains errors
     var lineerrs = Array<number>();
     let fileReader = new FileReader();
@@ -490,7 +493,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
 
           //Get the first service name
           var servicename = params[0].trim();
-          if (servicename != '' && servicename.indexOf(' ') < 0 && this.indexOfServiceByName(servicename) != -1) {
+          if (servicename != '' && servicename.indexOf(' ') < 0/* && this.indexOfServiceByName(servicename) != -1*/) {
             flow.fromService = servicename.toLowerCase();
           }
           else {
@@ -500,7 +503,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
 
           //Get the second service name
           servicename = params[1].trim();
-          if (servicename != '' && servicename.indexOf(' ') < 0 && this.indexOfServiceByName(servicename) != -1) {
+          if (servicename != '' && servicename.indexOf(' ') < 0/* && this.indexOfServiceByName(servicename) != -1*/) {
             flow.toService = servicename.toLowerCase();
           }
           else {
@@ -525,8 +528,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
         }
         else if (tmp[0] == 'maxLatency') {
 
-          //TODO: salvare la stringa e poi creare la subchain alla fine, quando si è sicuri di aver tutti gli altri dati
-
+          /*
           //Get the parameters
           var str = tmp[1].trim().split(')')[0].trim();
           var params = str.split(',');
@@ -583,6 +585,8 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
           this.subchains.push(subchain);
           this.localStorageService.storeSubchain(subchain);
           this.subchainId++;
+          */
+         subchainAsString.push(tmp);
         }
       }
 
@@ -624,16 +628,82 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
         }
         //Collocate the ordered services in the space
         this.collocateInSpace();
-        //Create the path for the eventual subchains
-        for (var z in this.subchains) {
-          this.subchains[z].createPath();
-          this.localStorageService.modifySubchain(this.subchains[z]);
+
+        var subchain: Subchain;
+        for (var z in subchainAsString) {
+          subchain = this.createSubchainFromSplittedString(subchainAsString[z]);
+          if (subchain != null) {
+            subchain.createPath();
+            this.subchains.push(subchain);
+            this.localStorageService.storeSubchain(subchain);
+            this.subchainId++;
+          }
+          else {
+            this.openErrorDialog('The max latency constraint is uncorrect');
+            this.new();
+          }
         }
+
       }
       this.localStorageService.storeChainFile(this.createChainFile());
     }
     fileReader.readAsText(file);
     
+  }
+
+  createSubchainFromSplittedString(tmp: Array<string>): Subchain {
+    //Get the parameters
+    var str = tmp[1].trim().split(')')[0].trim();
+    var params = str.split(',');
+    var subchain = new Subchain(this);
+    subchain.id = this.subchainId;
+    var services = Array<Service>();
+    var firstservice = params[0].trim().split('[')[1];
+    var index = this.indexOfServiceByName(firstservice);
+    if (index == -1) {
+      return null;
+    }
+    else {
+      //Empty subchain
+      if (firstservice == ']') {
+        //Error
+      }
+      //Subchain with only one service
+      else if (firstservice.indexOf(']') >= 0) {
+        //ERROR
+      }
+      //Correct subchain
+      else {
+        var i = 0;
+        var tmpservice = this.services[this.indexOfServiceByName(firstservice)];
+        services.push(tmpservice);
+        i = 1;
+        var stop = false;
+        while (!stop) {
+          if (params[i].indexOf(']') >= 0) {
+            var pi = params[i].trim().split(']')[0].trim();
+            var index = this.indexOfServiceByName(pi);
+            if (index != -1) {
+              tmpservice = this.services[index];
+              services.push(tmpservice);
+              stop = true;
+            }
+          }
+          else services.push(this.services[this.indexOfServiceByName(params[i].trim())]);
+          i++;
+        }
+      }
+    }
+    subchain.services = services;
+
+    var latency = Number(params[i].trim());
+    if (isNaN(latency) == false && latency > 0) {
+      subchain.maxLatency = latency;
+    }
+    else {
+      return null;
+    }
+    return subchain;
   }
 
   //Get the security requirements as and/or composition
@@ -856,6 +926,10 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
       file[j] = tmp;
       j++;
     }
+
+    file[j] = '% Max latency constraint';
+    j++;
+
     for (var k in this.subchains) {
       var sub = this.subchains[k];
       //Examples:
@@ -1466,7 +1540,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
           //Do nothing
         }
         else if (this.movedService >= 0) {
-          document.getElementById('node'+this.services[this.movedService].id).style.cursor = 'move';
+          document.getElementById('node'+this.movedService).style.cursor = 'move';
           var index = this.indexOfServiceById(this.movedService);
           this.services[index].x = x;
           this.services[this.movedService].y = y;
@@ -1838,6 +1912,7 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
 
     //Click to confirm the changes
     dialogRef.componentInstance.createSquare.subscribe(result => {
+      
       //Update the values
       s.id = result.id;
       s.name = result.name;

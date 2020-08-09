@@ -34,6 +34,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   nodeId = 0;
   linkId = 0;
   tmpLink = new Link(this);
+  //Index of the node that is been moving
   movedSquare = -1;
   node1: Node;
   isDrawingLine = false;
@@ -164,7 +165,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   //Get the information from the .eu file
   retrieveInformationFromFile(file: File) {
     this.new();
-    this.title = file.name;
+    this.title = file.name.split('.')[0];
     this.localStorageService.setInfrastructureTitle(this.title);
     this.onChangeTitleFromUpload.emit(this.title);
     let fileReader = new FileReader();
@@ -853,6 +854,9 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     var tmp = '';
     var i = 0;
 
+    file[j] = '% Nodes';
+    j++;
+
     for (i = 0; i < this.nodes.length; i++) {
       var node = this.nodes[i];
       if (node.probabilistic == true) {
@@ -882,6 +886,10 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
         j++;
       }
     }
+
+    file[j] = '% Links'
+    j++;
+
     for (var k in this.links) {
       var link = this.links[k];
       if (link.probabilistic == true) {
@@ -946,7 +954,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       this.redrawMenus();
     }
     else if (this.movedSquare >= 0) {
-      document.getElementById('node'+this.nodes[this.movedSquare].id).style.cursor = 'move';
+      document.getElementById('node'+this.movedSquare).style.cursor = 'move';
       var index = this.indexOfSquareById(this.movedSquare);
       this.nodes[index].x = x;
       //var y = (panZoomHeight - divY - (panZoomHeight-(viewboxHeight*realZoom)) + currentPan.y) / realZoom;    
@@ -1325,7 +1333,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
       }
     });
 
-    dialogRef.componentInstance.deleteSquare.subscribe((squareId) => {
+    dialogRef.componentInstance.deleteSquare.subscribe(() => {
       this.deleteNode(node);
     });
 
@@ -1348,7 +1356,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(LinkDialogComponent, {
       autoFocus: false,
       disableClose: true,
-      width: '35%',
+      width: '40%',
       data: {
         probs: link.probs,
         bandwidth: link.bandwidth,
@@ -1507,9 +1515,9 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
     a[a.length-1].style.minHeight = '0';
     cpc[cpc.length-1].style.fontSize = '90%';
 
-    dialogRef.componentInstance.deleteSquare.subscribe((squareId) => {
-      this.deleteNode(node);
+    dialogRef.componentInstance.deleteSquare.subscribe(() => {
       this.removeNodeDialog(node.id);
+      this.deleteNode(node);
     });
 
     dialogRef.componentInstance.closeClick.subscribe(() => {

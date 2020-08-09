@@ -254,6 +254,8 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
       link.path = ls[i].path;
       link.textpath = ls[i].textpath;
       link.middlePoint = ls[i].middlePoint;
+      link.createPath();
+      link.createTextPath();
       this.links.push(link);
       this.linkId = link.id + 1;
     }
