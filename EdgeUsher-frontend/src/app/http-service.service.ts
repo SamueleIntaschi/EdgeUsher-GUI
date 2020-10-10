@@ -18,6 +18,11 @@ export class HttpService {
     return this.http.post(url, {query: string, eu: eu, last: last}, {responseType: 'text'});
   }
 
+  postQueryFinal(url, chain, infrastructure, query, eu, last) {
+    console.log('sending query final to ' + url);
+    return this.http.post(url, {chain: chain, infrastructure: infrastructure, query: query, eu: eu, last: last}, {responseType: 'text'});
+  }
+
   postClearBackend(url) {
     return this.http.post(url, {clear: 1}, {responseType: 'text'});
   }

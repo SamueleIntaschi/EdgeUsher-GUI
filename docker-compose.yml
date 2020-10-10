@@ -15,4 +15,4 @@ services:
       - backend
     env_file:
       - ./conf.env
-    command: /bin/sh -c "envsubst '$${SERVER_URL},$${SERVER_PORT}' < /usr/share/nginx/html/assets/config.template.json > /usr/share/nginx/html/assets/config.json && exec nginx -g 'daemon off;'" 
+    command: /bin/sh -c "envsubst '$${SERVER_NAME},$${SERVER_PORT}' < /usr/share/nginx/html/assets/config.template.json > /usr/share/nginx/html/assets/config.json && exec nginx -g 'daemon off;'" 

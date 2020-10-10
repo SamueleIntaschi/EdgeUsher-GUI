@@ -60,5 +60,27 @@ def queryResult():
             string = string + '\n' + ('%s : %s' % (it))
     return string
 
+@app.route('/queryfinal/', methods=['POST'])
+def queryfinal():
+    data = request.json
+    chain = request.json.get('chain')
+    infrastructure = request.json.get('infrastructure')
+    query = request.json.get('query')
+    eu = request.json.get('eu')
+    string0 = ":- consult('" + eu + ".pl').\n" + chain + '\n' + infrastructure + '\n' + query
+    print(string0)
+    p = PrologString(string0)
+    lf = LogicFormula.create_from(p)   # ground the program
+    sdd = SDD.create_from(lf)
+    string = ''
+    result = sdd.evaluate()
+    print(result)
+    for it in result.items() :
+        if string == '':
+            string = ('%s : %s' % (it))
+        else:
+            string = string + '\n' + ('%s : %s' % (it))
+    return string
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port= 5000, threaded=True)

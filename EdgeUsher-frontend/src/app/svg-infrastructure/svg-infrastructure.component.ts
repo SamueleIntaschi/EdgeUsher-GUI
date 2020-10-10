@@ -1367,6 +1367,7 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
         id: link.id,
         type: link.type,
         reverse: false,
+        links: this.links
       },
     });
 

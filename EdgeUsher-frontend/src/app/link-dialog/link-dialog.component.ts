@@ -12,6 +12,7 @@ export interface LinkDialogData {
   id: number;
   probabilisticMode: boolean;
   reverse: boolean;
+  links: Array<Link>;
 }
 
 export interface LinkProb {
@@ -104,6 +105,15 @@ export class LinkDialogComponent {
         this.err = 'The latency value must be a positive number';
         errs++;
       }
+      else if (this.data.reverse == true) {
+        for (var i in this.data.links) {
+          if (this.data.to == this.data.links[i].fromNode && this.data.from == this.data.links[i].toNode) {
+            errs++;
+            this.err = 'There is already a links in the opposite direction';
+            break;
+          }
+        }
+      }
       return errs;
     }
     else {
@@ -147,6 +157,15 @@ export class LinkDialogComponent {
       if (sum > 1 || sum < 0) {
         this.err = 'The total probability is not correct';
         errs++;
+      }
+      if (this.data.reverse == true) {
+        for (var i in this.data.links) {
+          if (this.data.to == this.data.links[i].fromNode && this.data.from == this.data.links[i].toNode) {
+            errs++;
+            this.err = 'There is already a links in the opposite direction';
+            break;
+          }
+        }
       }
       return errs;
     }

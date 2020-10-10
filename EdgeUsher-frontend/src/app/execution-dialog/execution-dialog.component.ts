@@ -163,6 +163,7 @@ export class ExecutionDialogComponent implements OnInit {
 
   /*--- AFFINITY METHODS ---*/
 
+  /*
   onAffinityChange(elem) {
     var service1 = elem.service1;
     var service2 = elem.service2;
@@ -177,6 +178,7 @@ export class ExecutionDialogComponent implements OnInit {
       }
     }
   }
+  */
 
   //Add an affinity constraint
   addAffinity(): void {
@@ -184,6 +186,24 @@ export class ExecutionDialogComponent implements OnInit {
       service1: '',
       service2: '',
     });
+
+    /*Error checking
+    var ok = 0;
+    if (this.data.type == 0) {
+      ok = this.checkInformation1();
+      if (ok == 1) {
+        //this.err = '';
+      }
+      else {
+        
+      }
+    }
+    else if (this.data.type == 1) {
+      ok = this.checkInformation2();
+      if (ok == 1) {
+        //this.err = '';
+      }
+    }*/
   }
 
   //Delete an affinity constraint
@@ -638,6 +658,7 @@ export class ExecutionDialogComponent implements OnInit {
 
   //Create placement structure
   createQueryPlacement() {
+    //this.err = '';
     //Reset the placement
     this.tmpPlacement.placement = [];
     var order = this.createPlacementBase();
@@ -690,7 +711,8 @@ export class ExecutionDialogComponent implements OnInit {
                 var pl1 = this.getPlaceNodeFor(aff[j].service1, this.placesRequested);
                 var pl2 = this.getPlaceNodeFor(aff[j].service2, this.placesRequested);
                 if (pl1 && pl2) {
-                  console.log('ERROR');
+                  console.log('ERROR: two different places are different from default');
+                  //this.err = 'Two different nodes are already different';
                   //Restore the situation
                 }
                 else if (pl1) {
@@ -708,7 +730,8 @@ export class ExecutionDialogComponent implements OnInit {
                 var pl1 = this.getPlaceNodeFor(aff[j].service1, this.placesRequested);
                 var pl2 = this.getPlaceNodeFor(aff[j].service2, this.placesRequested);
                 if (pl1 && pl2) {
-                  console.log('ERROR');
+                  console.log('ERROR: two different places are different from default');
+                  //this.err = 'Two different nodes are already different';
                   //Do nothing
                 }
                 else if (pl1) {
@@ -1245,7 +1268,7 @@ export class ExecutionDialogComponent implements OnInit {
 
 
   async createHeuristicResult(pl: Placement, last: number) {
-    var res = await this.submitQueryForEvalHeuristicResult(pl, last);
+    var res = await this.submitQueryForEvalHeuristicResultFinal(pl, last);
     var tmp: string = <string>res.split(' : ')[1];
     var prob: number;
     if (tmp) {
@@ -1256,13 +1279,163 @@ export class ExecutionDialogComponent implements OnInit {
     return pl;
   }
 
-  //Send the query
+  submitQueryFinal() {
+    var ok = 0;
+    var h = '';
+    var errs = 0;
+    //Get the chain as a string
+    var chainLines: Array<string> = this.localStorageService.getChainFile();
+    var chain: string = '';
+    if (chainLines) {
+      for (var i=0; i<chainLines.length; i++) {
+        if (i != chainLines.length - 1) chain = chain + chainLines[i] + '\n';
+        else chain = chain + chainLines[i];
+      }
+    }
+    else {
+      this.err = 'Chain is missing';
+      errs++;
+    }
+    //Get the infrastructure as a string
+    var infrastructureLines: Array<string> = this.localStorageService.getInfrastructureFile();
+    var infrastructure: string = '';
+    if (infrastructureLines) {
+      for (var i=0; i<infrastructureLines.length; i++) {
+        if (i != infrastructureLines.length - 1) infrastructure = infrastructure + infrastructureLines[i] + '\n';
+        else infrastructure = infrastructure + infrastructureLines[i];
+      }
+    }
+    else {
+      this.err = 'Infrastructure is missing';
+      errs++;
+    }
+    if (errs == 0) {
+      /*  
+        Case execution called from chain or infrastructure page:
+      */
+      if (this.data.type == 0) {
+        ok = this.checkInformation1();
+        if (ok == 1) {
+          var query = this.createQuery();
+          if (query) {
+            this.openSpinnerDialog();
+            if (this.heuristicMode == false) h = 'edgeusher';
+            else h = 'hedgeusher';
+            if (this.heuristicMode == true) {
+              //Case heuristic mode
+              this.http.postQueryFinal(this.serverUrl + '/queryfinal/', chain, infrastructure, query, h, 0).pipe(catchError(this.handleError.bind(this))).subscribe(async result => {
+                this.createResult(result);
+                var last = 0;
+                if (this.placements.length > 0) {
+                  for (var i=0; i < this.placements.length; i++) {
+                    //console.log(this.placements[i]);
+                    if (i == this.placements.length - 1) last = 1;
+                    var tmpl = await this.createHeuristicResult(this.placements[i], last);
+                    this.placements[i] = tmpl;
+                  }
+                  this.localStorageService.storePlacements(this.placements);
+                  this.spinner.close();
+                  this.router.navigate(['/placement']);
+                  this.dialogRef.close();
+                }
+                else {
+                  this.spinner.close();
+                  console.log('no valid placement');
+                  this.openErrorDialog("There aren't valid placements for this chain over this infrastructure with this constraints");
+                }
+              });
+            }
+            else {
+              //Case not heuristic mode
+              this.http.postQueryFinal(this.serverUrl + '/queryfinal/', chain, infrastructure, query, h, 1).pipe(catchError(this.handleError)).subscribe(result => {
+                this.spinner.close();
+                this.createResult(result);
+                if (this.placements.length > 0) {
+                  this.router.navigate(['/placement']);
+                  this.dialogRef.close();
+                }
+                else {
+                  console.log('no valid placement');
+                  this.openErrorDialog("There aren't valid placements for this chain over this infrastructure with this constraints");
+                }
+              });
+            }
+          }
+        }
+      }
+      /*
+        Case execution called from placement: 
+      */
+      else if (this.data.type == 1) {
+        /*
+          Retrieve actual placement and create the query
+        */
+        ok = this.checkInformation2();
+        if (ok == 1) {
+          var query: string;
+          query = this.createQueryFromPlacement2();
+          if (query) {
+            this.openSpinnerDialog();
+            if (this.heuristicMode == true) {
+              h = 'hedgeusher';
+              this.http.postQueryFinal(this.serverUrl + '/queryfinal/', chain, infrastructure, query, h, 0).pipe(catchError(this.handleError).bind(this)).subscribe(async result => {
+                this.createResult(result);
+                if (this.placements.length == 0) {
+                  this.spinner.close();
+                  console.log('no valid placement');
+                  this.openErrorDialog("There aren't valid placements for this chain over this infrastructure with this constraints");
+                }
+                else {
+                  var last = 0;
+                  for (var i=0; i<this.placements.length; i++) {
+                    //console.log(this.placements[i]);
+                    if (i == this.placements.length - 1) last = 1;
+                    var tmpl = await this.createHeuristicResult(this.placements[i], last);
+                    this.placements[i] = tmpl;
+                  }
+                  this.localStorageService.storePlacements(this.placements);
+                  this.spinner.close();
+                  this.reloadPage.emit(1);
+                  this.dialogRef.close();
+                }
+              });
+            }
+            else {
+              h = 'edgeusher';
+              if (query) {
+                this.http.postQueryFinal(this.serverUrl + '/queryfinal/', chain, infrastructure, query, h, 1).pipe(catchError(this.handleError).bind(this)).subscribe(result => {
+                  this.spinner.close();
+                  //TODO: aggiornare pagina placements cancellando i vecchi per mostrare i nuovi
+                  //TODO: in caso di restituzione valori da euristica ricalcolare la probabilità dei placement, che è sbagliata
+                  this.createResult(result);
+                  if (this.placements.length == 0) {
+                    console.log('no valid placement');
+                    this.openErrorDialog("There aren't valid placements for this chain over this infrastructure with this constraints");
+                  }
+                  else {
+                    this.localStorageService.storePlacements(this.placements);
+                    this.reloadPage.emit(1);
+                    this.dialogRef.close();
+                  }
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+    else {
+      console.log('Errors in chain or infrastructure file');
+    }
+  }
+
+  /*Send the query
   submitQuery() {
     var ok = 0;
     var h = '';
-    /*  
-      Case execution called from chain or infrastructure page:
-    */
+      
+    //Case execution called from chain or infrastructure page:
+    
     if (this.data.type == 0) {
       ok = this.checkInformation1();
       if (ok == 1) {
@@ -1274,6 +1447,7 @@ export class ExecutionDialogComponent implements OnInit {
           if (this.heuristicMode == false) h = 'edgeusher';
           else h = 'hedgeusher';
           if (this.heuristicMode == true) {
+            //Case heuristic mode
             this.http.postQuery(this.serverUrl + '/query/', query, h, 0).pipe(catchError(this.handleError.bind(this))).subscribe(async result => {
               this.createResult(result);
               var last = 0;
@@ -1297,6 +1471,7 @@ export class ExecutionDialogComponent implements OnInit {
             });
           }
           else {
+            //Case not heuristic mode
             this.http.postQuery(this.serverUrl + '/query/', query, h, 1).pipe(catchError(this.handleError)).subscribe(result => {
               this.spinner.close();
               this.createResult(result);
@@ -1313,13 +1488,13 @@ export class ExecutionDialogComponent implements OnInit {
         }
       }
     }
-    /*
-      Case execution called from placement: 
-    */
+    
+    //Case execution called from placement: 
+    
     else if (this.data.type == 1) {
-      /*
-        Retrieve actual placement and create the query
-      */
+      
+      //Retrieve actual placement and create the query
+      
       ok = this.checkInformation2();
       if (ok == 1) {
         this.sendInfrastructure();
@@ -1376,7 +1551,89 @@ export class ExecutionDialogComponent implements OnInit {
       }
     }
   }
+  */
 
+  async submitQueryForEvalHeuristicResultFinal(placement: Placement, last: number) {
+    var query = '';
+    var pl = '';
+    var rt = '';
+    for (var i=0; i < placement.placement.length; i++) {
+      var p = placement.placement[i];
+      if (pl == '') {
+        pl = 'on(' + p.service + ',' + p.node + ')';
+      }
+      else pl = pl + ', on(' + p.service + ',' + p.node + ')';
+    }
+    pl = '[' + pl + ']';
+    for (var i=0; i < placement.routes.length; i++) {
+      var r = placement.routes[i];
+      if (rt == '') {
+        rt = '(' + r.fromNode + ', ' + r.toNode + ', ' + r.usedBw;
+        var fs = '';
+        for (var j in r.flows) {
+          if (fs == '') {
+            fs = '(' + r.flows[j].from + ', ' + r.flows[j].to + ')'; 
+          }
+          else {
+            fs = fs + ', (' + r.flows[j].from + ', ' + r.flows[j].to + ')'; 
+          }
+        }
+        rt = rt + ', [' + fs + '])';
+      }
+      else {
+        rt = rt + ', (' + r.fromNode + ', ' + r.toNode + ', ' + r.usedBw;
+        var fs = '';
+        for (var j in r.flows) {
+          if (fs == '') {
+            fs = '(' + r.flows[j].from + ', ' + r.flows[j].to + ')'; 
+          }
+          else {
+            fs = fs + ', (' + r.flows[j].from + ', ' + r.flows[j].to + ')'; 
+          }
+        }
+        rt = rt + ', [' + fs + '])';
+      }
+    }
+    rt = '[' + rt + ']';
+    query = 'query(placement(' + placement.chainId + ', ' + pl + ', ' + rt +')).'
+    var h = 'edgeusher';
+    var errs = 0;
+    //Get the chain as a string
+    var chainLines: Array<string> = this.localStorageService.getChainFile();
+    var chain: string = '';
+    if (chainLines) {
+      for (var i=0; i<chainLines.length; i++) {
+        if (i != chainLines.length - 1) chain = chain + chainLines[i] + '\n';
+        else chain = chain + chainLines[i];
+      }
+    }
+    else {
+      this.err = 'Chain is missing';
+      errs++;
+    }
+    //Get the infrastructure as a string
+    var infrastructureLines: Array<string> = this.localStorageService.getInfrastructureFile();
+    var infrastructure: string = '';
+    if (infrastructureLines) {
+      for (var i=0; i<infrastructureLines.length; i++) {
+        if (i != infrastructureLines.length - 1) infrastructure = infrastructure + infrastructureLines[i] + '\n';
+        else infrastructure = infrastructure + infrastructureLines[i];
+      }
+    }
+    else {
+      this.err = 'Infrastructure is missing';
+      errs++;
+    }
+    if (errs == 0) {
+      //Retry for tree times if fail
+      return await this.http.postQueryFinal(this.serverUrl + '/queryfinal/', chain, infrastructure, query, h, last).pipe(retry(3)).toPromise();
+    }
+    else {
+      console.log('Errors in chain or infrastructure files');
+    }
+  }
+
+  /*
   async submitQueryForEvalHeuristicResult(placement: Placement, last: number) {
     var query = '';
     var pl = '';
@@ -1424,6 +1681,7 @@ export class ExecutionDialogComponent implements OnInit {
     //Retry for tree times if fail
     return await this.http.postQuery(this.serverUrl + '/query/', query, h, last).pipe(retry(3)).toPromise();
   }
+  */
 
   openSpinnerDialog() {
     this.spinner = this.dialog.open(ProgressSpinnerDialogComponent, {
