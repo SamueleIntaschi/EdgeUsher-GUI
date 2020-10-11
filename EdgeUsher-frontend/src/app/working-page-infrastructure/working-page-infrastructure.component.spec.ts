@@ -1,5 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {MatDialog} from '@angular/material/dialog';
+
 import { WorkingPageInfrastructureComponent } from './working-page-infrastructure.component';
 
 describe('WorkingPageInfrastructureComponent', () => {
@@ -8,7 +11,11 @@ describe('WorkingPageInfrastructureComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WorkingPageInfrastructureComponent ]
+      declarations: [ WorkingPageInfrastructureComponent ],
+      imports: [HttpClientTestingModule],
+      providers: [
+        { provide: MatDialog, useValue: {} },
+      ]
     })
     .compileComponents();
   }));

@@ -1,7 +1,6 @@
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {Component, Inject, Output, EventEmitter, OnInit} from '@angular/core';
 import {DialogData, NodeProb, NodeFields, SecurityCapabilities} from '../node-dialog/node-dialog.component';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ChainErrorCheckingService } from '../chain-error-checking.service';
 
 
@@ -13,8 +12,8 @@ import { ChainErrorCheckingService } from '../chain-error-checking.service';
 export class NodeMenuComponent implements OnInit {
 
   err = '';
-  probs: Array<NodeProb> = JSON.parse(JSON.stringify(this.data.probs));
-  singleValue: NodeFields = JSON.parse(JSON.stringify(this.data.singleValue));
+  probs: Array<NodeProb>;
+  singleValue: NodeFields;
   icons: Array<string> = [
     "../../icons/network/file-server.svg",
     "../../icons/network/micro-webserver.svg",
@@ -39,6 +38,8 @@ export class NodeMenuComponent implements OnInit {
   @Output() closeClick = new EventEmitter<number>();
 
   ngOnInit() {
+    this.probs = JSON.parse(JSON.stringify(this.data.probs));
+    this.singleValue = JSON.parse(JSON.stringify(this.data.singleValue));
   }
 
   onChangeProb(event) {

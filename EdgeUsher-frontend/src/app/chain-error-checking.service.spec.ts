@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ChainErrorCheckingServiceService } from './chain-error-checking-service.service';
+import { ChainErrorCheckingService } from './chain-error-checking.service';
 
 describe('ChainErrorCheckingServiceService', () => {
-  let service: ChainErrorCheckingServiceService;
+  let service: ChainErrorCheckingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ChainErrorCheckingServiceService);
+    service = TestBed.inject(ChainErrorCheckingService);
   });
 
   it('should be created', () => {

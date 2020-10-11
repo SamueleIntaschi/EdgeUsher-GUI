@@ -23,8 +23,12 @@ export class WorkingPageInfrastructureComponent implements OnInit {
   constructor(public dialog: MatDialog, private errorService: ChainErrorCheckingService) { }
 
   ngOnInit(): void {
-    document.getElementById("code").style.display = 'none';
-    document.getElementById('dot-navigation-component').style.display = 'block';
+    var code: HTMLElement = document.getElementById("code");
+    if (code) code.style.display = 'none';
+    var splitScreen: HTMLElement = document.getElementById("split-screen");
+    if (splitScreen) splitScreen.style.display = 'none';
+    var dotNavigation: HTMLElement = document.getElementById('dot-navigation-component');
+    if (dotNavigation) dotNavigation.style.display = 'block';
   }
 
   exe() {

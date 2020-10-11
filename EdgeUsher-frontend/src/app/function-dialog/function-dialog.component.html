@@ -52,6 +52,7 @@
   </mat-accordion>
 
   <br>
+
   <!-- SECURITY REQUIREMENTS -->
 
   <mat-accordion>
@@ -69,7 +70,24 @@
         
     </mat-expansion-panel>
   </mat-accordion>
+
+  <br>
+
+  <!-- PROLOG ELEMENT -->
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Pro(b)Log Element
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p [textContent]="createPrologString()"></p>
+    </mat-expansion-panel>
+  </mat-accordion>
+
 </div>
+
 <div id="actions" class="action-buttons" mat-dialog-actions>
   <button id="delete" mat-button mat-dialog-close (click)="onDeleteClick($event)">Cancel</button>
   <!--button id="move" mat-button mat-dialog-close (click)="onMoveClick($event)">Move</button-->

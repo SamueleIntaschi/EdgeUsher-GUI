@@ -91,6 +91,17 @@ export class ServiceDialogComponent {
   @Output() closeClick = new EventEmitter<number>();
 
 
+  /*--- Create Prolog Element ---*/
+  createPrologString(): string {
+    var str = 'service(' + this.data.name + ', ' + this.data.serviceTime + ', ' + this.data.hwReqs + ',' + this.createIotReqString() + ', ' + this.createSecReqsString() + ').';
+    return str;
+  }
+
+  //TODO
+  createSecReqsString() {
+    return '';
+  }
+
   /*--- IOT device connected ---*/
 
   onIconClick(event, device) {

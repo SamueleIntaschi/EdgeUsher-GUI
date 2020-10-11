@@ -1,20 +1,32 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LinkDialogComponent } from './link-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-describe('LinkDialogComponent', () => {
-  let component: LinkDialogComponent;
-  let fixture: ComponentFixture<LinkDialogComponent>;
+import { FlowDialogComponent } from './flow-dialog.component';
+
+describe('FlowDialogComponent', () => {
+  let component: FlowDialogComponent;
+  let fixture: ComponentFixture<FlowDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LinkDialogComponent ]
+      declarations: [ 
+        FlowDialogComponent,
+      ],
+      providers: [
+        { provide: MatDialog, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} }
+      ]
+
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LinkDialogComponent);
+    fixture = TestBed.createComponent(FlowDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

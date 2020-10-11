@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RouterTestingModule } from '@angular/router/testing';
+
 import { DotNavigationComponent } from './dot-navigation.component';
 
 describe('DotNavigationComponent', () => {
@@ -8,7 +10,8 @@ describe('DotNavigationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DotNavigationComponent ]
+      declarations: [ DotNavigationComponent ],
+      imports: [RouterTestingModule]
     })
     .compileComponents();
   }));

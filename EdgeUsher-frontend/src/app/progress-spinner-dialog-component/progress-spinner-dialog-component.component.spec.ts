@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProgressSpinnerDialogComponentComponent } from './progress-spinner-dialog-component.component';
+import { ProgressSpinnerDialogComponent } from './progress-spinner-dialog-component.component';
 
 describe('ProgressSpinnerDialogComponentComponent', () => {
-  let component: ProgressSpinnerDialogComponentComponent;
-  let fixture: ComponentFixture<ProgressSpinnerDialogComponentComponent>;
+  let component: ProgressSpinnerDialogComponent;
+  let fixture: ComponentFixture<ProgressSpinnerDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProgressSpinnerDialogComponentComponent ]
+      declarations: [ ProgressSpinnerDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProgressSpinnerDialogComponentComponent);
+    fixture = TestBed.createComponent(ProgressSpinnerDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
