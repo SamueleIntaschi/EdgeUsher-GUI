@@ -2,7 +2,7 @@
     <app-svg-infrastructure id="svg"
     (onChangeTitleFromUpload)="changeTitleFromUpload($event)"
     ></app-svg-infrastructure>
-    <app-header-infrastructure id ="header"
+    <app-header-infrastructure id ="header-infrastructure"
     (reset)="new()"
     (saveInfrastructure)="save()"
     (uploadInfrastructureFile)="uploadInfrastructure($event)"
@@ -16,11 +16,11 @@
     [title]="this.title"
     (tutorialClick)="this.openTutorialDialog()"
     ></app-header-infrastructure>
-    <app-chain-code id="code"
+    <app-chain-code id="code-infrastructure"
     ></app-chain-code>
-    <app-split-screen id="split-screen"></app-split-screen>
+    <app-split-screen id="split-screen-infrastructure"></app-split-screen>
     <div id='radio-button-infrastructure'>
-        <div id="subdiv-radio-button-infrastructure">
+        <div id="subdiv-radio-button">
             <input id="left-radio-button-infr" (click)="onCodeClick(1)" type="radio" name="radios"value="false">
             <label for="left-radio-button-infr">Source code</label>
             <input id="center-radio-button" (click)="onCodeClick(3)" type="radio" name="radios"value="all">

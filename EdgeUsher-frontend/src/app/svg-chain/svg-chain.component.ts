@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit, OnDestroy, Inject } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Service } from './service';
 import { Flow } from './flow';
@@ -15,6 +15,7 @@ import { Subchain } from './subchain';
 import { ChainDialogComponent } from '../chain-dialog/chain-dialog.component';
 import { SubchainMenuComponent } from '../subchain-menu/subchain-menu.component';
 import { ChainErrorCheckingService } from '../chain-error-checking.service';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-svg-chain',
@@ -70,9 +71,23 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
 
   constructor(public dialog: MatDialog, 
     public localStorageService: LocalStorageService,
-    public errorService: ChainErrorCheckingService) {}
+    public errorService: ChainErrorCheckingService,
+    public router: Router) {
+      /*this.activatedRoute.params.subscribe((e) => {
+        if (e instanceof NavigationEnd) {
+          this.onResize();
+        }
+      });*/
+      this.router.events.subscribe((e) => {
+        if (e instanceof NavigationEnd && e.url === '/chain') {
+          this.onResize();
+        }
+      });
+    }
 
   ngOnInit(): void {
+    //Set the resize method for the window
+    window.onresize = this.onResize;
     //Don't display the temporary flow
     document.getElementById('tmp-flow').style.display = 'none';
     //Get the information from local storage
@@ -98,7 +113,27 @@ export class SvgChainComponent implements OnInit, AfterViewInit {
   }
 
   /*--- RESIZE METHODS ---*/
+
+  //Resize the elements inside the window
+  onResize() {
+    var winHeight = window.innerHeight;
+    var headerHeight = document.getElementById('header').getBoundingClientRect().height;
+    var trailerHeight = document.getElementById('radio-button-chain').getBoundingClientRect().height;
+    var offset = headerHeight + trailerHeight + 10;
+    var svgHeight = winHeight - offset;
+    var svgWidth = document.getElementById('svg-div').getBoundingClientRect().width;
+    document.getElementById("svg-div").style.height = svgHeight + 'px';
+    document.getElementById("code").style.height = svgHeight + 'px';
+    document.getElementById("split-screen").style.height = svgHeight + 'px';
+    document.getElementById('zoomp').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoomp').style.left = ((svgWidth / 100) * 88) + 'px';
+    document.getElementById('zoom-').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoom-').style.left = ((svgWidth / 100) * 94) + 'px';
+    document.getElementById('zoom0').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoom0').style.left = ((svgWidth / 100) * 91) + 'px';
+  }
   
+  //Zoom + or - when the button is clicked
   onZoom(type: number) {
     if (type == 0) {
       this.svgPanZoom.zoomOut();

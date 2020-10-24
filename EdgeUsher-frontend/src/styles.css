@@ -3,6 +3,7 @@
 html, body { 
     height: 100%;
     background-color: skyblue;
+    overflow: hidden;
     /*background-image: linear-gradient(rgb(224, 72, 72), rgb(101, 101, 238));*/
     /*background-image: linear-gradient(lightblue, rgb(101, 101, 238));*/
     /*background-image: linear-gradient(lightblue, lightskyblue, #0066ff);*/

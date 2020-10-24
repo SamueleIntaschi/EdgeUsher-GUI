@@ -1,7 +1,7 @@
 /*--- SVG GENERIC STYLE ---*/
 
 #svg-div {
-    height: 510px;
+    /*height: 510px;*/
     width: 97%;
     border: solid;
     border-radius: 20px;
@@ -66,21 +66,15 @@ svg text::selection {
 
 #zoomp {
     position: absolute;
-    top: 90%;
-    left: 88%;
     cursor: pointer;
 }
 
 #zoom- {
     position: absolute;
-    top: 90%;
-    left: 94%;
     cursor: pointer;
 }
 
 #zoom0 {
     position: absolute;
-    top: 90%;
-    left: 91%;
     cursor: pointer;
 }

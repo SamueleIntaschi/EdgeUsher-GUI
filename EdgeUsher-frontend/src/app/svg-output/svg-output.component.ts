@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Renderer2, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { NodeP } from './node';
 import { Node } from '../svg-infrastructure/node';
@@ -17,6 +17,8 @@ import { NodeMenuComponent } from '../node-menu/node-menu.component';
 import { LinkMenuComponent } from '../link-menu/link-menu.component';
 import { Placement, Place, Route } from '../execution-dialog/execution-dialog.component';
 import { PlacementObject } from './placement-object';
+import { Router, NavigationEnd } from '@angular/router';
+
 
 @Component({
   selector: 'app-svg-output',
@@ -59,10 +61,17 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
     r: 100
   }
 
-  constructor(public dialog: MatDialog, public localStorageService: LocalStorageService) {}
+  constructor(public dialog: MatDialog, public localStorageService: LocalStorageService, private router: Router) {
+    this.router.events.subscribe((e) => {
+      if (e instanceof NavigationEnd && e.url === '/placement') {
+        this.onResize();
+      }
+    });
+  }
 
 
   ngOnInit(): void {
+    window.onresize = this.onResize;
     this.retrieveChainInformation();
     this.retrieveInfrastructureInformation();
     this.retrievePlacements();
@@ -86,6 +95,26 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   }
 
   /*--- RESIZE METHODS ---*/
+
+  //Resize the elements inside the window
+  onResize() {
+    var winHeight = window.innerHeight;
+    var headerHeight = document.getElementById('header-placement').getBoundingClientRect().height;
+    var trailerHeight = document.getElementById('radio-button-placement').getBoundingClientRect().height;
+    var offset = headerHeight + trailerHeight + 10;
+    var svgHeight = winHeight - offset;
+    var svgWidth = document.getElementById('svg-placement-div').getBoundingClientRect().width;
+    document.getElementById("svg-placement-div").style.height = svgHeight + 'px';
+    document.getElementById("code-placement").style.height = svgHeight + 'px';
+    document.getElementById('zoomp-placement').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoomp-placement').style.left = ((svgWidth / 100) * 88) + 'px';
+    document.getElementById('zoom--placement').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoom--placement').style.left = ((svgWidth / 100) * 94) + 'px';
+    document.getElementById('zoom0-placement').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoom0-placement').style.left = ((svgWidth / 100) * 91) + 'px';
+    document.getElementById('unplacedsvg').style.right = ((svgWidth / 100) * 4) + 'px';
+    document.getElementById('unplacedsvg').style.top = ((svgHeight / 100) * 7) + 'px';
+  }
   
   onZoom(type: number) {
     if (type == 0) {
@@ -103,7 +132,7 @@ export class SvgOutputComponent implements OnInit, AfterViewInit {
   //Hide the code and show the svg
   hideCode() {
     document.getElementById("svgplacement").style.display = 'block';
-    document.getElementById("code").style.display = 'none';
+    document.getElementById("code-placement").style.display = 'none';
     var elem = <any>document.getElementById("left-radio-button-pl") as HTMLInputElement;
     elem.checked = false;
     elem = <any>document.getElementById("right-radio-button-pl");

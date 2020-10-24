@@ -1,6 +1,6 @@
 /*--- SVG GENERIC STYLE ---*/
 
-#svg-div {
+#svg-div-infrastructure {
     height: 510px;
     width: 97%;
     border: solid;
@@ -57,23 +57,17 @@ svg text::selection {
 
 /*--- ZOOM BUTTONS ---*/
 
-#zoomp {
+#zoomp-infrastructure {
     position: absolute;
-    top: 90%;
-    left: 88%;
     cursor: pointer;
 }
 
-#zoom- {
+#zoom--infrastructure {
     position: absolute;
-    top: 90%;
-    left: 94%;
     cursor: pointer;
 }
 
-#zoom0 {
+#zoom0-infrastructure {
     position: absolute;
-    top: 90%;
-    left: 91%;
     cursor: pointer;
 }

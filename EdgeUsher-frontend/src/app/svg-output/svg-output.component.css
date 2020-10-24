@@ -1,7 +1,7 @@
 /*--- SVG GENERIC STYLE ---*/
 
 #svg-placement-div {
-    height: 510px;
+    /*height: 510px;*/
     width: 97%;
     border: solid;
     border-radius: 20px;
@@ -17,8 +17,8 @@
 
 #unplacedsvg {
     position: absolute;
-    top: 7%;
-    right: 3%;
+    /*top: 7%;
+    right: 3%;*/
     height: 220px;
     width: 220px;
     border: 2px solid grey;
@@ -74,23 +74,17 @@ svg text::selection {
 
 /*--- ZOOM BUTTONS ---*/
 
-#zoomp {
+#zoomp-placement {
     position: absolute;
-    top: 90%;
-    left: 88%;
     cursor: pointer;
 }
 
-#zoom- {
+#zoom--placement {
     position: absolute;
-    top: 90%;
-    left: 94%;
     cursor: pointer;
 }
 
-#zoom0 {
+#zoom0-placement {
     position: absolute;
-    top: 90%;
-    left: 91%;
     cursor: pointer;
 }

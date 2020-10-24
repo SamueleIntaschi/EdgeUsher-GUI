@@ -7,7 +7,7 @@
     user-select: none;
 }
 
-#header {
+#header-infrastructure {
     grid-row-start: 1;
 }
 
@@ -27,6 +27,7 @@
 
 #infrastructure-navigation {
     text-align: center;
+    grid-row: 3;
 }
 
 #infrastructure-src-code {

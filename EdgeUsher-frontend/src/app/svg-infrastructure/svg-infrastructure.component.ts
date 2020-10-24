@@ -12,6 +12,7 @@ import { ConfirmationRequestComponent } from '../confirmation-request/confirmati
 import { NodeMenuComponent } from '../node-menu/node-menu.component';
 import { LinkMenuComponent } from '../link-menu/link-menu.component';
 import { ChainErrorCheckingService } from '../chain-error-checking.service';
+import { Router, NavigationEnd } from '@angular/router';
 
 //TODO: aumentare area cliccabile link
 
@@ -50,10 +51,20 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   openNodeDialogs = Array<number>();
   openLinkDialogs = Array<number>();
 
-  constructor(public dialog: MatDialog, public localStorageService: LocalStorageService, private errorService: ChainErrorCheckingService) {}
+  constructor(public dialog: MatDialog, 
+    public localStorageService: LocalStorageService, 
+    private errorService: ChainErrorCheckingService,
+    private router: Router) {
+      this.router.events.subscribe((e) => {
+        if (e instanceof NavigationEnd && e.url === '/infrastructure') {
+          this.onResize();
+        }
+      });
+    }
 
 
   ngOnInit(): void {
+    window.onresize = this.onResize;
     this.retrieveInformation();
   }
 
@@ -77,6 +88,24 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   }
 
   /*--- RESIZE METHODS ---*/
+
+  onResize() {
+    var winHeight = window.innerHeight;
+    var headerHeight = document.getElementById('header-infrastructure').getBoundingClientRect().height;
+    var trailerHeight = document.getElementById('radio-button-infrastructure').getBoundingClientRect().height;
+    var offset = headerHeight + trailerHeight + 10;
+    var svgHeight = winHeight - offset;
+    var svgWidth = document.getElementById('svg-div-infrastructure').getBoundingClientRect().width;
+    document.getElementById("svg-div-infrastructure").style.height = svgHeight + 'px';
+    document.getElementById("code-infrastructure").style.height = svgHeight + 'px';
+    document.getElementById("split-screen-infrastructure").style.height = svgHeight + 'px';
+    document.getElementById('zoomp-infrastructure').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoomp-infrastructure').style.left = ((svgWidth / 100) * 88) + 'px';
+    document.getElementById('zoom--infrastructure').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoom--infrastructure').style.left = ((svgWidth / 100) * 94) + 'px';
+    document.getElementById('zoom0-infrastructure').style.top = (svgHeight + offset - 50) + 'px';
+    document.getElementById('zoom0-infrastructure').style.left = ((svgWidth / 100) * 91) + 'px';
+  }
   
   onZoom(type: number) {
     if (type == 0) {
@@ -95,8 +124,8 @@ export class SvgInfrastructureComponent implements OnInit, AfterViewInit {
   //Hide the code and show the svg
   hideCode() {
     document.getElementById("svg").style.display = 'block';
-    document.getElementById("code").style.display = 'none';
-    document.getElementById("split-screen").style.display = "none";
+    document.getElementById("code-infrastructure").style.display = 'none';
+    document.getElementById("split-screen-infrastructure").style.display = "none";
     var elem = <any>document.getElementById("left-radio-button-infr") as HTMLInputElement;
     elem.checked = false;
     elem = <any>document.getElementById("right-radio-button-infr");

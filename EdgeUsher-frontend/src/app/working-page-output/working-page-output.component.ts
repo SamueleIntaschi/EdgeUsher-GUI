@@ -22,10 +22,10 @@ export class WorkingPageOutputComponent implements OnInit {
   constructor(public dialog: MatDialog, private errorService: ChainErrorCheckingService) { }
 
   ngOnInit(): void {
-    var code: HTMLElement = document.getElementById("code");
+    var code: HTMLElement = document.getElementById("code-placement");
     if (code) code.style.display = 'none';
-    var splitScreen: HTMLElement = document.getElementById("split-screen");
-    if (splitScreen) splitScreen.style.display = 'none';
+    //var splitScreen: HTMLElement = document.getElementById("split-screen");
+    //if (splitScreen) splitScreen.style.display = 'none';
     var dotNavigation: HTMLElement = document.getElementById('dot-navigation-component');
     if (dotNavigation) dotNavigation.style.display = 'block';
   }
@@ -84,12 +84,12 @@ export class WorkingPageOutputComponent implements OnInit {
       var d = document.getElementsByClassName("CodeMirror-scroll") as HTMLCollectionOf<HTMLElement>;
       var d1 = document.getElementsByClassName("CodeMirror-gutter") as HTMLCollectionOf<HTMLElement>;
       document.getElementById("svgplacement").style.display = 'none';
-      document.getElementById("code").style.display = 'block';
+      document.getElementById("code-placement").style.display = 'block';
       this.code.refresh();
     }
     else if (type == 2) {
       document.getElementById("svgplacement").style.display = 'block';
-      document.getElementById("code").style.display = 'none';
+      document.getElementById("code-placement").style.display = 'none';
     }
   }
 

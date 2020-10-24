@@ -23,9 +23,9 @@ export class WorkingPageInfrastructureComponent implements OnInit {
   constructor(public dialog: MatDialog, private errorService: ChainErrorCheckingService) { }
 
   ngOnInit(): void {
-    var code: HTMLElement = document.getElementById("code");
+    var code: HTMLElement = document.getElementById("code-infrastructure");
     if (code) code.style.display = 'none';
-    var splitScreen: HTMLElement = document.getElementById("split-screen");
+    var splitScreen: HTMLElement = document.getElementById("split-screen-infrastructure");
     if (splitScreen) splitScreen.style.display = 'none';
     var dotNavigation: HTMLElement = document.getElementById('dot-navigation-component');
     if (dotNavigation) dotNavigation.style.display = 'block';
@@ -72,14 +72,14 @@ export class WorkingPageInfrastructureComponent implements OnInit {
       var d1 = document.getElementsByClassName("CodeMirror-gutter") as HTMLCollectionOf<HTMLElement>;
       //d1[0].style.backgroundColor = 'lightblue';
       document.getElementById("svg").style.display = 'none';
-      document.getElementById("split-screen").style.display = 'none';
-      document.getElementById("code").style.display = 'block';
+      document.getElementById("split-screen-infrastructure").style.display = 'none';
+      document.getElementById("code-infrastructure").style.display = 'block';
       this.code.refresh();
     }
     else if (type == 2) {
       document.getElementById("svg").style.display = 'block';
-      document.getElementById("split-screen").style.display = 'none';
-      document.getElementById("code").style.display = 'none';
+      document.getElementById("split-screen-infrastructure").style.display = 'none';
+      document.getElementById("code-infrastructure").style.display = 'none';
     }
     else if (type == 3) {
       this.svg.dialog.closeAll();
@@ -87,8 +87,8 @@ export class WorkingPageInfrastructureComponent implements OnInit {
       this.svg.openLinkDialogs = [];
       this.splitScreen.resetPan();
       document.getElementById("svg").style.display = 'none';
-      document.getElementById("code").style.display = 'none';
-      document.getElementById("split-screen").style.display = 'block';
+      document.getElementById("code-infrastructure").style.display = 'none';
+      document.getElementById("split-screen-infrastructure").style.display = 'block';
     }
   }
 

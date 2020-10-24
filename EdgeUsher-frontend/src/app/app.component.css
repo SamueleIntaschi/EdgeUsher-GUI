@@ -6,6 +6,10 @@
     display: none;
 }
 
+#router {
+    /*height: 100%;*/
+}
+
 #dot-navigation-component {
     display: none;
 }
